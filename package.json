@@ -1,0 +1,69 @@
+{
+	"name": "@snickbit/dungeon",
+	"version": "0.0.0",
+	"description": "Simple procedural dungeon generator",
+	"license": "MIT",
+	"exports": {
+		"require": "./dist/index.js",
+		"import": "./dist/index.mjs",
+		"types": "./dist/index.d.ts"
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup",
+		"clean": "shx rm -rf ./dist ",
+		"depcheck": "depcheck",
+		"meta": "pnpm run prod --metafile",
+		"prod": "pnpm run clean && pnpm run build --minify",
+		"test": "jest",
+		"watch": "pnpm run build --watch"
+	},
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "node",
+		"bail": false,
+		"roots": [
+			"src",
+			"__tests__"
+		],
+		"testPathIgnorePatterns": [
+			"__tests__/helpers.ts",
+			"/node_modules/"
+		]
+	},
+	"dependencies": {
+		"@snickbit/indexer": "^2.5.7",
+		"@snickbit/utilities": "^3.2.0",
+		"chance": "^1.1.8",
+		"victor": "^1.1.0"
+	},
+	"devDependencies": {
+		"@types/jest": "^28.1.3",
+		"@types/node": "^18.0.0",
+		"jest": "^28.1.1",
+		"shx": "^0.3.4",
+		"ts-jest": "^28.0.5",
+		"tsup": "^6.1.2",
+		"typescript": "^4.7.4"
+	},
+	"engines": {
+		"node": ">= 12"
+	},
+	"tsup": {
+		"entry": [
+			"src/index.ts"
+		],
+		"sourcemap": true,
+		"clean": true,
+		"dts": true,
+		"format": [
+			"esm",
+			"cjs"
+		]
+	}
+}

@@ -1,0 +1,21 @@
+{
+	"include": [
+		"src/**/*.ts",
+		"__tests__/**/*"
+	],
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"removeComments": true,
+		"target": "es2018",
+		"moduleResolution": "node",
+		"newLine": "lf",
+		"module": "commonjs",
+		"downlevelIteration": true,
+		"sourceMap": true,
+		"noImplicitAny": false,
+		"noImplicitThis": false,
+		"esModuleInterop": true,
+		"resolveJsonModule": true
+	}
+}
