@@ -24,9 +24,7 @@ export interface NeighborQueryOptions {
 
 const defaultOptions: NeighborQueryOptions = {
 	levels: 1,
-	inclusive: false,
-	cardinal: true,
-	intercardinal: true
+	inclusive: false
 }
 
 export class NeighborQuery {
@@ -53,11 +51,21 @@ export class NeighborQuery {
 
 	cardinal(): this {
 		this.options.cardinal = true
+
+		if (this.options.intercardinal !== true) {
+			this.options.intercardinal = false
+		}
+
 		return this
 	}
 
 	intercardinal(): this {
 		this.options.intercardinal = true
+
+		if (this.options.cardinal !== true) {
+			this.options.cardinal = false
+		}
+
 		return this
 	}
 
@@ -77,10 +85,10 @@ export class NeighborQuery {
 		}
 
 		const directions = []
-		if (this.options.cardinal) {
+		if (this.options.cardinal !== false) {
 			directions.push(...cardinal)
 		}
-		if (this.options.intercardinal) {
+		if (this.options.intercardinal !== false) {
 			directions.push(...intercardinal)
 		}
 
@@ -88,9 +96,23 @@ export class NeighborQuery {
 
 		for (const direction of directions) {
 			const tile = this.tile.neighbors[direction]
-			if (tile && (!this.options.type || tile.type === this.options.type) && (!this.options.notType || tile.type !== this.options.notType)) {
-				tiles.push(tile)
+
+			// Skip falsy tiles
+			if (!tile) {
+				continue
 			}
+
+			// Skip tiles that don't match the type
+			if (this.options.type && tile.type !== this.options.type) {
+				continue
+			}
+
+			// Skip tiles that match the notType
+			if (this.options.notType && tile.type === this.options.notType) {
+				continue
+			}
+
+			tiles.push(tile)
 		}
 
 		if (this.options.levels > 1 && this.options.inclusive) {
