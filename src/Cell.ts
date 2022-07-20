@@ -1,4 +1,4 @@
-import {Coordinates, parsePoint, Point} from './Coordinates'
+import {Coordinates, parsePoint} from './Coordinates'
 
 export interface CellState {
 	x: number
@@ -9,8 +9,8 @@ export class Cell {
 	private readonly state: CellState
 
 	constructor(x: number, y: number)
-	constructor(point: Point)
-	constructor(optionalX: Point | number, optionalY?: number) {
+	constructor(coordinates: Coordinates)
+	constructor(optionalX: Coordinates | number, optionalY?: number) {
 		const {x, y} = parsePoint(optionalX, optionalY)
 
 		this.state = {
