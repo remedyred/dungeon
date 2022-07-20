@@ -15,7 +15,7 @@ describe('seeds', () => {
 			seed: dungeon1.seed
 		})
 
-		expect(dungeon1.toJson()).toEqual(dungeon2.toJson())
+		expect(dungeon1.toJson()).toStrictEqual(dungeon2.toJson())
 	})
 
 	it('.build() seeded dungeons should be consistent', () => {
@@ -44,6 +44,6 @@ describe('seeds', () => {
 			seed: 'snickbit'
 		})
 
-		expect(dungeon1.toJson()).toEqual(dungeon2.toJson())
+		expect(dungeon1.toJson()).toStrictEqual(dungeon2.toJson())
 	})
 })

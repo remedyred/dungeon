@@ -101,14 +101,14 @@ describe('Room', () => {
 	})
 
 	it('Room.getBoundingBox() returns the correct bounding box', () => {
-		expect(new Room(0, 0, 10, 10).getBoundingBox()).toEqual({
+		expect(new Room(0, 0, 10, 10).getBoundingBox()).toStrictEqual({
 			top: 0,
 			right: 9,
 			bottom: 9,
 			left: 0
 		})
 
-		expect(new Room(3, 3, 3, 3).getBoundingBox()).toEqual({
+		expect(new Room(3, 3, 3, 3).getBoundingBox()).toStrictEqual({
 			top: 3,
 			right: 5,
 			bottom: 5,
@@ -117,7 +117,7 @@ describe('Room', () => {
 	})
 
 	it('Room.toJson() should return a POJO', () => {
-		expect(new Room(0, 0, 10, 10).toJson()).toEqual({
+		expect(new Room(0, 0, 10, 10).toJson()).toStrictEqual({
 			x: 0,
 			y: 0,
 			width: 10,

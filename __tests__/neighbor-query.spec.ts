@@ -45,6 +45,6 @@ describe('NeighborQuery', () => {
 
 	it('.get() should return an array', () => {
 		const query = new NeighborQuery(tile)
-		expect(query.get()).toEqual([])
+		expect(query.get()).toStrictEqual([])
 	})
 })

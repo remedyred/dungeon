@@ -26,7 +26,7 @@ describe('NeighborQuery', () => {
 
 	it('.get() should return an array of tiles', () => {
 		const query = new NeighborQuery(tile)
-		expect(query.get()).toEqual([
+		expect(query.get()).toStrictEqual([
 			n,
 			e,
 			s,
@@ -40,7 +40,7 @@ describe('NeighborQuery', () => {
 
 	it('.cardinal().get() should return only cardinal neighbors', () => {
 		const query = new NeighborQuery(tile)
-		expect(query.cardinal().get()).toEqual([
+		expect(query.cardinal().get()).toStrictEqual([
 			n,
 			e,
 			s,

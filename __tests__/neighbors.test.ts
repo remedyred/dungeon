@@ -120,7 +120,7 @@ describe('neighbors', () => {
 
 		const tile = $dungeon.tiles[0][0]
 
-		expect(Object.keys(tile.neighbors)).toEqual(['e', 'se', 's'])
+		expect(Object.keys(tile.neighbors)).toStrictEqual(['e', 'se', 's'])
 	})
 
 	it('.build() the tile on north east corner should have only three neighbors', () => {
@@ -133,7 +133,7 @@ describe('neighbors', () => {
 
 		const tile = $dungeon.tiles[width - 1][0]
 
-		expect(Object.keys(tile.neighbors)).toEqual(['s', 'sw', 'w'])
+		expect(Object.keys(tile.neighbors)).toStrictEqual(['s', 'sw', 'w'])
 	})
 
 	it('.build() the tile on south west corner should have only three neighbors', () => {
@@ -146,7 +146,7 @@ describe('neighbors', () => {
 
 		const tile = $dungeon.tiles[0][height - 1]
 
-		expect(Object.keys(tile.neighbors)).toEqual(['n', 'ne', 'e'])
+		expect(Object.keys(tile.neighbors)).toStrictEqual(['n', 'ne', 'e'])
 	})
 
 	it('.build() the tile on south east corner should have only three neighbors', () => {
@@ -159,6 +159,6 @@ describe('neighbors', () => {
 
 		const tile = $dungeon.tiles[width - 1][height - 1]
 
-		expect(Object.keys(tile.neighbors)).toEqual(['n', 'w', 'nw'])
+		expect(Object.keys(tile.neighbors)).toStrictEqual(['n', 'w', 'nw'])
 	})
 })
