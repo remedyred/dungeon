@@ -162,97 +162,97 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 3,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 5,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 7,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 8,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 9,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 10,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 11,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 13,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 15,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 17,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 19,
       },
@@ -269,7 +269,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 2,
         "y": 1,
       },
@@ -279,7 +279,7 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 2,
         "y": 3,
       },
@@ -359,13 +359,13 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
-        "x": 2,
-        "y": 19,
-      },
-      Object {
         "type": "wall",
         "x": 2,
+        "y": 19,
+      },
+      Object {
+        "type": "wall",
+        "x": 2,
         "y": 20,
       },
     ],
@@ -376,7 +376,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 1,
       },
@@ -401,42 +401,42 @@ Object {
         "y": 5,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 3,
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 7,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 8,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 9,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 10,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 11,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 13,
       },
@@ -446,27 +446,27 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 15,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 17,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 19,
       },
@@ -483,7 +483,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 4,
         "y": 1,
       },
@@ -523,7 +523,7 @@ Object {
         "y": 8,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 4,
         "y": 9,
       },
@@ -533,7 +533,7 @@ Object {
         "y": 10,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 4,
         "y": 11,
       },
@@ -543,7 +543,7 @@ Object {
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 4,
         "y": 13,
       },
@@ -553,7 +553,7 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 4,
         "y": 15,
       },
@@ -568,7 +568,7 @@ Object {
         "y": 17,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 4,
         "y": 18,
       },
@@ -590,12 +590,12 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 5,
         "y": 1,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 5,
         "y": 2,
       },
@@ -615,7 +615,7 @@ Object {
         "y": 5,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 5,
         "y": 6,
       },
@@ -640,7 +640,7 @@ Object {
         "y": 10,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 5,
         "y": 11,
       },
@@ -650,7 +650,7 @@ Object {
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 5,
         "y": 13,
       },
@@ -660,7 +660,7 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 5,
         "y": 15,
       },
@@ -697,7 +697,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 6,
         "y": 1,
       },
@@ -742,12 +742,12 @@ Object {
         "y": 9,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 6,
         "y": 10,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 6,
         "y": 11,
       },
@@ -757,17 +757,17 @@ Object {
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 6,
         "y": 13,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 6,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 6,
         "y": 15,
       },
@@ -804,32 +804,32 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 3,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 5,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 7,
         "y": 6,
       },
@@ -864,22 +864,22 @@ Object {
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 13,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 15,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 7,
         "y": 16,
       },
@@ -921,7 +921,7 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 8,
         "y": 3,
       },
@@ -949,355 +949,355 @@ Object {
         "type": "wall",
         "x": 8,
         "y": 8,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 9,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 10,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 11,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 12,
-      },
-      Object {
-        "type": "floor",
-        "x": 8,
-        "y": 13,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 14,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 15,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 16,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 17,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 18,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 19,
-      },
-      Object {
-        "type": "wall",
-        "x": 8,
-        "y": 20,
-      },
-    ],
-    Array [
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 0,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 1,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 2,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 3,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 4,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 5,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 6,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 7,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 8,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 9,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 10,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 11,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 12,
-      },
-      Object {
-        "type": "floor",
-        "x": 9,
-        "y": 13,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 14,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 15,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 16,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 17,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 18,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 19,
-      },
-      Object {
-        "type": "wall",
-        "x": 9,
-        "y": 20,
-      },
-    ],
-    Array [
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 0,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 1,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 2,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 3,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 4,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 5,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 6,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 7,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 8,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 9,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 10,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 11,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 12,
-      },
-      Object {
-        "type": "floor",
-        "x": 10,
-        "y": 13,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 14,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 15,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 16,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 17,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 18,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 19,
-      },
-      Object {
-        "type": "wall",
-        "x": 10,
-        "y": 20,
-      },
-    ],
-    Array [
-      Object {
-        "type": "wall",
-        "x": 11,
-        "y": 0,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 1,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 2,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 3,
-      },
-      Object {
-        "type": "wall",
-        "x": 11,
-        "y": 4,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 5,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 6,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 7,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 8,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 9,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 10,
-      },
-      Object {
-        "type": "floor",
-        "x": 11,
-        "y": 11,
       },
       Object {
         "type": "door",
+        "x": 8,
+        "y": 9,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 10,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 11,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 12,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 13,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 14,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 15,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 16,
+      },
+      Object {
+        "type": "door",
+        "x": 8,
+        "y": 17,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 18,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 19,
+      },
+      Object {
+        "type": "wall",
+        "x": 8,
+        "y": 20,
+      },
+    ],
+    Array [
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 0,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 1,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 2,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 3,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 4,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 5,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 6,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 7,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 8,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 9,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 10,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 11,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 12,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 13,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 14,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 15,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 16,
+      },
+      Object {
+        "type": "floor",
+        "x": 9,
+        "y": 17,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 18,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 19,
+      },
+      Object {
+        "type": "wall",
+        "x": 9,
+        "y": 20,
+      },
+    ],
+    Array [
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 0,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 1,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 2,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 3,
+      },
+      Object {
+        "type": "door",
+        "x": 10,
+        "y": 4,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 5,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 6,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 7,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 8,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 9,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 10,
+      },
+      Object {
+        "type": "floor",
+        "x": 10,
+        "y": 11,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 12,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 13,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 14,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 15,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 16,
+      },
+      Object {
+        "type": "door",
+        "x": 10,
+        "y": 17,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 18,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 19,
+      },
+      Object {
+        "type": "wall",
+        "x": 10,
+        "y": 20,
+      },
+    ],
+    Array [
+      Object {
+        "type": "wall",
+        "x": 11,
+        "y": 0,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 1,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 2,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 3,
+      },
+      Object {
+        "type": "wall",
+        "x": 11,
+        "y": 4,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 5,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 6,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 7,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 8,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 9,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 10,
+      },
+      Object {
+        "type": "floor",
+        "x": 11,
+        "y": 11,
+      },
+      Object {
+        "type": "wall",
         "x": 11,
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 11,
         "y": 13,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 11,
         "y": 14,
       },
@@ -1312,7 +1312,7 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "wall",
+        "type": "floor",
         "x": 11,
         "y": 17,
       },
@@ -1404,7 +1404,7 @@ Object {
         "y": 13,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 12,
         "y": 14,
       },
@@ -1419,7 +1419,7 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "wall",
+        "type": "door",
         "x": 12,
         "y": 17,
       },
@@ -1563,12 +1563,12 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 14,
         "y": 3,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 14,
         "y": 4,
       },
@@ -1670,7 +1670,7 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 15,
         "y": 3,
       },
@@ -1715,7 +1715,7 @@ Object {
         "y": 11,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 15,
         "y": 12,
       },
@@ -1777,7 +1777,7 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 16,
         "y": 3,
       },
@@ -1797,7 +1797,7 @@ Object {
         "y": 6,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 16,
         "y": 7,
       },
@@ -1884,7 +1884,7 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 3,
       },
@@ -1894,17 +1894,17 @@ Object {
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 5,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 7,
       },
@@ -1981,17 +1981,17 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 18,
         "y": 1,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 18,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 18,
         "y": 3,
       },
@@ -2001,7 +2001,7 @@ Object {
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 18,
         "y": 5,
       },
@@ -2011,12 +2011,12 @@ Object {
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 18,
         "y": 7,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 18,
         "y": 8,
       },
@@ -2036,7 +2036,7 @@ Object {
         "y": 11,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 18,
         "y": 12,
       },
@@ -2088,27 +2088,27 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 3,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 5,
       },
@@ -2143,7 +2143,7 @@ Object {
         "y": 11,
       },
       Object {
-        "type": "wall",
+        "type": "door",
         "x": 19,
         "y": 12,
       },
