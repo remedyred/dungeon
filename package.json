@@ -15,9 +15,11 @@
 		"dist"
 	],
 	"scripts": {
+		"prebuild": "pnpm run index",
 		"build": "tsup",
 		"clean": "shx rm -rf ./dist ",
 		"depcheck": "depcheck",
+		"index": "indexer",
 		"lint": "eslint **/*.{ts,json} --cache --fix",
 		"meta": "pnpm run prod --metafile",
 		"prod": "pnpm run clean && pnpm run build --minify",
