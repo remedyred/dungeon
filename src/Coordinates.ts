@@ -1,6 +1,7 @@
 import {isNumber} from '@snickbit/utilities'
 import Tile from './Tile'
 import Victor from 'victor'
+import Cell from './Cell'
 
 /** Definitions **/
 
@@ -9,7 +10,7 @@ export interface Point {
 	y: number
 }
 
-export type Coordinates = Point | Tile
+export type Coordinates = Cell | Point | Tile
 
 /** Constants **/
 
@@ -25,3 +26,19 @@ export const cardinalDirections = [
 	s,
 	w
 ]
+
+/** Helpers **/
+
+export function parsePoint(optionalX: Cell | Point | Tile | number, optionalY: number): Point {
+	if (isNumber(optionalX) && isNumber(optionalY)) {
+		return {x: optionalX, y: optionalY}
+	}
+
+	const obj = optionalX as Point
+
+	try {
+		return {x: obj.x, y: obj.y}
+	} catch (e) {
+		throw new Error('Invalid point')
+	}
+}
