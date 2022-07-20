@@ -26,13 +26,13 @@
 		"watch": "pnpm run build --watch"
 	},
 	"jest": {
-		"preset": "ts-jest",
-		"testEnvironment": "node",
 		"bail": false,
+		"preset": "ts-jest",
 		"roots": [
 			"src",
 			"__tests__"
 		],
+		"testEnvironment": "node",
 		"testPathIgnorePatterns": [
 			"__tests__/helpers.ts",
 			"/node_modules/"
