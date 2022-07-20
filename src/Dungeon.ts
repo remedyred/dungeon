@@ -1,6 +1,7 @@
-import {cardinalDirections, defaultDungeonOptions, defaultStageOptions, nameChance} from './helpers'
+import {defaultDungeonOptions, defaultStageOptions, nameChance} from './helpers'
 import {arrayUnique, isDefined, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
+import {cardinalDirections} from './Coordinates'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
 import Victor from 'victor'
