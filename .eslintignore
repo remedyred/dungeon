@@ -1,0 +1,15 @@
+*.iml
+dist/**
+
+**/babel.config.js*
+
+**/examples/
+
+logs/
+*.log
+
+node_modules/
+*.lock
+
+dist/
+bin/
