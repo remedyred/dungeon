@@ -10,7 +10,9 @@ export interface Point {
 	y: number
 }
 
-export type Coordinates = Cell | Point | Tile
+export type PointArray = [number, number]
+
+export type Coordinates = Cell | Point | PointArray | Tile
 
 /** Constants **/
 
@@ -29,16 +31,18 @@ export const cardinalDirections = [
 
 /** Helpers **/
 
-export function parsePoint(optionalX: Cell | Point | Tile | number, optionalY: number): Point {
-	if (isNumber(optionalX) && isNumber(optionalY)) {
-		return {x: optionalX, y: optionalY}
+export function parsePoint(optionalX: Cell | Point | PointArray | Tile | number, optionalY?: number): Point {
+	let x: number
+	let y: number
+
+	if (Array.isArray(optionalX)) {
+		[x, y] = optionalX
+	} else if (isNumber(optionalX) && isNumber(optionalY)) {
+		x = optionalX
+		y = optionalY
+	} else {
+		({x, y} = optionalX as Point)
 	}
 
-	const obj = optionalX as Point
-
-	try {
-		return {x: obj.x, y: obj.y}
-	} catch (e) {
-		throw new Error('Invalid point')
-	}
+	return {x, y}
 }
