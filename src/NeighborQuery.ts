@@ -92,7 +92,7 @@ export class NeighborQuery {
 			directions.push(...intercardinal)
 		}
 
-		const tiles = []
+		const tiles: Tile[] = []
 
 		for (const direction of directions) {
 			const tile = this.tile.neighbors[direction]
