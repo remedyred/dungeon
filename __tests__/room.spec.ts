@@ -94,10 +94,80 @@ describe('Room', () => {
 	it('Room.intersects() returns true for rooms that intersect', () => {
 		const room = new Room(10, 10, 10, 10)
 
-		expect(room.intersects(new Room(1, 1, 10, 10))).toBe(true)
-		expect(room.intersects(new Room(9, 9, 10, 10))).toBe(true)
-		expect(room.intersects(new Room(10, 10, 10, 10))).toBe(true)
-		expect(room.intersects(new Room(19, 19, 10, 10))).toBe(true)
+			expect(room.intersects(new Room(1, 1, 10, 10))).toBe(true)
+			expect(room.intersects(new Room(9, 9, 10, 10))).toBe(true)
+			expect(room.intersects(new Room(10, 10, 10, 10))).toBe(true)
+			expect(room.intersects(new Room(19, 19, 10, 10))).toBe(true)
+		})
+	})
+
+	describe('Room.touches()', () => {
+		it('Should throw if the object has no getBoundingBox method', () => {
+			expect(() => {
+				new Room(0, 0, 3, 3).touches({foo: 'bar'})
+			}).toThrow()
+		})
+
+		it('returns false for rooms 2 spaces north of the room', () => {
+			const room1 = new Room(0, 10, 10, 10)
+			const room2 = new Room(0, 0, 10, 8)
+
+			expect(room1.touches(room2)).toBe(false)
+		})
+		it('returns true for rooms directly north of the room', () => {
+			const room1 = new Room(0, 10, 10, 10)
+			const room2 = new Room(0, 0, 10, 10)
+
+			expect(room1.touches(room2)).toBe(true)
+		})
+
+		it('returns false for rooms 2 spaces east of the room', () => {
+			const room1 = new Room(0, 0, 10, 10)
+			const room2 = new Room(12, 0, 10, 10)
+
+			expect(room1.touches(room2)).toBe(false)
+		})
+		it('returns true for rooms directly east of the room', () => {
+			const room1 = new Room(0, 0, 10, 10)
+			const room2 = new Room(10, 0, 10, 10)
+
+			expect(room1.touches(room2)).toBe(true)
+		})
+
+		it('returns false for rooms 2 spaces south of the room', () => {
+			const room1 = new Room(0, 0, 10, 10)
+			const room2 = new Room(0, 12, 10, 10)
+
+			expect(room1.touches(room2)).toBe(false)
+		})
+		it('returns true for rooms directly south of the room', () => {
+			const room1 = new Room(0, 0, 10, 10)
+			const room2 = new Room(0, 10, 10, 10)
+
+			expect(room1.touches(room2)).toBe(true)
+		})
+
+		it('returns false for rooms 2 spaces west of the room', () => {
+			const room1 = new Room(12, 0, 10, 10)
+			const room2 = new Room(0, 0, 10, 10)
+
+			expect(room1.touches(room2)).toBe(false)
+		})
+		it('returns true for rooms directly west of the room', () => {
+			const room1 = new Room(10, 0, 10, 10)
+			const room2 = new Room(0, 0, 10, 10)
+
+			expect(room1.touches(room2)).toBe(true)
+		})
+
+		it('returns true for rooms that intersect', () => {
+			const room = new Room(10, 10, 10, 10)
+
+			expect(room.touches(new Room(1, 1, 10, 10))).toBe(true)
+			expect(room.touches(new Room(9, 9, 10, 10))).toBe(true)
+			expect(room.touches(new Room(10, 10, 10, 10))).toBe(true)
+			expect(room.touches(new Room(19, 19, 10, 10))).toBe(true)
+		})
 	})
 
 	it('Room.getBoundingBox() returns the correct bounding box', () => {
