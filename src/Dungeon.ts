@@ -37,14 +37,6 @@ const defaultStageOptions: StageOptions = {
 	height: 5
 }
 
-export interface DungeonResults {
-	rooms: Room[]
-	tiles: Array<Tile[]>
-	seed: number | string
-
-	toJson(): DungeonResults
-}
-
 export type TileMatrix = Tile[][]
 
 export interface Neighbors {
