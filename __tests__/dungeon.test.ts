@@ -1,5 +1,13 @@
 import {dungeon, Tile} from '../src'
 
+const counter = [
+	1,
+	2,
+	3,
+	4,
+	5
+]
+
 describe('dungeon', () => {
 	it('.build() should return an object containing the key "tiles"', () => {
 		const $dungeon = dungeon().build({
@@ -101,10 +109,10 @@ describe('dungeon', () => {
 		}
 	})
 
-	it('.build() every floor and door tile should be accessible', () => {
+	test.concurrent.each(counter)('.build() every floor and door tile should be accessible', async (i: number) => {
 		expect(() => {
-			const width = 15
-			const height = 15
+			const width = 10 + i
+			const height = 10 + i
 			const $dungeon = dungeon().build({
 				width,
 				height
@@ -117,13 +125,15 @@ describe('dungeon', () => {
 					const tile = $dungeon.tiles[x][y]
 					if (tile.type === 'door' || tile.type === 'floor') {
 						if (!visited[tile.x][tile.y]) {
-							throw new Error(`Tile ${x}, ${y} was not visited`)
+							throw new Error(`Tile ${x}, ${y} was not visited for dungeon: ${$dungeon.seed}`)
 						}
 					}
 				}
 			}
+
+			return true
 		}).not.toThrow()
-	})
+	}, 3000)
 
 	it('.build() even numbers for options.width and options.height should be rounded up', () => {
 		const width = 20
