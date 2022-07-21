@@ -80,7 +80,7 @@
 	</ul>
 	<ul>
 		<li><button x-data x-on:click="createMap"><strong>Generate</strong></button></li>
-		<li><a href="./" class="contrast"><strong>GitHub</strong></a></li>
+		<li><a href="https://github.com/snickbit/dungeon" target="_blank" class="contrast"><strong>GitHub</strong></a></li>
 	</ul>
 </nav>
 
@@ -107,12 +107,10 @@
 
 	ctx.imageSmoothingEnabled = false
 
-	function createMap(e) {
-		console.log('createMap', e)
+	function createMap() {
+		const $dungeon = window.dungeon().build(options)
 
-		const $generator = window.dungeon().build(options)
-
-		console.log('Generated dungeon', $generator)
+		console.log('Generated dungeon', $dungeon)
 
 		$canvas.width = options.canvasWidth;
 		$canvas.height = options.canvasHeight;
@@ -126,13 +124,13 @@
 
 		// Blue for rooms
 		ctx.fillStyle = 'blue'
-		for (const room of $generator.rooms) {
+		for (const room of $dungeon.rooms) {
 			ctx.fillRect(room.x * options.cellSize, room.y * options.cellSize, room.width * options.cellSize, room.height * options.cellSize)
 		}
 
-		for (let x = 0; x < $generator.tiles.length; x++) {
-			for (let y = 0; y < $generator.tiles[x].length; y++) {
-				const tile = $generator.tiles[x][y]
+		for (let x = 0; x < $dungeon.tiles.length; x++) {
+			for (let y = 0; y < $dungeon.tiles[x].length; y++) {
+				const tile = $dungeon.tiles[x][y]
 
 				if (tile.type === 'floor') {
 					// Use an overlay for corridors
@@ -154,7 +152,7 @@
 		drawGrid(ctx)
 
 		const $seed = document.getElementById('seed')
-		$seed.innerText = $generator.seed
+		$seed.innerText = $dungeon.seed
 	}
 
 	function drawGrid(context) {
