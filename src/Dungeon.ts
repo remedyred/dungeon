@@ -270,6 +270,8 @@ export class Dungeon {
 	}
 
 	private addRooms(): void {
+		const roomRestrictionModifier = 4 * this.options.multiplier
+
 		for (let i = 0; i < this.options.roomTries; i++) {
 			// Pick a random room size. The funny math here does two things:
 			// - It makes sure rooms are odd-sized to line up with maze.
@@ -286,8 +288,8 @@ export class Dungeon {
 			}
 
 			// Restrict the size of rooms relative to the stage size
-			width = Math.min(width, this.stage.width - 4)
-			height = Math.min(width, this.stage.height - 4)
+			width = Math.min(width, this.stage.width - roomRestrictionModifier)
+			height = Math.min(width, this.stage.height - roomRestrictionModifier)
 
 			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
 			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
