@@ -39,6 +39,8 @@ const defaultStageOptions: StageOptions = {
 
 export type TileMatrix = Tile[][]
 
+export type RegionType = 'corridor' | 'room'
+
 export interface Neighbors {
 	n?: Tile
 	ne?: Tile

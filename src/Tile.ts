@@ -1,4 +1,4 @@
-import {Neighbors} from './Dungeon'
+import {Neighbors, RegionType} from './Dungeon'
 import {NeighborQuery} from './NeighborQuery'
 
 export type TileType = 'door' | 'floor' | 'shaft' | 'stairs' | 'wall'
@@ -9,6 +9,7 @@ export interface TileState {
 	x: number
 	y: number
 	region: number
+	regionType?: RegionType
 }
 
 export class Tile {
@@ -46,6 +47,14 @@ export class Tile {
 
 	set region(region: number) {
 		this.state.region = region
+	}
+
+	get regionType(): RegionType {
+		return this.state.regionType
+	}
+
+	set regionType(type: RegionType) {
+		this.state.regionType = type
 	}
 
 	get neighbors() {
@@ -125,6 +134,14 @@ export class Tile {
 
 	isWall(): boolean {
 		return this.type === 'wall'
+	}
+
+	isRoom(): boolean {
+		return this.state.regionType === 'room'
+	}
+
+	isCorridor(): boolean {
+		return this.state.regionType === 'corridor'
 	}
 
 	isAtEnd(): boolean {
