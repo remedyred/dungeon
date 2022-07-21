@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>@snickbit/dungeon</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+	<style>
+		html,
+		body {
+			background: black;
+		}
+
+		canvas {
+			margin: 0 auto 0;
+			display: block;
+			image-rendering: pixelated;
+		}
+
+		#dice-svg {
+			display: block;
+			width: 80px;
+			margin-left: auto;
+			margin-right: auto;
+			cursor: pointer;
+		}
+
+		#dice-svg.mousedown {
+			padding-top: 1px;
+		}
+
+		#dice-svg:hover {
+			animation: wiggle 0.82s cubic-bezier(.36, .07, .19, .97) both;
+		}
+
+		#seed {
+			color: white;
+			font-family: monospace;
+			text-align: center;
+		}
+
+		@keyframes wiggle {
+			10%, 90% {
+				transform: rotate(-2deg);
+			}
+
+			20%, 80% {
+				transform: rotate(0deg);
+			}
+
+			30%, 50%, 70% {
+				transform: rotate(2deg);
+			}
+
+			40%, 60% {
+				transform: rotate(-2deg);
+			}
+		}
+
+		.flex-actions{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	</style>
+	<title>Hello, world!</title>
+</head>
+<body>
+
+<nav class="container-fluid">
+	<ul>
+		<li><a href="./" class="contrast"><strong>@snickbit/dungeon</strong></a></li>
+	</ul>
+	<ul>
+		<li><a href="./" class="contrast"><strong>GitHub</strong></a></li>
+	</ul>
+</nav>
+
+<main class="container">
+	<section>
+		<canvas></canvas>
+	</section>
+	<section>
+		<div class="flex-actions">
+			<h4 id="seed"></h4>
+			<img id="dice-svg" src="dice.svg" alt="dice"/>
+		</div>
+	</section>
+</main>
+<script type="module" src="../dist/index.bundle.js"></script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>

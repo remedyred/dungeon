@@ -2,6 +2,7 @@ import {defaultDungeonOptions, defaultStageOptions, nameChance} from './helpers'
 import {arrayUnique, isDefined, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
+import {isBrowser} from 'browser-or-node'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
 import Room from './Room'
@@ -445,3 +446,8 @@ export class Dungeon {
 export function dungeon(options?: DungeonOptions): Dungeon {
 	return new Dungeon(options)
 }
+
+if (isBrowser) {
+	window.dungeon = dungeon
+}
+
