@@ -321,7 +321,7 @@ export class Dungeon {
 			let overlaps = false
 
 			for (const other of this.rooms) {
-				if (room.intersects(other)) {
+				if (room.touches(other)) {
 					overlaps = true
 					break
 				}
