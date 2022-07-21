@@ -271,6 +271,18 @@ export class Dungeon {
 
 	private addRooms(): void {
 		const roomRestrictionModifier = 4 * this.options.multiplier
+		let outer_width_limit = this.stage.width - roomRestrictionModifier
+		let outer_height_limit = this.stage.height - roomRestrictionModifier
+
+		if (this.stage.width > 10 && outer_width_limit > this.stage.width * 0.5) {
+			// if the width is greater than 10, it should not be greater than 50% of the stage width
+			outer_width_limit = this.stage.width * 0.5
+		}
+
+		if (this.stage.height > 10 && outer_height_limit > this.stage.height * 0.5) {
+			// if the height is greater than 10, it should not be greater than 50% of the stage height
+			outer_height_limit = this.stage.height * 0.5
+		}
 
 		for (let i = 0; i < this.options.roomTries; i++) {
 			// Pick a random room size. The funny math here does two things:
@@ -288,8 +300,8 @@ export class Dungeon {
 			}
 
 			// Restrict the size of rooms relative to the stage size
-			width = Math.min(width, this.stage.width - roomRestrictionModifier)
-			height = Math.min(height, this.stage.height - roomRestrictionModifier)
+			width = Math.min(width, outer_width_limit)
+			height = Math.min(height, outer_height_limit)
 
 			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
 			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
