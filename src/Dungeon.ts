@@ -306,13 +306,13 @@ export class Dungeon {
 			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
 			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
 
-			// Make sure X dimension doesn't overflow
-			if (x + width > this.stage.width) {
+			// Make sure X dimension doesn't reach the edge of the stage
+			if (x + width >= this.stage.width) {
 				x = Math.max(1, this.stage.width - width - 1)
 			}
 
-			// Make sure Y dimension doesn't overflow
-			if (y + height > this.stage.height) {
+			// Make sure Y dimension doesn't reach the edge of the stage
+			if (y + height >= this.stage.height) {
 				y = Math.max(1, this.stage.height - height - 1)
 			}
 
