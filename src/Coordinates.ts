@@ -1,7 +1,6 @@
 import {isNumber} from '@snickbit/utilities'
 import Tile from './Tile'
 import Victor from 'victor'
-import Cell from './Cell'
 
 /** Definitions **/
 
@@ -12,7 +11,7 @@ export interface Point {
 
 export type PointArray = [number, number]
 
-export type Coordinates = Cell | Point | PointArray | Tile
+export type Coordinates = Point | PointArray | Tile
 
 /** Constants **/
 
@@ -31,7 +30,7 @@ export const cardinalDirections = [
 
 /** Helpers **/
 
-export function parsePoint(optionalX: Cell | Point | PointArray | Tile | number, optionalY?: number): Point {
+export function parsePoint(optionalX: Point | PointArray | Tile | number, optionalY?: number): Point {
 	let x: number
 	let y: number
 
