@@ -33,6 +33,19 @@ export class Room {
 			r2.bottom < r1.top)
 	}
 
+	touches(other) {
+		if (!other.getBoundingBox) {
+			throw new Error('Given entity has no method getBoundingBox')
+		}
+		const r1 = this.getBoundingBox()
+		const r2 = other.getBoundingBox()
+
+		return !(r2.left - 1 > r1.right ||
+			r2.right + 1 < r1.left ||
+			r2.top - 1 > r1.bottom ||
+			r2.bottom + 1 < r1.top)
+	}
+
 	containsTile(x, y) {
 		const boundingBox = this.getBoundingBox()
 		return !(
