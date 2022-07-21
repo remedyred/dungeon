@@ -361,34 +361,38 @@ export class Dungeon {
 			}
 		}
 
-		let added_connections = 0
 		for (const connections of Object.values(regionConnections)) {
-			const index = this.randBetween(0, connections.length - 1)
-			const connection = connections[index]
+			let added_connections = 0
+			const doorCount: number = this.randBetween(1, this.options.maxDoors)
 
-			if (connection.isCorner() || connection.nearDoors()) {
-				continue
+			let i = 0
+			const failedByChance: Tile[] = []
+			while (added_connections < doorCount && i < this.options.doorChance) {
+				i++
+				const rand: number = this.randBetween(0, connections.length - 1)
+				const door: Tile = connections[rand]
+				const byChance: boolean = this.oneIn(this.options.doorChance)
+				if (
+					!door.isCorner() &&
+					!door.nearDoors() &&
+					!door.isAtEnd()
+				) {
+					if (byChance) {
+						door.type = 'door'
+						added_connections++
+					} else {
+						failedByChance.push(door)
+					}
+				}
 			}
 
-			connection.type = 'door'
-			connections.splice(index, 1)
-			added_connections++
-
-			// Occasionally open up additional connections
-			for (const conn of connections) {
-				if (added_connections <= this.options.maxDoors) {
-					if (
-						!conn.isCorner() &&
-						!conn.nearDoors() &&
-						!conn.isAtEnd() &&
-						this.oneIn(this.options.doorChance)
-					) {
-						conn.type = 'door'
-						added_connections++
-					}
-				} else {
-					break
-				}
+			// If we didn't add any doors, just pick one of the failedByChance (if any) or fall back to a less desirable door spot if needed
+			if (!added_connections) {
+				const doors: Tile[] = failedByChance.length ? failedByChance : connections
+				const rand: number = this.randBetween(0, doors.length - 1)
+				const door: Tile = doors[rand]
+				door.type = 'door'
+				added_connections++
 			}
 		}
 	}
