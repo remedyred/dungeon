@@ -1,7 +1,7 @@
-import {dungeon} from '../src'
+import {dungeon} from '../../../src'
 
 describe('rooms', () => {
-	it('.build() every room should have numerical height, width, x, and y properties', () => {
+	it('every room should have numerical height, width, x, and y properties', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -17,7 +17,7 @@ describe('rooms', () => {
 		}
 	})
 
-	it('.build() every room should fall within the bounds of the declared height and width', () => {
+	it('every room should fall within the bounds of the declared height and width', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -31,7 +31,7 @@ describe('rooms', () => {
 		}
 	})
 
-	it('.build() every room should be surrounded by either wall or door tiles', () => {
+	it('every room should be surrounded by either wall or door tiles', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -75,7 +75,7 @@ describe('rooms', () => {
 		}
 	})
 
-	it('.build() every room should have at least one adjacent door tile', () => {
+	it('every room should have at least one adjacent door tile', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -119,7 +119,7 @@ describe('rooms', () => {
 		}
 	})
 
-	it('.build() every room should be made up of an area of floor tiles', () => {
+	it('every room should be made up of an area of floor tiles', () => {
 		expect(() => {
 			const width = 21
 			const height = 21

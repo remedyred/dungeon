@@ -1,7 +1,7 @@
-import {dungeon} from '../src'
+import {dungeon} from '../../../src'
 
 describe('seeds', () => {
-	it('.build() should return a re-usable seed', () => {
+	it('should return a re-usable seed', () => {
 		const width = 21
 		const height = 21
 		const dungeon1 = dungeon().build({
@@ -18,7 +18,7 @@ describe('seeds', () => {
 		expect(dungeon1.toJson()).toStrictEqual(dungeon2.toJson())
 	})
 
-	it('.build() seeded dungeons should be consistent', () => {
+	it('seeded dungeons should be consistent', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -29,7 +29,7 @@ describe('seeds', () => {
 		expect($dungeon.toJson()).toMatchSnapshot()
 	})
 
-	it('.build() should be seedable', () => {
+	it('should be seedable', () => {
 		const width = 21
 		const height = 21
 		const dungeon1 = dungeon().build({

@@ -1,7 +1,7 @@
-import {dungeon} from '../src'
+import {dungeon} from '../../../src'
 
 describe('neighbors', () => {
-	it('.build() every tile should correctly reference its neighbors', () => {
+	it('every tile should correctly reference its neighbors', () => {
 		expect(() => {
 			const width = 21
 			const height = 21
@@ -50,7 +50,7 @@ describe('neighbors', () => {
 		}).not.toThrow()
 	})
 
-	it('.build() tiles on the north edge should not list a northern neighbour', () => {
+	it('tiles on the north edge should not list a northern neighbour', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -65,7 +65,7 @@ describe('neighbors', () => {
 		}
 	})
 
-	it('.build() tiles on the east edge should not list an eastern neighbour', () => {
+	it('tiles on the east edge should not list an eastern neighbour', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -80,7 +80,7 @@ describe('neighbors', () => {
 		}
 	})
 
-	it('.build() tiles on the south edge should not list a southern neighbour', () => {
+	it('tiles on the south edge should not list a southern neighbour', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -95,7 +95,7 @@ describe('neighbors', () => {
 		}
 	})
 
-	it('.build() tiles on the west edge should not list a western neighbour', () => {
+	it('tiles on the west edge should not list a western neighbour', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -110,7 +110,7 @@ describe('neighbors', () => {
 		}
 	})
 
-	it('.build() the tile on north west corner should have only three neighbors', () => {
+	it('the tile on north west corner should have only three neighbors', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -123,7 +123,7 @@ describe('neighbors', () => {
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['e', 'se', 's'])
 	})
 
-	it('.build() the tile on north east corner should have only three neighbors', () => {
+	it('the tile on north east corner should have only three neighbors', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -136,7 +136,7 @@ describe('neighbors', () => {
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['s', 'sw', 'w'])
 	})
 
-	it('.build() the tile on south west corner should have only three neighbors', () => {
+	it('the tile on south west corner should have only three neighbors', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -149,7 +149,7 @@ describe('neighbors', () => {
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['n', 'ne', 'e'])
 	})
 
-	it('.build() the tile on south east corner should have only three neighbors', () => {
+	it('the tile on south east corner should have only three neighbors', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({

@@ -1,4 +1,4 @@
-import {dungeon, Tile} from '../src'
+import {dungeon, Tile} from '../../src'
 
 const counter = [
 	1,
@@ -8,8 +8,8 @@ const counter = [
 	5
 ]
 
-describe('dungeon', () => {
-	it('.build() should return an object containing the key "tiles"', () => {
+describe('dungeon.build()', () => {
+	it('should return an object containing the key "tiles"', () => {
 		const $dungeon = dungeon().build({
 			width: 21,
 			height: 21
@@ -18,7 +18,7 @@ describe('dungeon', () => {
 		expect($dungeon.tiles).toBeTruthy()
 	})
 
-	it('.build() should return an object containing the key "rooms"', () => {
+	it('should return an object containing the key "rooms"', () => {
 		const $dungeon = dungeon().build({
 			width: 21,
 			height: 21
@@ -27,7 +27,7 @@ describe('dungeon', () => {
 		expect($dungeon.rooms).toBeTruthy()
 	})
 
-	it('.build() should return a 2d array of tiles proportional to the width and height options', () => {
+	it('should return a 2d array of tiles proportional to the width and height options', () => {
 		const width = 21
 		const height = 31
 
@@ -43,7 +43,7 @@ describe('dungeon', () => {
 		}
 	})
 
-	it('.build() tiles should contain at least one floor tile', () => {
+	it('tiles should contain at least one floor tile', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -65,7 +65,7 @@ describe('dungeon', () => {
 		expect(floorTiles.length).toBeTruthy()
 	})
 
-	it('.build() every floor tile should be connected to a floor or door tile', () => {
+	it('every floor tile should be connected to a floor or door tile', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -87,7 +87,7 @@ describe('dungeon', () => {
 		}
 	})
 
-	it('.build() every door tile should be connected to at least two floor tiles', () => {
+	it('every door tile should be connected to at least two floor tiles', () => {
 		const width = 21
 		const height = 21
 		const $dungeon = dungeon().build({
@@ -109,7 +109,7 @@ describe('dungeon', () => {
 		}
 	})
 
-	test.concurrent.each(counter)('.build() every floor and door tile should be accessible', async (i: number) => {
+	test.concurrent.each(counter)('every floor and door tile should be accessible', async (i: number) => {
 		expect(() => {
 			const width = 10 + i
 			const height = 10 + i
@@ -125,7 +125,7 @@ describe('dungeon', () => {
 					const tile = $dungeon.tiles[x][y]
 					if (tile.type === 'door' || tile.type === 'floor') {
 						if (!visited[tile.x][tile.y]) {
-							throw new Error(`Tile ${x}, ${y} was not visited for dungeon: ${$dungeon.seed}`)
+							throw new Error(`Tile ${x}, ${y} was not visited for dungeon of size ${width}x${height} : ${$dungeon.seed}`)
 						}
 					}
 				}
@@ -135,7 +135,7 @@ describe('dungeon', () => {
 		}).not.toThrow()
 	}, 3000)
 
-	it('.build() even numbers for options.width and options.height should be rounded up', () => {
+	it('even numbers for options.width and options.height should be rounded up', () => {
 		const width = 20
 		const height = 20
 		const $dungeon = dungeon().build({
@@ -147,7 +147,7 @@ describe('dungeon', () => {
 		expect($dungeon.tiles[0].length).toBe(height + 1)
 	})
 
-	it('.build() should throw an error if width is less than 5', () => {
+	it('should throw an error if width is less than 5', () => {
 		const width = 4
 		const height = 20
 
@@ -159,7 +159,7 @@ describe('dungeon', () => {
 		}).toThrow(`DungeonError: options.width must not be less than 5, received ${width}`)
 	})
 
-	it('.build() should throw an error if height is less than 5', () => {
+	it('should throw an error if height is less than 5', () => {
 		const width = 20
 		const height = 4
 
@@ -180,7 +180,7 @@ describe('dungeon', () => {
 	]
 
 	for (const [width, height] of sizes) {
-		it(`.build() Should reliably create ${width} x ${height} dungeons`, () => {
+		it(`Should reliably create ${width} x ${height} dungeons`, () => {
 			expect(() => {
 				let count = 10
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`seeds .build() seeded dungeons should be consistent 1`] = `
+exports[`seeds seeded dungeons should be consistent 1`] = `
 Object {
   "rooms": Array [
     Object {
@@ -202,33 +202,33 @@ Object {
         "y": 8,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 1,
         "y": 9,
-      },
-      Object {
-        "type": "door",
-        "x": 1,
-        "y": 10,
-      },
-      Object {
-        "type": "floor",
-        "x": 1,
-        "y": 11,
-      },
-      Object {
-        "type": "floor",
-        "x": 1,
-        "y": 12,
-      },
-      Object {
-        "type": "floor",
-        "x": 1,
-        "y": 13,
       },
       Object {
         "type": "wall",
         "x": 1,
+        "y": 10,
+      },
+      Object {
+        "type": "floor",
+        "x": 1,
+        "y": 11,
+      },
+      Object {
+        "type": "floor",
+        "x": 1,
+        "y": 12,
+      },
+      Object {
+        "type": "floor",
+        "x": 1,
+        "y": 13,
+      },
+      Object {
+        "type": "wall",
+        "x": 1,
         "y": 14,
       },
       Object {
@@ -309,33 +309,33 @@ Object {
         "y": 8,
       },
       Object {
-        "type": "floor",
-        "x": 2,
-        "y": 9,
-      },
-      Object {
         "type": "wall",
         "x": 2,
-        "y": 10,
-      },
-      Object {
-        "type": "floor",
-        "x": 2,
-        "y": 11,
-      },
-      Object {
-        "type": "floor",
-        "x": 2,
-        "y": 12,
-      },
-      Object {
-        "type": "floor",
-        "x": 2,
-        "y": 13,
+        "y": 9,
       },
       Object {
         "type": "wall",
         "x": 2,
+        "y": 10,
+      },
+      Object {
+        "type": "floor",
+        "x": 2,
+        "y": 11,
+      },
+      Object {
+        "type": "floor",
+        "x": 2,
+        "y": 12,
+      },
+      Object {
+        "type": "floor",
+        "x": 2,
+        "y": 13,
+      },
+      Object {
+        "type": "wall",
+        "x": 2,
         "y": 14,
       },
       Object {
@@ -376,47 +376,47 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 3,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 5,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 7,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 8,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 9,
       },
@@ -446,17 +446,17 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 15,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 3,
         "y": 17,
       },
@@ -483,7 +483,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 4,
         "y": 1,
       },
@@ -503,7 +503,7 @@ Object {
         "y": 4,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 4,
         "y": 5,
       },
@@ -523,7 +523,7 @@ Object {
         "y": 8,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 4,
         "y": 9,
       },
@@ -553,7 +553,7 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 4,
         "y": 15,
       },
@@ -563,7 +563,7 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 4,
         "y": 17,
       },
@@ -590,12 +590,12 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 5,
         "y": 1,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 5,
         "y": 2,
       },
@@ -635,7 +635,7 @@ Object {
         "y": 9,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 5,
         "y": 10,
       },
@@ -655,12 +655,12 @@ Object {
         "y": 13,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 5,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 5,
         "y": 15,
       },
@@ -697,7 +697,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 6,
         "y": 1,
       },
@@ -752,7 +752,7 @@ Object {
         "y": 11,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 6,
         "y": 12,
       },
@@ -767,7 +767,7 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 6,
         "y": 15,
       },
@@ -804,7 +804,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 1,
       },
@@ -829,7 +829,7 @@ Object {
         "y": 5,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 7,
         "y": 6,
       },
@@ -849,37 +849,37 @@ Object {
         "y": 9,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 7,
         "y": 10,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 11,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 13,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 7,
         "y": 15,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 7,
         "y": 16,
       },
@@ -911,7 +911,7 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 8,
         "y": 1,
       },
@@ -931,7 +931,7 @@ Object {
         "y": 4,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 8,
         "y": 5,
       },
@@ -946,7 +946,7 @@ Object {
         "y": 7,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 8,
         "y": 8,
       },
@@ -971,7 +971,7 @@ Object {
         "y": 12,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 8,
         "y": 13,
       },
@@ -996,7 +996,7 @@ Object {
         "y": 17,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 8,
         "y": 18,
       },
@@ -1018,17 +1018,17 @@ Object {
         "y": 0,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 9,
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 9,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 9,
         "y": 3,
       },
@@ -1098,17 +1098,17 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 9,
         "y": 17,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 9,
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 9,
         "y": 19,
       },
@@ -1135,7 +1135,7 @@ Object {
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 10,
         "y": 3,
       },
@@ -1205,7 +1205,7 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 10,
         "y": 17,
       },
@@ -1215,7 +1215,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 10,
         "y": 19,
       },
@@ -1237,17 +1237,17 @@ Object {
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 11,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 11,
         "y": 3,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 11,
         "y": 4,
       },
@@ -1312,7 +1312,7 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 11,
         "y": 17,
       },
@@ -1322,7 +1322,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 11,
         "y": 19,
       },
@@ -1344,7 +1344,7 @@ Object {
         "y": 1,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 12,
         "y": 2,
       },
@@ -1414,12 +1414,12 @@ Object {
         "y": 15,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 12,
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 12,
         "y": 17,
       },
@@ -1429,7 +1429,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 12,
         "y": 19,
       },
@@ -1536,13 +1536,13 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
-        "x": 13,
-        "y": 19,
-      },
-      Object {
         "type": "wall",
         "x": 13,
+        "y": 19,
+      },
+      Object {
+        "type": "wall",
+        "x": 13,
         "y": 20,
       },
     ],
@@ -1568,7 +1568,7 @@ Object {
         "y": 3,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 14,
         "y": 4,
       },
@@ -1643,7 +1643,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 14,
         "y": 19,
       },
@@ -1740,17 +1740,17 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 15,
         "y": 17,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 15,
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 15,
         "y": 19,
       },
@@ -1797,7 +1797,7 @@ Object {
         "y": 6,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 16,
         "y": 7,
       },
@@ -1812,7 +1812,7 @@ Object {
         "y": 9,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 16,
         "y": 10,
       },
@@ -1837,7 +1837,7 @@ Object {
         "y": 14,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 16,
         "y": 15,
       },
@@ -1847,7 +1847,7 @@ Object {
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 16,
         "y": 17,
       },
@@ -1857,7 +1857,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 16,
         "y": 19,
       },
@@ -1889,22 +1889,22 @@ Object {
         "y": 3,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 17,
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 5,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 7,
       },
@@ -1929,32 +1929,32 @@ Object {
         "y": 11,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 17,
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 13,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 15,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 17,
       },
@@ -1964,7 +1964,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 17,
         "y": 19,
       },
@@ -1986,7 +1986,7 @@ Object {
         "y": 1,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 18,
         "y": 2,
       },
@@ -2011,12 +2011,12 @@ Object {
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 18,
         "y": 7,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 18,
         "y": 8,
       },
@@ -2071,7 +2071,7 @@ Object {
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 18,
         "y": 19,
       },
@@ -2093,32 +2093,32 @@ Object {
         "y": 1,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 2,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 3,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 4,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 5,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 6,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 7,
       },
@@ -2143,42 +2143,42 @@ Object {
         "y": 11,
       },
       Object {
-        "type": "door",
+        "type": "wall",
         "x": 19,
         "y": 12,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 13,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 14,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 15,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 16,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 17,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 18,
       },
       Object {
-        "type": "floor",
+        "type": "wall",
         "x": 19,
         "y": 19,
       },
