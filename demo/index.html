@@ -8,31 +8,10 @@
 	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 	<style>
-		html,
-		body {
-			background: black;
-		}
-
 		canvas {
 			margin: 0 auto 0;
 			display: block;
 			image-rendering: pixelated;
-		}
-
-		#dice-svg {
-			display: block;
-			width: 80px;
-			margin-left: auto;
-			margin-right: auto;
-			cursor: pointer;
-		}
-
-		#dice-svg.mousedown {
-			padding-top: 1px;
-		}
-
-		#dice-svg:hover {
-			animation: wiggle 0.82s cubic-bezier(.36, .07, .19, .97) both;
 		}
 
 		#seed {
@@ -41,30 +20,6 @@
 			text-align: center;
 			font-size: 1.5rem;
 			cursor: copy;
-		}
-
-		@keyframes wiggle {
-			10%, 90% {
-				transform: rotate(-2deg);
-			}
-
-			20%, 80% {
-				transform: rotate(0deg);
-			}
-
-			30%, 50%, 70% {
-				transform: rotate(2deg);
-			}
-
-			40%, 60% {
-				transform: rotate(-2deg);
-			}
-		}
-
-		.flex-actions{
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
 		}
 	</style>
 	<title>Hello, world!</title>
@@ -112,18 +67,18 @@
 
 		console.log('Generated dungeon', $dungeon)
 
-		$canvas.width = options.canvasWidth;
-		$canvas.height = options.canvasHeight;
+		$canvas.width = options.canvasWidth
+		$canvas.height = options.canvasHeight
 
 		$canvas.style.width = `${options.canvasWidth}px`
 		$canvas.style.height = `${options.canvasHeight}px`
 
-		// Fill canvas with gray to represent stone
-		ctx.fillStyle = 'gray'
+		// Fill canvas with black background
+		ctx.fillStyle = 'black'
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
 		// Blue for rooms
-		ctx.fillStyle = 'blue'
+		ctx.fillStyle = '#6479a3'
 		for (const room of $dungeon.rooms) {
 			ctx.fillRect(room.x * options.cellSize, room.y * options.cellSize, room.width * options.cellSize, room.height * options.cellSize)
 		}
@@ -132,19 +87,31 @@
 			for (let y = 0; y < $dungeon.tiles[x].length; y++) {
 				const tile = $dungeon.tiles[x][y]
 
-				if (tile.type === 'floor') {
+				if (tile.isRoom()) {
 					// Use an overlay for corridors
-					ctx.fillStyle = 'rgba(255, 255, 255, 0.4)'
+					ctx.fillStyle = '#3d5986'
 					ctx.fillRect(x * options.cellSize, y * options.cellSize, options.cellSize, options.cellSize)
-				}
-				if (tile.type === 'door') {
+				} else if (tile.isCorridor()) {
+					// Use an overlay for corridors
+					ctx.fillStyle = '#bdb8af'
+					ctx.fillRect(x * options.cellSize, y * options.cellSize, options.cellSize, options.cellSize)
+				} else if (tile.isDoor()) {
 					// White for doors
 					ctx.fillStyle = 'white'
+					ctx.fillRect(x * options.cellSize, y * options.cellSize, options.cellSize, options.cellSize)
+				} else if (tile.type === 'floor') {
+					// Color missing tiles red
+					ctx.fillStyle = 'red'
 					ctx.fillRect(x * options.cellSize, y * options.cellSize, options.cellSize, options.cellSize)
 				}
 
 				ctx.fillStyle = 'black'
-				ctx.fillText(`${x}x${y}  |  ${tile.region}`, x * options.cellSize + 3, y * options.cellSize + 10)
+				ctx.textAlign = 'center'
+				ctx.fillText(`${x}x${y}`, x * options.cellSize + 18, y * options.cellSize + 10)
+
+				if (tile.region > -1) {
+					ctx.fillText(`${tile.region}`, x * options.cellSize + 18, y * options.cellSize + 30)
+				}
 			}
 		}
 
