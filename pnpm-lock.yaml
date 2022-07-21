@@ -7,7 +7,9 @@ specifiers:
   '@types/node': 18.0.6
   '@typescript-eslint/eslint-plugin': ^5.30.6
   '@typescript-eslint/parser': ^5.30.6
+  browser-or-node: ^2.0.0
   chance: ^1.1.8
+  esbuild: ^0.14.49
   eslint: ^8.19.0
   eslint-plugin-beautiful-sort: ^2.0.3
   eslint-plugin-json: ^3.1.0
@@ -18,19 +20,19 @@ specifiers:
   ts-jest: 28.0.7
   tsup: 6.1.3
   typescript: 4.7.4
-  victor: ^1.1.0
 
 dependencies:
   '@snickbit/indexer': 2.5.7
   '@snickbit/utilities': 3.2.0
+  browser-or-node: 2.0.0
   chance: 1.1.8
-  victor: 1.1.0
 
 devDependencies:
   '@types/jest': 28.1.6
   '@types/node': 18.0.6
   '@typescript-eslint/eslint-plugin': 5.30.7_6wltbjakwuqm7awqswigmiuhd4
   '@typescript-eslint/parser': 5.30.7_he2ccbldppg44uulnyq4rwocfa
+  esbuild: 0.14.49
   eslint: 8.20.0
   eslint-plugin-beautiful-sort: 2.0.3
   eslint-plugin-json: 3.1.0
@@ -38,7 +40,7 @@ devDependencies:
   eslint-plugin-sort-class-members: 1.14.1_eslint@8.20.0
   jest: 28.1.3_@types+node@18.0.6
   shx: 0.3.4
-  ts-jest: 28.0.7_bi2kohzqnxavgozw3csgny5hju
+  ts-jest: 28.0.7_e4vlsll2vsrxuwy4jhlvxjbksa
   tsup: 6.1.3_typescript@4.7.4
   typescript: 4.7.4
 
@@ -3374,7 +3376,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-jest/28.0.7_bi2kohzqnxavgozw3csgny5hju:
+  /ts-jest/28.0.7_e4vlsll2vsrxuwy4jhlvxjbksa:
     resolution: {integrity: sha512-wWXCSmTwBVmdvWrOpYhal79bDpioDy4rTT+0vyUnE3ZzM7LOAAGG9NXwzkEL/a516rQEgnMmS/WKP9jBPCVJyA==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     hasBin: true
@@ -3396,6 +3398,7 @@ packages:
         optional: true
     dependencies:
       bs-logger: 0.2.6
+      esbuild: 0.14.49
       fast-json-stable-stringify: 2.1.0
       jest: 28.1.3_@types+node@18.0.6
       jest-util: 28.1.3
@@ -3514,10 +3517,6 @@ packages:
       '@types/istanbul-lib-coverage': 2.0.4
       convert-source-map: 1.8.0
     dev: true
-
-  /victor/1.1.0:
-    resolution: {integrity: sha512-s+EQHqIs5TNgLa3HHPr8oCpWFulQZzDX/PLaskVDeWXqEW12l54H5XD+cZ3gXrgvdOscqEcdAMXgEUZlJckQ4w==}
-    dev: false
 
   /vscode-json-languageservice/4.2.1:
     resolution: {integrity: sha512-xGmv9QIWs2H8obGbWg+sIPI/3/pFgj/5OWBhNzs00BkYQ9UaB2F6JJaGB/2/YOZJ3BvLXQTC4Q7muqU25QgAhA==}
