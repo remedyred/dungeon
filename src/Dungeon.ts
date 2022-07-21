@@ -1,15 +1,15 @@
-import {defaultDungeonOptions, defaultStageOptions, nameChance} from './helpers'
 import {arrayUnique, isDefined, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import {isBrowser} from 'browser-or-node'
+import {$chance} from './common'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
 import Room from './Room'
 
 export interface DungeonOptions {
-	extraConnectorChance?: number
-	maxConnectors?: number
+	doorChance?: number
+	maxDoors?: number
 	roomTries?: number
 	roomExtraSize?: number
 	windingPercent?: number
@@ -22,6 +22,20 @@ export interface StageOptions {
 	width: number
 	height: number
 	seed?: any
+}
+
+const defaultDungeonOptions: DungeonOptions = {
+	doorChance: 50,
+	maxDoors: 5,
+	roomTries: 50,
+	roomExtraSize: 0,
+	windingPercent: 50
+}
+
+const defaultStageOptions: StageOptions = {
+	width: 5,
+	height: 5,
+	seed: $chance.guid()
 }
 
 export interface DungeonResults {
@@ -48,7 +62,7 @@ export interface Neighbors {
 export class Dungeon {
 	options: DungeonOptions
 	stage: StageOptions
-	rng: typeof Chance
+	rng: Chance.Chance
 
 	private rooms = []
 	private currentRegion = -1
@@ -357,12 +371,12 @@ export class Dungeon {
 
 			// Occasionally open up additional connections
 			for (const conn of connections) {
-				if (added_connections <= this.options.maxConnectors) {
+				if (added_connections <= this.options.maxDoors) {
 					if (
 						!conn.isCorner() &&
 						!conn.nearDoors() &&
 						!conn.isAtEnd() &&
-						this.oneIn(this.options.extraConnectorChance)
+						this.oneIn(this.options.doorChance)
 					) {
 						conn.type = 'door'
 						added_connections++
