@@ -1,4 +1,4 @@
-import {arrayUnique, isDefined, objectFilter} from '@snickbit/utilities'
+import {arrayUnique, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import {isBrowser} from 'browser-or-node'
