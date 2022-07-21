@@ -1,10 +1,9 @@
 import {defaultDungeonOptions, defaultStageOptions, nameChance} from './helpers'
 import {arrayUnique, isDefined, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
-import {cardinalDirections} from './Coordinates'
+import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
-import Victor from 'victor'
 import Room from './Room'
 
 export interface DungeonOptions {
@@ -195,8 +194,8 @@ export class Dungeon {
 	}
 
 	private growMaze(startX: number, startY: number): void {
-		const cells = []
-		let lastDir
+		const cells: Point[] = []
+		let lastDirection
 
 		if (objectFilter(this.tiles[startX][startY].neighbors, (key: string, tile: Tile) => tile.type === 'floor').length > 0) {
 			return
@@ -206,7 +205,10 @@ export class Dungeon {
 
 		this.carve(startX, startY)
 
-		cells.push(new Victor(startX, startY))
+		cells.push({
+			x: startX,
+			y: startY
+		})
 
 		let count = 0
 
@@ -215,41 +217,48 @@ export class Dungeon {
 			const cell = cells[cells.length - 1]
 
 			// See which adjacent cells are open.
-			const unmadeCells = []
+			const unmadeCells: PointArray[] = []
 
-			for (const dir of cardinalDirections) {
-				if (this.canCarve(cell, dir)) {
-					unmadeCells.push(dir)
+			for (const direction of cardinalDirections) {
+				if (this.canCarve(cell, direction)) {
+					unmadeCells.push(direction)
 				}
 			}
 
 			if (unmadeCells.length) {
 				// Based on how "windy" passages are, try to prefer carving in the
 				// same direction.
-				let dir
-				const stringifiedCells = unmadeCells.map(v => v.toString())
-				if (lastDir && stringifiedCells.indexOf(lastDir.toString()) > -1 && this.randBetween(1, 100) > this.options.windingPercent) {
-					dir = lastDir.clone()
+				let direction: Point
+				const cellIds = unmadeCells.map(v => v.toString())
+				if (lastDirection && cellIds.indexOf(lastDirection.toString()) > -1 && this.randBetween(1, 100) > this.options.windingPercent) {
+					direction = parsePoint(lastDirection)
 				} else {
 					const rand = this.randBetween(0, unmadeCells.length - 1)
-					dir = unmadeCells[rand].clone()
+					direction = parsePoint(unmadeCells[rand])
 				}
 
-				const carveLoc1 = cell.clone().add(dir).toObject()
-				this.carve(carveLoc1.x, carveLoc1.y)
+				// carve the first cell in the direction
+				this.carve(cell.x + direction.x, cell.y + direction.y)
 
-				const carveLoc2 = cell.clone().add(dir).add(dir).toObject()
-				this.carve(carveLoc2.x, carveLoc2.y)
+				// create the new cell
+				const newCell = {
+					x: cell.x + direction.x * 2,
+					y: cell.y + direction.y * 2
+				}
 
-				cells.push(cell.clone().add(dir).add(dir))
+				// carve the space where the new cell will be
+				this.carve(newCell.x, newCell.y)
 
-				lastDir = dir.clone()
+				// place the new cell in the stack
+				cells.push(newCell)
+
+				lastDirection = {...direction}
 			} else {
 				// No adjacent uncarved cells.
 				cells.pop()
 
 				// This path has ended.
-				lastDir = null
+				lastDirection = null
 			}
 		}
 	}
@@ -398,9 +407,14 @@ export class Dungeon {
 		}
 	}
 
-	private canCarve(cell, direction): boolean {
+	private canCarve(cell: Point, offset: Coordinates): boolean {
+		const parsed = parsePoint(offset)
+
 		// Must end in bounds.
-		const end = cell.clone().add(direction).add(direction).add(direction).toObject()
+		const end: Point = {
+			x: cell.x + parsed.x * 3,
+			y: cell.y + parsed.y * 3
+		}
 
 		if (!this.tiles[end.x] || !this.tiles[end.x][end.y]) {
 			return false
@@ -411,7 +425,10 @@ export class Dungeon {
 		}
 
 		// Destination must not be open.
-		const dest = cell.clone().add(direction).add(direction).toObject()
+		const dest: Point = {
+			x: cell.x + parsed.x * 2,
+			y: cell.y + parsed.y * 2
+		}
 		return this.getTile(dest.x, dest.y).type !== 'floor'
 	}
 

@@ -1,6 +1,5 @@
 import {isNumber} from '@snickbit/utilities'
 import Tile from './Tile'
-import Victor from 'victor'
 
 /** Definitions **/
 
@@ -15,17 +14,12 @@ export type Coordinates = Point | PointArray | Tile
 
 /** Constants **/
 
-const n = new Victor(0, 1)
-const e = new Victor(1, 0)
-const s = new Victor(0, -1)
-const w = new Victor(-1, 0)
-
 // The four cardinal directions: north, south, east, and west.
-export const cardinalDirections = [
-	n,
-	e,
-	s,
-	w
+export const cardinalDirections: PointArray[] = [
+	[0, 1], // north
+	[1, 0], // east
+	[0, -1], // south
+	[-1, 0] // west
 ]
 
 /** Helpers **/
