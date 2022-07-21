@@ -5,6 +5,8 @@
 	<title>@snickbit/dungeon</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 	<style>
 		html,
 		body {
@@ -37,6 +39,8 @@
 			color: white;
 			font-family: monospace;
 			text-align: center;
+			font-size: 1.5rem;
+			cursor: copy;
 		}
 
 		@keyframes wiggle {
@@ -72,22 +76,105 @@
 		<li><a href="./" class="contrast"><strong>@snickbit/dungeon</strong></a></li>
 	</ul>
 	<ul>
+		<li><strong id="seed"></strong></li>
+	</ul>
+	<ul>
+		<li><button x-data x-on:click="createMap"><strong>Generate</strong></button></li>
 		<li><a href="./" class="contrast"><strong>GitHub</strong></a></li>
 	</ul>
 </nav>
+
 
 <main class="container">
 	<section>
 		<canvas></canvas>
 	</section>
-	<section>
-		<div class="flex-actions">
-			<h4 id="seed"></h4>
-			<img id="dice-svg" src="dice.svg" alt="dice"/>
-		</div>
-	</section>
 </main>
-<script type="module" src="../dist/index.bundle.js"></script>
-<script type="module" src="./main.js"></script>
+<script src="../dist/index.bundle.js"></script>
+<script>
+	const options = {
+		width: 15,
+		height: 15,
+		cellSize: 40,
+		gridPadding: 0
+	}
+
+	options.canvasWidth = options.width * options.cellSize;
+	options.canvasHeight = options.height * options.cellSize;
+
+	const $canvas = document.querySelector('canvas')
+	const ctx = $canvas.getContext('2d')
+
+	ctx.imageSmoothingEnabled = false
+
+	function createMap(e) {
+		console.log('createMap', e)
+
+		const $generator = window.dungeon().build(options)
+
+		console.log('Generated dungeon', $generator)
+
+		$canvas.width = options.canvasWidth;
+		$canvas.height = options.canvasHeight;
+
+		$canvas.style.width = `${options.canvasWidth}px`
+		$canvas.style.height = `${options.canvasHeight}px`
+
+		// Fill canvas with gray to represent stone
+		ctx.fillStyle = 'gray'
+		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+		// Blue for rooms
+		ctx.fillStyle = 'blue'
+		for (const room of $generator.rooms) {
+			ctx.fillRect(room.x * options.cellSize, room.y * options.cellSize, room.width * options.cellSize, room.height * options.cellSize)
+		}
+
+		for (let x = 0; x < $generator.tiles.length; x++) {
+			for (let y = 0; y < $generator.tiles[x].length; y++) {
+				const tile = $generator.tiles[x][y]
+
+				if (tile.type === 'floor') {
+					// Use an overlay for corridors
+					ctx.fillStyle = 'rgba(255, 255, 255, 0.4)'
+					ctx.fillRect(x * options.cellSize, y * options.cellSize, options.cellSize, options.cellSize)
+				}
+				if (tile.type === 'door') {
+					// White for doors
+					ctx.fillStyle = 'white'
+					ctx.fillRect(x * options.cellSize, y * options.cellSize, options.cellSize, options.cellSize)
+				}
+
+				ctx.fillStyle = 'black'
+				ctx.fillText(`${x}x${y}  |  ${tile.region}`, x * options.cellSize + 3, y * options.cellSize + 10)
+			}
+		}
+
+		// Draw the grid
+		drawGrid(ctx)
+
+		const $seed = document.getElementById('seed')
+		$seed.innerText = $generator.seed
+	}
+
+	function drawGrid(context) {
+		for (let x = 0; x <= options.canvasWidth; x += options.cellSize) {
+			context.moveTo(x + options.gridPadding, options.gridPadding)
+			context.lineTo(x + options.gridPadding, options.canvasHeight + options.gridPadding)
+		}
+
+		for (let x = 0; x <= options.canvasHeight; x += options.cellSize) {
+			context.moveTo(options.gridPadding, x + options.gridPadding)
+			context.lineTo(options.canvasWidth + options.gridPadding, x + options.gridPadding)
+		}
+		context.strokeStyle = 'black'
+		context.stroke()
+	}
+
+	document.addEventListener('alpine:initialized', () => {
+		createMap()
+	})
+
+</script>
 </body>
 </html>
