@@ -348,7 +348,7 @@ export class Dungeon {
 					continue
 				}
 
-				const tileRegions = arrayUnique(tile.cardinal().map(neighbor => neighbor.region).filter(neighborRegion => isDefined(neighborRegion)))
+				const tileRegions = arrayUnique(tile.cardinal().map(neighbor => neighbor.region).filter(neighborRegion => neighborRegion > -1))
 				if (tileRegions.length <= 1) {
 					continue
 				}
