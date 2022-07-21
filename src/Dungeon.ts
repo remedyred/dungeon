@@ -276,12 +276,12 @@ export class Dungeon {
 
 		if (this.stage.width > 10 && outer_width_limit > this.stage.width * 0.5) {
 			// if the width is greater than 10, it should not be greater than 50% of the stage width
-			outer_width_limit = this.stage.width * 0.5
+			outer_width_limit = Math.ceil(this.stage.width * 0.5)
 		}
 
 		if (this.stage.height > 10 && outer_height_limit > this.stage.height * 0.5) {
 			// if the height is greater than 10, it should not be greater than 50% of the stage height
-			outer_height_limit = this.stage.height * 0.5
+			outer_height_limit = Math.ceil(this.stage.height * 0.5)
 		}
 
 		for (let i = 0; i < this.options.roomTries; i++) {
