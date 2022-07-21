@@ -289,7 +289,7 @@ export class Dungeon {
 
 			// Restrict the size of rooms relative to the stage size
 			width = Math.min(width, this.stage.width - roomRestrictionModifier)
-			height = Math.min(width, this.stage.height - roomRestrictionModifier)
+			height = Math.min(height, this.stage.height - roomRestrictionModifier)
 
 			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
 			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
