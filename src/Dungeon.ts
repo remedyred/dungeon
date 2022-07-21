@@ -34,8 +34,7 @@ const defaultDungeonOptions: DungeonOptions = {
 
 const defaultStageOptions: StageOptions = {
 	width: 5,
-	height: 5,
-	seed: $chance.guid()
+	height: 5
 }
 
 export interface DungeonResults {
@@ -159,7 +158,7 @@ export class Dungeon {
 		stage.width *= this.options.multiplier
 		stage.height *= this.options.multiplier
 
-		const seed = stage.seed || `${nameChance.word({length: 7})}-${nameChance.word({length: 7})}`
+		const seed: string = stage.seed || $chance.generateSlug()
 
 		this.rng = new Chance(seed)
 
