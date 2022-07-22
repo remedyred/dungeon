@@ -199,7 +199,7 @@ export class Dungeon {
 	carveArea(x: number, y: number, width: number, height: number): void {
 		for (let i = x; i < x + width; i++) {
 			for (let j = y; j < y + height; j++) {
-				this.carve(i, j, 'room')
+				this.setTile(i, j, 'floor')
 			}
 		}
 	}
@@ -214,7 +214,7 @@ export class Dungeon {
 
 		this.startRegion()
 
-		this.carve(startX, startY, 'corridor')
+		this.setTile(startX, startY, 'floor')
 
 		cells.push({
 			x: startX,
@@ -249,7 +249,7 @@ export class Dungeon {
 				}
 
 				// carve the first cell in the direction
-				this.carve(cell.x + direction.x, cell.y + direction.y, 'corridor')
+				this.setTile(cell.x + direction.x, cell.y + direction.y, 'floor')
 
 				// create the new cell
 				const newCell = {
@@ -258,7 +258,7 @@ export class Dungeon {
 				}
 
 				// carve the space where the new cell will be
-				this.carve(newCell.x, newCell.y, 'corridor')
+				this.setTile(newCell.x, newCell.y, 'floor')
 
 				// place the new cell in the stack
 				cells.push(newCell)
@@ -464,12 +464,6 @@ export class Dungeon {
 	private startRegion() {
 		this.currentRegion++
 		return this.currentRegion
-	}
-
-	private carve(x: number, y: number, regionType: RegionType, type?: TileType): void {
-		const tile = this.getTile(x, y)
-		tile.type = type ?? 'floor'
-		tile.regionType = regionType
 	}
 }
 
