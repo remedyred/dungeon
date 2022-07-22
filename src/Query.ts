@@ -78,7 +78,7 @@ export class Query {
 			...options
 		}
 
-		this.out = $out.prefix('Query')
+		this.out = $out.clone().prefix('Query')
 
 		$out.verbose('Constructed query:', this.options)
 	}
