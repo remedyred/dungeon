@@ -26,11 +26,11 @@ export class Tile {
 	}
 
 	get x() {
-		return this.state.x
+		return parseInt(String(this.state.x))
 	}
 
 	get y() {
-		return this.state.y
+		return parseInt(String(this.state.y))
 	}
 
 	get type() {
