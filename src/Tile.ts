@@ -1,4 +1,5 @@
 import {Neighbors, RegionType} from './Dungeon'
+import {Coordinates, parsePoint} from './Coordinates'
 import {NeighborQuery} from './NeighborQuery'
 
 export type TileType = 'door' | 'floor' | 'shaft' | 'stairs' | 'wall'
@@ -106,6 +107,29 @@ export class Tile {
 		}
 
 		return corners === 1
+	}
+
+	isCardinal(tile: Tile): boolean {
+		return this.neighbors.n === tile.neighbors.s ||
+			this.neighbors.s === tile.neighbors.n ||
+			this.neighbors.e === tile.neighbors.w ||
+			this.neighbors.w === tile.neighbors.e
+	}
+
+	isIntercardinal(tile: Tile): boolean {
+		return this.neighbors.ne === tile.neighbors.sw ||
+			this.neighbors.nw === tile.neighbors.se ||
+			this.neighbors.se === tile.neighbors.nw ||
+			this.neighbors.sw === tile.neighbors.ne
+	}
+
+	offset(x: number, y: number): this
+	offset(location: Coordinates): this
+	offset(optionalX: Coordinates | number, optionalY?: number): this {
+		const {x, y} = parsePoint(optionalX, optionalY)
+		this.state.x += x
+		this.state.y += y
+		return this
 	}
 
 	nearDoors(levels = 1): boolean {
