@@ -1,8 +1,9 @@
-import {arrayUnique, objectFilter} from '@snickbit/utilities'
+import {arrayUnique, isNumber, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import {isBrowser} from 'browser-or-node'
 import {$chance, $out} from './common'
+import {Query, QueryOptions} from './Query'
 import {Region, RegionType} from './Region'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
@@ -391,11 +392,11 @@ export class Dungeon {
 
 		for (const row of this.tiles) {
 			for (const tile of row) {
-				if (tile.type === 'floor') {
+				if (tile.type !== 'wall' || tile.region !== -1) {
 					continue
 				}
 
-				const tileRegions = arrayUnique(tile.cardinal().map(neighbor => neighbor.region).filter(neighborRegion => neighborRegion > -1))
+				const tileRegions = this.find().debug(tile.x === 0 && tile.y === 8).start(tile).unique('region').cardinal().levels().notRegion(-1).get().map(neighbor => neighbor.region)
 				if (tileRegions.length <= 1) {
 					continue
 				}
