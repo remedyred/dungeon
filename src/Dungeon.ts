@@ -16,6 +16,7 @@ export interface DungeonOptions {
 	multiplier?: number
 	width?: number
 	height?: number
+	removeDeadEnds?: boolean
 }
 
 export interface StageOptions {
@@ -187,8 +188,10 @@ export class Dungeon {
 		// create doors between rooms and corridors
 		this.connectRegions()
 
-		// remove dead ends
-		this.removeDeadEnds()
+		if (this.options.removeDeadEnds) {
+			// remove dead ends
+			this.removeDeadEnds()
+		}
 
 		return new Results(this.rooms, this.tiles, this.seed)
 	}
