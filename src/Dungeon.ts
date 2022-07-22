@@ -2,7 +2,7 @@ import {arrayUnique, objectFilter} from '@snickbit/utilities'
 import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import {isBrowser} from 'browser-or-node'
-import {$chance} from './common'
+import {$chance, $out} from './common'
 import {Region, RegionType} from './Region'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
@@ -386,6 +386,9 @@ export class Dungeon {
 
 	private connectRegions(): void {
 		const regionConnections: Record<string, Tile[]> = {}
+
+		$out.debug('Connecting regions...').extra(arrayUnique(this.tiles.flat().map(v => v.region)))
+
 		for (const row of this.tiles) {
 			for (const tile of row) {
 				if (tile.type === 'floor') {
@@ -405,6 +408,8 @@ export class Dungeon {
 			}
 		}
 
+		$out.debug(`Found ${Object.keys(regionConnections).length} regions to connect`)
+
 		for (const connections of Object.values(regionConnections)) {
 			let added_connections = 0
 			const doorCount: number = this.randBetween(1, this.options.maxDoors)
@@ -422,6 +427,7 @@ export class Dungeon {
 					!door.isAtEnd()
 				) {
 					if (byChance) {
+						$out.debug(`Door at ${door.x}, ${door.y}`)
 						door.type = 'door'
 						added_connections++
 					} else {
@@ -435,8 +441,13 @@ export class Dungeon {
 				const doors: Tile[] = failedByChance.length ? failedByChance : connections
 				const rand: number = this.randBetween(0, doors.length - 1)
 				const door: Tile = doors[rand]
+				$out.debug(`Forced Door at ${door.x}, ${door.y}`)
 				door.type = 'door'
 				added_connections++
+			}
+
+			if (!added_connections) {
+				$out.error(`Failed to add doors to region ${connections[0].region}`)
 			}
 		}
 	}
