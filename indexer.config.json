@@ -1,5 +1,9 @@
 {
 	"source": "src/**/*",
 	"output": "src/index.ts",
-	"type": "wildcard"
+	"type": "wildcard",
+	"ignore": [
+		"**/*.d.ts",
+		"src/common.ts"
+	]
 }
