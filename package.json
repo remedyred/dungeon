@@ -17,7 +17,7 @@
 	"scripts": {
 		"prebuild": "pnpm run index",
 		"build": "tsup",
-		"bundle": "esbuild --bundle --outfile=dist/index.bundle.js --target=es2020 src/index.ts",
+		"bundle": "esbuild --bundle --outfile=dist/index.bundle.js --target=es2020 src/index.ts --sourcemap",
 		"clean": "shx rm -rf ./dist ",
 		"depcheck": "depcheck",
 		"index": "indexer",
