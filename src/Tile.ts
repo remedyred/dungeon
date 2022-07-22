@@ -1,6 +1,7 @@
-import {Neighbors, RegionType} from './Dungeon'
+import {Neighbors} from './Dungeon'
 import {Coordinates, parsePoint} from './Coordinates'
 import {NeighborQuery} from './NeighborQuery'
+import {RegionType} from './Region'
 
 export type TileType = 'door' | 'floor' | 'shaft' | 'stairs' | 'wall'
 

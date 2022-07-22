@@ -3,6 +3,7 @@ import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import {isBrowser} from 'browser-or-node'
 import {$chance} from './common'
+import {Region, RegionType} from './Region'
 import Tile, {TileType} from './Tile'
 import Chance from 'chance'
 import Room from './Room'
@@ -40,8 +41,6 @@ const defaultStageOptions: StageOptions = {
 
 export type TileMatrix = Tile[][]
 
-export type RegionType = 'corridor' | 'room'
-
 export interface Neighbors {
 	n?: Tile
 	ne?: Tile
@@ -59,7 +58,7 @@ export class Dungeon {
 	rng: Chance.Chance
 
 	private rooms = []
-	private currentRegion = -1
+	private region: Region
 	private tiles: TileMatrix = []
 	private seed: any
 
@@ -68,23 +67,63 @@ export class Dungeon {
 		this.options.multiplier = this.options.multiplier > 0 ? parseInt(String(this.options.multiplier || 1)) || 1 : 1
 	}
 
+	get currentRegion(): number {
+		return this.region.id
+	}
+
 	randBetween(min: number, max: number): number {
 		return this.rng.integer({min, max})
 	}
 
-	getTile(x: number, y: number): Tile {
-		return this.tiles[x][y]
-	}
-
-	setTile(x: number, y: number, type: TileType): Tile {
+	getTile(x: number, y: number): Tile
+	getTile(location: Coordinates): Tile
+	getTile(optionalX: Coordinates | number, optionalY?: number): Tile {
+		const {x, y} = parsePoint(optionalX, optionalY)
 		if (this.tiles[x] && this.tiles[x][y]) {
-			const tile = this.tiles[x][y]
-			tile.type = type
-			tile.region = this.currentRegion
-			return tile
+			return this.tiles[x][y]
 		}
 
-		throw new RangeError(`tile at ${x}, ${y} is unreachable`)
+		throw new RangeError(`tile at ${x}x${y} is unreachable`)
+	}
+
+	setTile(x: number, y: number, type?: TileType): Tile
+	setTile(location: Coordinates, type?: TileType): Tile
+	setTile(optionalX: Coordinates | number, optionalY?: TileType | number, optionalType?: TileType): Tile {
+		let x: number
+		let y: number
+		let type: TileType
+		if (isNumber(optionalX)) {
+			({x, y} = parsePoint(optionalX, optionalY as number))
+			type = optionalType
+		} else {
+			({x, y} = parsePoint(optionalX as Coordinates))
+			type = optionalY as TileType
+		}
+
+		$out.verbose('setTile', {x, y})
+
+		const tile = this.getTile(x, y)
+		tile.type = type ?? 'floor'
+		tile.region = this.region.id
+		tile.regionType = this.region.type
+
+		return tile
+	}
+
+	resetTile(x: number, y: number): Tile
+	resetTile(location: Coordinates): Tile
+	resetTile(optionalX: Coordinates | number, optionalY?: number): Tile {
+		const {x, y} = parsePoint(optionalX, optionalY)
+
+		const tile = this.getTile(x, y)
+		tile.type = 'wall'
+		tile.region = -1
+		tile.regionType = undefined
+		return tile
+	}
+
+	find(options?: QueryOptions) {
+		return new Query(this.tiles, options)
 	}
 
 	fill(type: TileType): TileMatrix {
@@ -212,7 +251,7 @@ export class Dungeon {
 			return
 		}
 
-		this.startRegion()
+		this.startRegion('corridor')
 
 		this.setTile(startX, startY, 'floor')
 
@@ -338,7 +377,7 @@ export class Dungeon {
 
 			this.rooms.push(room)
 
-			this.startRegion()
+			this.startRegion('room')
 
 			// Convert room tiles to floor
 			this.carveArea(x, y, width, height)
@@ -421,7 +460,8 @@ export class Dungeon {
 						tile.find().cardinal().notType('wall').get().length <= 1 &&
 						!this.rooms.find(room => room.containsTile(tile.x, tile.y))
 					) {
-						tile.type = 'wall'
+						$out.debug(`Found dead end at ${tile.x}, ${tile.y}`)
+						this.resetTile(tile)
 						done = false
 					}
 				}
@@ -461,9 +501,11 @@ export class Dungeon {
 		return this.getTile(dest.x, dest.y).type !== 'floor'
 	}
 
-	private startRegion() {
-		this.currentRegion++
-		return this.currentRegion
+	private startRegion(type?: RegionType): Region {
+		const region = new Region(type)
+		$out.debug(`Starting region ${region.id}`)
+		this.region = region
+		return region
 	}
 }
 
