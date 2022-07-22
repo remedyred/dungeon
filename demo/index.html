@@ -51,7 +51,8 @@
 		width: 15,
 		height: 15,
 		cellSize: 40,
-		gridPadding: 0
+		gridPadding: 0,
+		removeDeadEnds: false
 	}
 
 	options.canvasWidth = options.width * options.cellSize;
@@ -74,7 +75,7 @@
 		$canvas.style.height = `${options.canvasHeight}px`
 
 		// Fill canvas with black background
-		ctx.fillStyle = 'black'
+		ctx.fillStyle = 'gray'
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
 		// Blue for rooms
@@ -108,9 +109,10 @@
 				ctx.fillStyle = 'black'
 				ctx.textAlign = 'center'
 				ctx.fillText(`${x}x${y}`, x * options.cellSize + 18, y * options.cellSize + 10)
+				ctx.fillText(`${tile.type}`, x * options.cellSize + 18, y * options.cellSize + 22)
 
 				if (tile.region > -1) {
-					ctx.fillText(`${tile.region}`, x * options.cellSize + 18, y * options.cellSize + 30)
+					ctx.fillText(`${tile.region}`, x * options.cellSize + 18, y * options.cellSize + 35)
 				}
 			}
 		}
