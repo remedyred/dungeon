@@ -1,6 +1,6 @@
 import {Neighbors} from './Dungeon'
 import {Coordinates, parsePoint} from './Coordinates'
-import {NeighborQuery} from './NeighborQuery'
+import {Query} from './Query'
 import {RegionType} from './Region'
 
 export type TileType = 'door' | 'floor' | 'shaft' | 'stairs' | 'wall'
@@ -77,7 +77,14 @@ export class Tile {
 	}
 
 	find() {
-		return new NeighborQuery(this)
+		const tiles = Object.values(this.neighbors)
+		tiles.push(this)
+		return new Query(tiles, {
+			start: {
+				x: this.state.x,
+				y: this.state.y
+			}
+		})
 	}
 
 	cardinal(levels = 1): Tile[] {
