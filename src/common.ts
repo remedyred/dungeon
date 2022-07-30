@@ -17,13 +17,6 @@ export interface DungeonOptions {
 	removeDeadEnds?: boolean
 }
 
-// todo: remove stage options and merge them with dungeon options.
-export interface StageOptions {
-	width: number
-	height: number
-	seed?: any
-}
-
 export const defaultDungeonOptions: DungeonOptions = {
 	doorChance: 50,
 	maxDoors: 5,
@@ -35,7 +28,3 @@ export const defaultDungeonOptions: DungeonOptions = {
 	mazeCorridors: true
 }
 
-export const defaultStageOptions: StageOptions = {
-	width: 5,
-	height: 5
-}

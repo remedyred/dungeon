@@ -1,4 +1,4 @@
-import {Dungeon, dungeon, Results} from '../../src'
+import {dungeon, Dungeon, Results} from '../../src'
 
 describe('Dungeon', () => {
 	it('dungeon should be a function', () => {

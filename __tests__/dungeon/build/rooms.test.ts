@@ -86,6 +86,11 @@ describe('rooms', () => {
 		for (const room of $dungeon.rooms) {
 			const tiles = []
 
+			const points = room.getBorderPoints(1)
+			for (const point of points) {
+				tiles.push(dungeon().getTile(point))
+			}
+
 			const north = room.y - 1
 			const east = room.x + room.width
 			const south = room.y + room.height
@@ -113,9 +118,7 @@ describe('rooms', () => {
 				}
 			}
 
-			expect(tiles.find(tile => {
-				return tile.type === 'door'
-			})).toBeTruthy()
+			expect(tiles.find(tile => tile.isDoor())).toBeTruthy()
 		}
 	})
 

@@ -229,7 +229,6 @@
 					"[accessor-pairs]",
 					"[static-methods]",
 					"[methods]",
-					"[async-methods]",
 					"[conventional-private-methods]",
 					"[everything-else]"
 				],

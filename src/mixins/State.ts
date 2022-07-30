@@ -1,33 +1,21 @@
-import {Region, RegionType} from '../structures/Region'
-import {Results} from '../Results'
-import {defaultStageOptions, StageOptions} from '../common'
-import {isString, slugify} from '@snickbit/utilities'
-import {$chance} from '../random/chance'
+import {RegionManagerState} from './RegionManager'
+import {TileManagerState} from './TileManager'
+import {RandomState} from './Random'
+import {Region} from '../structures/Region'
 import {TileMatrix} from '../structures/Tile'
-import Room from '../structures/Room'
+import {defaultDungeonOptions, DungeonOptions} from '../common'
+import {RoomManagerState} from './RoomManager'
+import {BuilderState, StageOptions} from './Builder'
 
-export interface DungeonState {
-	tiles: TileMatrix
-	regions: Record<number, Region>
-	results?: Results
-	region?: Region
-	stage: StageOptions
-	seed?: any
-	rooms: Room[]
-}
-
-export const default_state: DungeonState = {
-	rooms: [],
-	regions: {},
-	tiles: [],
-	stage: {...defaultStageOptions}
-}
+export interface DungeonState extends BuilderState, RandomState, RegionManagerState, RoomManagerState, TileManagerState {}
 
 export class State {
-	protected state: DungeonState
+	protected state = {} as DungeonState
+	options: DungeonOptions
 
-	constructor(options: Partial<DungeonState> = {}) {
-		this.state = {...default_state, ...options} as DungeonState
+	constructor(options?: DungeonOptions) {
+		this.options = {...defaultDungeonOptions, ...options}
+		this.options.multiplier = this.options.multiplier > 0 ? parseInt(String(this.options.multiplier || 1)) || 1 : 1
 	}
 
 	get region(): Region {
@@ -38,39 +26,19 @@ export class State {
 		return this.state.regions
 	}
 
-	get tiles(): TileMatrix {
-		return this.state.tiles
-	}
-
-	get rooms(): Room[] {
-		return this.state.rooms
-	}
-
 	get currentRegion(): number {
 		return this.region.id
 	}
 
-	get seed(): any {
-		return this.state.seed
+	get tiles(): TileMatrix {
+		return this.state.tiles
 	}
 
-	set seed(seed: any) {
-		if (!/[a-zA-Z0-9]+-[a-zA-Z0-9]+-[a-zA-Z0-9]+/.test(String(seed))) {
-			if (isString(seed)) {
-				seed = slugify(seed)
-			} else {
-				// if seed is not a string, generate a string seed
-				const seedChance = $chance.clone(seed)
-				seed = seedChance.generateSlug()
-			}
-		}
-		this.state.seed = seed
+	get stage(): StageOptions {
+		return this.state.stage
 	}
+}
 
-	protected startRegion(type?: RegionType, id?: number): Region {
-		const region = new Region(type, id)
-		this.regions[region.id] = region
-		this.state.region = region
-		return region
-	}
+export function safeMerge<T = any>(state, defaultState): T {
+	return {...defaultState, ...state || {}} as T
 }

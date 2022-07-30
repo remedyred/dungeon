@@ -1,5 +1,6 @@
-import {directions, Query, Tile} from '../src'
 import {setupQueryVars} from './query.spec'
+import {directions, Query} from '../src/query/Query'
+import Tile from '../src/structures/Tile'
 
 describe('Tile', () => {
 	const TILE_TYPE = 'floor'

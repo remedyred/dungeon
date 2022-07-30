@@ -1,5 +1,6 @@
-import {Corridor, TileType} from '../src'
 import {setupQueryVars} from './Query.spec'
+import {Corridor} from '../src/structures/Corridor'
+import {TileType} from '../src/structures/Tile'
 
 describe('Corridor', () => {
 	const region_id = 0
