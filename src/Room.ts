@@ -18,7 +18,7 @@ export class Room {
 			top: this.y - 1 - padding,
 			right: this.x + this.width + padding,
 			bottom: this.y + this.height + padding,
-			left: this.x - padding
+			left: this.x - 1 - padding
 		}
 	}
 
