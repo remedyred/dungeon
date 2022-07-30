@@ -167,13 +167,13 @@ describe('Query', () => {
 		expect(typeof Query.prototype.count).toBe('function')
 	})
 
-	it('.get() should return an array of tiles', async () => {
+	it('.get() should return an array of tiles', () => {
 		const query = new Query(tiles)
-		expect(await query.get()).toEqual(expect.arrayContaining(tiles))
+		expect(query.get()).toEqual(expect.arrayContaining(tiles))
 	})
 
-	it('.count() should return a number the length of the results', async () => {
+	it('.count() should return a number the length of the results', () => {
 		const query = new Query(tiles)
-		expect(await query.count()).toBe(tiles.length)
+		expect(query.count()).toBe(tiles.length)
 	})
 })

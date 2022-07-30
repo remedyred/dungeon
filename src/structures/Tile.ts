@@ -191,44 +191,44 @@ export class Tile {
 		return `${this.state.x},${this.state.y}`
 	}
 
-	async nearDoors(levels = 1): Promise<boolean> {
-		return (await this.doors(levels)).length > 0
+	nearDoors(levels = 1): boolean {
+		return this.doors(levels).length > 0
 	}
 
-	async touchesAnother(): Promise<boolean> {
-		return (await this.around()).some(tile => tile.isFloor() && tile.region === -1 || tile.region !== this.region)
+	touchesAnother(): boolean {
+		return this.around().some(tile => tile.isFloor() && tile.region === -1 || tile.region !== this.region)
 	}
 
-	async isAtEnd(): Promise<boolean> {
-		return (await this.floors()).length === 1
+	isAtEnd(): boolean {
+		return this.floors().length === 1
 	}
 
-	async nearRoom(levels = 1): Promise<boolean> {
-		return (await this.find().levels(levels).type('floor').regionType('room').notRegion(this.region).get()).length > 0
+	nearRoom(levels = 1): boolean {
+		return this.find().levels(levels).type('floor').regionType('room').notRegion(this.region).get().length > 0
 	}
 
-	async doors(levels = 1): Promise<Tile[]> {
-		return await this.find().levels(levels).type('door').get()
+	doors(levels = 1): Tile[] {
+		return this.find().levels(levels).type('door').get()
 	}
 
-	async walls(levels = 1): Promise<Tile[]> {
-		return await this.find().levels(levels).type('wall').get()
+	walls(levels = 1): Tile[] {
+		return this.find().levels(levels).type('wall').get()
 	}
 
-	async floors(levels = 1): Promise<Tile[]> {
-		return await this.find().levels(levels).type('floor').get()
+	floors(levels = 1): Tile[] {
+		return this.find().levels(levels).type('floor').get()
 	}
 
-	async cardinal(levels = 1): Promise<Tile[]> {
-		return await this.find().levels(levels).cardinal().get()
+	cardinal(levels = 1): Tile[] {
+		return this.find().levels(levels).cardinal().get()
 	}
 
-	async intercardinal(levels = 1): Promise<Tile[]> {
-		return await this.find().levels(levels).intercardinal().get()
+	intercardinal(levels = 1): Tile[] {
+		return this.find().levels(levels).intercardinal().get()
 	}
 
-	async around(levels = 1): Promise<Tile[]> {
-		return await this.find().levels(levels).get()
+	around(levels = 1): Tile[] {
+		return this.find().levels(levels).get()
 	}
 }
 

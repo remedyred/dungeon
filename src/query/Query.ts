@@ -273,11 +273,11 @@ export class Query {
 		return this
 	}
 
-	async count(): Promise<number> {
-		return (await this.get())?.length || 0
+	count(): number {
+		return this.get()?.length || 0
 	}
 
-	async get(): Promise<Tile[]> {
+	get(): Tile[] {
 		const options: ParsedOptions = this.validate(this.options)
 
 		let results: Tile[] = []

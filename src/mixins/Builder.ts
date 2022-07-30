@@ -275,7 +275,7 @@ export class Builder {
 		await Promise.all(carvePromises)
 	}
 
-	protected async canCarve(cell: Point, offset?: Coordinates): Promise<boolean> {
+	protected canCarve(cell: Point, offset?: Coordinates): boolean {
 		const checks: Record<string, Point> = {start: cell}
 
 		if (offset) {
@@ -286,26 +286,26 @@ export class Builder {
 		}
 
 		for (const [check, def] of Object.entries(checks)) {
-			if (!await this.isCarvable(def, check)) {
+			if (!this.isCarvable(def, check)) {
 				return false
 			}
 		}
 		return true
 	}
 
-	protected async cleanCorridors(): Promise<void> {
-		const corridors = await this.getCorridors()
+	protected cleanCorridors(): void {
+		const corridors = this.getCorridors()
 		let reclean = false
 		const tilesToClean: Tile[] = []
 
 		for (let corridor of corridors) {
 			if (corridor.tiles.length < this.options.minCorridorLength) {
 				tilesToClean.push(...corridor.tiles)
-			} else if (!corridor.tiles.find(async tile => await tile.find().levels(2).cardinal().notRegion(tile.region).notRegion(-1).count() === 0)) {
+			} else if (!corridor.tiles.find(tile => tile.find().levels(2).cardinal().notRegion(tile.region).notRegion(-1).count() === 0)) {
 				tilesToClean.push(...corridor.tiles)
 			} else {
 				for (let tile of corridor.tiles) {
-					if ((await tile.cardinal()).find(tile => tile.isRoom())) {
+					if (tile.cardinal().find(tile => tile.isRoom())) {
 						tilesToClean.push(...this.walkStraight(tile, false))
 					}
 				}
@@ -324,8 +324,8 @@ export class Builder {
 		}
 	}
 
-	protected async connectCorridors(a: number | string, b: number | string, connection: Tile): Promise<void> {
-		const corridors = await this.getCorridors()
+	protected connectCorridors(a: number | string, b: number | string, connection: Tile): void {
+		const corridors = this.getCorridors()
 		const corridorA = corridors.find(c => c.isRegion(a))
 		if (!corridorA) {
 			throw new Error(`Could not find corridor with region ${a}`)
@@ -356,7 +356,7 @@ export class Builder {
 		connection.type = 'floor'
 	}
 
-	protected async connectRegions(): Promise<void> {
+	protected connectRegions(): void {
 		interface SimpleNeighbor {
 			region: number
 			x: number
@@ -380,7 +380,7 @@ export class Builder {
 					continue
 				}
 
-				const tileRegions = await this.find()
+				const tileRegions = this.find()
 					.start(tile)
 					.unique('region')
 					.cardinal()
@@ -445,8 +445,8 @@ export class Builder {
 				const byChance: boolean = this.oneIn(this.options.doorChance)
 				if (
 					!door.isCorner() &&
-					!await door.nearDoors() &&
-					!await door.isAtEnd()
+					!door.nearDoors() &&
+					!door.isAtEnd()
 				) {
 					if (byChance) {
 						makeConnection(key, door, type)
@@ -531,7 +531,7 @@ export class Builder {
 			const points = room.getBorderPoints(1)
 			for (const point of points) {
 				if (
-					await this.canCarve(point) &&
+					this.canCarve(point) &&
 					!availableStartPoints.includes(point)
 				) {
 					roomAvailableStartPoints.push(point)
@@ -560,7 +560,7 @@ export class Builder {
 					for (let x = 1; x < stage.width; x += 2) {
 						const point = {x, y}
 						if (
-							await this.canCarve(point) &&
+							this.canCarve(point) &&
 							!availableStartPoints.includes(point)
 						) {
 							availableStartPoints.push(point)
@@ -604,7 +604,7 @@ export class Builder {
 			return direction
 		}
 
-		if (!await this.canCarve(start)) {
+		if (!this.canCarve(start)) {
 			$out.warn(`growMaze ${start.x}x${start.y} is not carvable`)
 			return
 		}
@@ -621,12 +621,7 @@ export class Builder {
 
 			// Get the possible directions to carve from this cell
 			// Get them fresh each time, so we can check if it's different from the previous loop(s)
-			const carvableDirections: PointArray[] = []
-			await Promise.all(cardinalDirections.map(direction => this.canCarve(cell, direction).then(() => {
-				carvableDirections.push(direction)
-			}).catch(e => {
-				$out.verbose(`growMaze.canCarve ${cell.x}x${cell.y} is not carvable`, e)
-			})))
+			const carvableDirections: PointArray[] = cardinalDirections.filter(direction => this.canCarve(cell, direction))
 
 			// Check if there are any carvable directions
 			if (carvableDirections.length) {
@@ -659,7 +654,7 @@ export class Builder {
 		}
 	}
 
-	protected async isCarvable(cell: Point, check: string): Promise<boolean> {
+	protected isCarvable(cell: Point, check: string): boolean {
 		if (!this.hasTile(cell)) {
 			return false
 		}
@@ -670,7 +665,7 @@ export class Builder {
 			return false
 		}
 
-		if (check !== 'after' && await tile.nearRoom()) {
+		if (check !== 'after' && tile.nearRoom()) {
 			return false
 		}
 
@@ -694,10 +689,10 @@ export class Builder {
 		}
 	}
 
-	protected async removeDeadEnds(): Promise<void> {
+	protected removeDeadEnds(): void {
 		let done = false
 
-		const cycle = async () => {
+		const cycle = () => {
 			let done = true
 			for (const row of this.tiles) {
 				for (const tile of row) {
@@ -706,7 +701,7 @@ export class Builder {
 						continue
 					}
 					if (
-						await tile.find().cardinal().notType('wall').count() <= 1 &&
+						tile.find().cardinal().notType('wall').count() <= 1 &&
 						!this.rooms.find(room => room.containsTile(tile.x, tile.y))
 					) {
 						this.resetTile(tile)
@@ -720,12 +715,12 @@ export class Builder {
 
 		while (!done) {
 			done = true
-			done = await cycle()
+			done = cycle()
 		}
 	}
 
 	protected async splitCorridors(): Promise<void> {
-		const corridors = (await this.getCorridors()).sort((a, b) => b.region - a.region)
+		const corridors = this.getCorridors().sort((a, b) => b.region - a.region)
 
 		if (corridors.length === 0) {
 			$out.warn('No corridors found!')

@@ -157,88 +157,88 @@ describe('Tile', () => {
 		expect(typeof Tile.prototype.nearDoors).toBe('function')
 	})
 
-	it('should have an async .nearDoors() method that returns a boolean', async () => {
-		expect(typeof await tile.nearDoors()).toBe('boolean')
+	it('should have an async .nearDoors() method that returns a boolean', () => {
+		expect(typeof tile.nearDoors()).toBe('boolean')
 	})
 
 	it('should have a .nearDoors() method', () => {
 		expect(typeof Tile.prototype.nearDoors).toBe('function')
 	})
 
-	it('should have an async .nearDoors() method that returns a boolean', async () => {
-		expect(typeof await tile.nearDoors()).toBe('boolean')
+	it('should have an async .nearDoors() method that returns a boolean', () => {
+		expect(typeof tile.nearDoors()).toBe('boolean')
 	})
 
 	it('should have a .touchesAnother() method', () => {
 		expect(typeof Tile.prototype.touchesAnother).toBe('function')
 	})
 
-	it('should have an async .touchesAnother() method that returns a boolean', async () => {
-		expect(typeof await tile.touchesAnother()).toBe('boolean')
+	it('should have an async .touchesAnother() method that returns a boolean', () => {
+		expect(typeof tile.touchesAnother()).toBe('boolean')
 	})
 
 	it('should have a .isAtEnd() method', () => {
 		expect(typeof Tile.prototype.isAtEnd).toBe('function')
 	})
 
-	it('should have an async .isAtEnd() method that returns a boolean', async () => {
-		expect(typeof await tile.isAtEnd()).toBe('boolean')
+	it('should have an async .isAtEnd() method that returns a boolean', () => {
+		expect(typeof tile.isAtEnd()).toBe('boolean')
 	})
 
 	it('should have a .nearRoom() method', () => {
 		expect(typeof Tile.prototype.nearRoom).toBe('function')
 	})
 
-	it('should have an async .nearRoom() method that returns a boolean', async () => {
-		expect(typeof await tile.nearRoom()).toBe('boolean')
+	it('should have an async .nearRoom() method that returns a boolean', () => {
+		expect(typeof tile.nearRoom()).toBe('boolean')
 	})
 
 	it('should have a .doors() method', () => {
 		expect(typeof Tile.prototype.doors).toBe('function')
 	})
 
-	it('should have an async .doors() method that returns an array', async () => {
-		expect(Array.isArray(await tile.doors())).toBe(true)
+	it('should have an async .doors() method that returns an array', () => {
+		expect(Array.isArray(tile.doors())).toBe(true)
 	})
 
 	it('should have a .walls() method', () => {
 		expect(typeof Tile.prototype.walls).toBe('function')
 	})
 
-	it('should have an async .walls() method that returns an array', async () => {
-		expect(Array.isArray(await tile.walls())).toBe(true)
+	it('should have an async .walls() method that returns an array', () => {
+		expect(Array.isArray(tile.walls())).toBe(true)
 	})
 
 	it('should have a .floors() method', () => {
 		expect(typeof Tile.prototype.floors).toBe('function')
 	})
 
-	it('should have an async .floors() method that returns an array', async () => {
-		expect(Array.isArray(await tile.floors())).toBe(true)
+	it('should have an async .floors() method that returns an array', () => {
+		expect(Array.isArray(tile.floors())).toBe(true)
 	})
 
 	it('should have a .cardinal() method', () => {
 		expect(typeof Tile.prototype.cardinal).toBe('function')
 	})
 
-	it('should have an async .cardinal() method that returns an array', async () => {
-		expect(Array.isArray(await tile.cardinal())).toBe(true)
+	it('should have an async .cardinal() method that returns an array', () => {
+		expect(Array.isArray(tile.cardinal())).toBe(true)
 	})
 
 	it('should have a .intercardinal() method', () => {
 		expect(typeof Tile.prototype.intercardinal).toBe('function')
 	})
 
-	it('should have an async .intercardinal() method that returns an array', async () => {
-		expect(Array.isArray(await tile.intercardinal())).toBe(true)
+	it('should have an async .intercardinal() method that returns an array', () => {
+		expect(Array.isArray(tile.intercardinal())).toBe(true)
 	})
 
 	it('should have a .around() method', () => {
 		expect(typeof Tile.prototype.around).toBe('function')
 	})
 
-	it('should have an async .around() method that returns an array', async () => {
-		expect(Array.isArray(await tile.around())).toBe(true)
+	it('should have an async .around() method that returns an array', () => {
+		expect(Array.isArray(tile.around())).toBe(true)
 	})
 
 	it('should have a .toJSON() method', () => {

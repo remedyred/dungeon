@@ -8,8 +8,8 @@ import {RegionManager} from './RegionManager'
 export interface CorridorManager extends State, TileManager, Walker, RegionManager {}
 
 export class CorridorManager {
-	protected async getCorridors(): Promise<Corridor[]> {
-		const corridorTiles = await this.find().regionType('corridor').get()
+	protected getCorridors(): Corridor[] {
+		const corridorTiles = this.find().regionType('corridor').get()
 		const corridors: Record<number, Corridor> = {}
 
 		for (let tile of corridorTiles) {
