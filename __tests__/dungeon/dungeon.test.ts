@@ -1,12 +1,8 @@
 import {dungeon, Tile} from '../../src'
 
-const counter = [
-	1,
-	2,
-	3,
-	4,
-	5
-]
+const RELIABILITY_COUNT = 10
+
+const counter = Array.from(Array(RELIABILITY_COUNT).keys())
 
 describe('dungeon.build()', () => {
 	it('should return an object containing the key "tiles"', () => {
