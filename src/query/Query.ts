@@ -1,5 +1,5 @@
 import {Tile, TileMatrix, TileType} from '../structures/Tile'
-import {Coordinates, parsePoint, Point} from '../Coordinates'
+import {Coordinates, parsePoint, Point} from '../coordinates/Coordinates'
 import {arrayUnique, arrayWrap, isEmpty} from '@snickbit/utilities'
 import {$out} from '../common'
 import {Out} from '@snickbit/out'

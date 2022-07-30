@@ -1,5 +1,5 @@
 import {arrayUnique, arrayWrap, isNumber, isString} from '@snickbit/utilities'
-import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
+import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './coordinates/Coordinates'
 import {isBrowser} from 'browser-or-node'
 import {$out, defaultDungeonOptions, defaultStageOptions, DungeonOptions, StageOptions} from './common'
 import {cardinal, Query, QueryOptions} from './query/Query'

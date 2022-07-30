@@ -1,5 +1,5 @@
 import {isNumber} from '@snickbit/utilities'
-import Tile from './structures/Tile'
+import Tile from '../structures/Tile'
 
 /** Definitions **/
 

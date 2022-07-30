@@ -1,4 +1,4 @@
-import {Coordinates, parsePoint} from '../Coordinates'
+import {Coordinates, parsePoint} from '../coordinates/Coordinates'
 import {Query} from '../query/Query'
 import {RegionType} from './Region'
 

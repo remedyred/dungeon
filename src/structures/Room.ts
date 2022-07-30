@@ -1,4 +1,4 @@
-import {Point} from '../Coordinates'
+import {Point} from '../coordinates/Coordinates'
 
 export class Room {
 	x: number
