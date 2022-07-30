@@ -23,7 +23,7 @@ describe('Corridor', () => {
 	})
 
 	it('should have a .length property', () => {
-		expect(typeof Corridor.length).toBe('number')
+		expect(typeof new Corridor(region_id, tiles).length).toBe('number')
 	})
 
 	it('should have a .isRegion() method', () => {
