@@ -110,6 +110,10 @@ export class Dungeon extends State {
 		return regions
 	}
 
+	toJSON(): Results {
+		return new Results(this.rooms, this.tiles, this.seed)
+	}
+
 	private validate(stage: StageOptions): void {
 		if (stage.width < 5) {
 			throw new RangeError(`DungeonError: options.width must not be less than 5, received ${stage.width}`)
@@ -884,7 +888,7 @@ export class Dungeon extends State {
 		await Promise.all(carvePromises)
 	}
 
-	async build(stage?: StageOptions): Promise<Results> {
+	async build(stage?: StageOptions): Promise<this> {
 		stage = {...defaultStageOptions, ...stage}
 
 		// validate the state options
@@ -916,7 +920,7 @@ export class Dungeon extends State {
 		// Normalize region numbers
 		await this.normalizeRegions()
 
-		return new Results(this.rooms, this.tiles, this.seed)
+		return this
 	}
 }
 
