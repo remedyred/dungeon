@@ -1,4 +1,4 @@
-import {TileMatrix} from './index'
+import {TileMatrix} from './Tile'
 import Room from './Room'
 
 export class Results {

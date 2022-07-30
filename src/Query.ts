@@ -1,5 +1,4 @@
-import {TileMatrix} from './Dungeon'
-import {Tile, TileType} from './Tile'
+import {Tile, TileMatrix, TileType} from './Tile'
 import {Coordinates, parsePoint, Point} from './Coordinates'
 import {arrayUnique, arrayWrap, isEmpty} from '@snickbit/utilities'
 import {$out} from './common'

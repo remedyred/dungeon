@@ -1,9 +1,21 @@
-import {Neighbors} from './Dungeon'
 import {Coordinates, parsePoint} from './Coordinates'
 import {Query} from './Query'
 import {RegionType} from './Region'
 
 export type TileType = 'door' | 'floor' | 'wall'
+
+export type TileMatrix = Tile[][]
+
+export interface Neighbors {
+	n?: Tile
+	ne?: Tile
+	e?: Tile
+	se?: Tile
+	s?: Tile
+	sw?: Tile
+	w?: Tile
+	nw?: Tile
+}
 
 // todo: convert region to an array of Region objects. Most will contain only 1 region, but doors will have 2.
 export interface TileState {

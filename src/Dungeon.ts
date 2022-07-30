@@ -1,84 +1,25 @@
 import {arrayUnique, arrayWrap, isNumber, isString} from '@snickbit/utilities'
-import {Results} from './Results'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './Coordinates'
 import {isBrowser} from 'browser-or-node'
-import {$chance, $out} from './common'
+import {$out, defaultDungeonOptions, defaultStageOptions, DungeonOptions, StageOptions} from './common'
 import {cardinal, Query, QueryOptions} from './Query'
 import {Region, RegionType, regionTypes} from './Region'
 import {Corridor} from './Corridor'
-import Tile, {TileType} from './Tile'
+import {State} from './State'
+import {Results} from './Results'
+import Tile, {Neighbors, TileMatrix, TileType} from './Tile'
 import Chance from 'chance'
 import Room from './Room'
 
-export interface DungeonOptions {
-	doorChance?: number
-	maxDoors?: number
-	roomTries?: number
-	roomExtraSize?: number
-	mazeCorridors?: boolean
-	maxMazeTries?: number
-	minCorridorLength?: number
-	windingPercent?: number
-	multiplier?: number
-	width?: number
-	height?: number
-	removeDeadEnds?: boolean
-}
-
-// todo: remove stage options and merge them with dungeon options.
-export interface StageOptions {
-	width: number
-	height: number
-	seed?: any
-}
-
-const defaultDungeonOptions: DungeonOptions = {
-	doorChance: 50,
-	maxDoors: 5,
-	roomTries: 50,
-	roomExtraSize: 0,
-	windingPercent: 50,
-	minCorridorLength: 2,
-	maxMazeTries: 500,
-	mazeCorridors: true
-}
-
-const defaultStageOptions: StageOptions = {
-	width: 5,
-	height: 5
-}
-
-export type TileMatrix = Tile[][]
-
-export interface Neighbors {
-	n?: Tile
-	ne?: Tile
-	e?: Tile
-	se?: Tile
-	s?: Tile
-	sw?: Tile
-	w?: Tile
-	nw?: Tile
-}
-
-export class Dungeon {
+export class Dungeon extends State {
 	options: DungeonOptions
 	stage: StageOptions
 	rng: Chance.Chance
 
-	private rooms = []
-	private region: Region
-	private regions: Record<number, Region> = {}
-	private tiles: TileMatrix = []
-	private seed: any
-
 	constructor(options?: DungeonOptions) {
+		super()
 		this.options = {...defaultDungeonOptions, ...options}
 		this.options.multiplier = this.options.multiplier > 0 ? parseInt(String(this.options.multiplier || 1)) || 1 : 1
-	}
-
-	get currentRegion(): number {
-		return this.region.id
 	}
 
 	randBetween(min: number, max: number): number {
@@ -156,6 +97,19 @@ export class Dungeon {
 		return x === 0 || y === 0 || x === this.stage.width - 1 || y === this.stage.height - 1
 	}
 
+	getRegions(): Record<number, Tile[]> {
+		const regions: Record<number, Tile[]> = {}
+
+		for (let tile of this.tiles.flat()) {
+			if (!regions[tile.region]) {
+				regions[tile.region] = []
+			}
+			regions[tile.region].push(tile)
+		}
+
+		return regions
+	}
+
 	private validate(stage: StageOptions): void {
 		if (stage.width < 5) {
 			throw new RangeError(`DungeonError: options.width must not be less than 5, received ${stage.width}`)
@@ -176,11 +130,8 @@ export class Dungeon {
 		stage.width *= this.options.multiplier
 		stage.height *= this.options.multiplier
 
-		const seed: string = stage.seed || $chance.generateSlug()
-
-		this.rng = new Chance(seed)
-
-		this.seed = seed
+		this.seed = stage.seed
+		this.rng = new Chance(this.seed)
 
 		this.stage = stage
 	}
@@ -247,19 +198,6 @@ export class Dungeon {
 		return tiles
 	}
 
-	getRegions(): Record<number, Tile[]> {
-		const regions: Record<number, Tile[]> = {}
-
-		for (let tile of this.tiles.flat()) {
-			if (!regions[tile.region]) {
-				regions[tile.region] = []
-			}
-			regions[tile.region].push(tile)
-		}
-
-		return regions
-	}
-
 	// noinspection JSMethodCanBeStatic
 	private connectDoor(tile: Tile, options?: {region?: number; name?: number | string}): void {
 		if (options.region) {
@@ -273,14 +211,6 @@ export class Dungeon {
 
 	private oneIn(num: number): boolean {
 		return this.randBetween(1, num) === 1
-	}
-
-	private startRegion(type?: RegionType, id?: number): Region {
-		const region = new Region(type, id)
-		$out.debug(`Starting region ${region.id}`)
-		this.regions[region.id] = region
-		this.region = region
-		return region
 	}
 
 	private async connectCorridors(a: number | string, b: number | string, connection: Tile): Promise<void> {
