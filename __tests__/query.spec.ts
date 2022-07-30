@@ -72,10 +72,10 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 }
 
 describe('Query', () => {
-	let {tiles, tile, n, e, s, w, ne, se, sw, nw} = setupQueryVars()
+	let {tiles} = setupQueryVars()
 
 	beforeEach(() => {
-		({tiles, tile, n, e, s, w, ne, se, sw, nw} = setupQueryVars())
+		({tiles} = setupQueryVars())
 	})
 
 	it('should be a function', () => {
