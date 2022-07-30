@@ -5,7 +5,7 @@ import {$out, defaultDungeonOptions, defaultStageOptions, DungeonOptions, StageO
 import {cardinal, Query, QueryOptions} from './query/Query'
 import {Region, RegionType, regionTypes} from './structures/Region'
 import {Corridor} from './structures/Corridor'
-import {State} from './State'
+import {State} from './mixins/State'
 import {Results} from './Results'
 import Tile, {Neighbors, TileMatrix, TileType} from './structures/Tile'
 import Chance from 'chance'
