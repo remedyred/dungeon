@@ -180,7 +180,7 @@ export class Tile {
 		return this.floors().length === 1
 	}
 
-	toJson() {
+	toJSON() {
 		const {x, y, type} = this.state
 		return {x, y, type}
 	}

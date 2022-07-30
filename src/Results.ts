@@ -12,12 +12,12 @@ export class Results {
 		this.seed = seed
 	}
 
-	toJson() {
+	toJSON() {
 		const rooms = []
 		const tiles = []
 
 		for (const room of this.rooms) {
-			rooms.push(room.toJson())
+			rooms.push(room.toJSON())
 		}
 
 		for (let x = 0; x < this.tiles.length; x++) {
@@ -26,7 +26,7 @@ export class Results {
 			}
 			for (let y = 0; y < this.tiles[x].length; y++) {
 				const tile = this.tiles[x][y]
-				tiles[x].push(tile.toJson())
+				tiles[x].push(tile.toJSON())
 			}
 		}
 

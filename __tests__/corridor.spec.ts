@@ -10,7 +10,7 @@ describe('Corridor', () => {
 		({tiles} = setupQueryVars())
 		expected = {
 			region: region_id,
-			tiles: tiles.map(tile => tile.toJson())
+			tiles: tiles.map(tile => tile.toJSON())
 		}
 	})
 
@@ -38,12 +38,12 @@ describe('Corridor', () => {
 		expect(typeof Corridor.prototype.remove).toBe('function')
 	})
 
-	it('should have a .toJson() method', () => {
-		expect(typeof Corridor.prototype.toJson).toBe('function')
+	it('should have a .toJSON() method', () => {
+		expect(typeof Corridor.prototype.toJSON).toBe('function')
 	})
 
-	it('.toJson() should return a corridor object', () => {
-		expect(new Corridor(region_id, tiles).toJson()).toStrictEqual(expected)
+	it('.toJSON() should return a corridor object', () => {
+		expect(new Corridor(region_id, tiles).toJSON()).toStrictEqual(expected)
 	})
 
 	it('should have a .toString() method', () => {

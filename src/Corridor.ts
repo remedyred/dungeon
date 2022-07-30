@@ -37,10 +37,10 @@ export class Corridor {
 		}
 	}
 
-	toJson() {
+	toJSON() {
 		return {
 			region: this.region,
-			tiles: this.tiles.map(tile => tile.toJson())
+			tiles: this.tiles.map(tile => tile.toJSON())
 		}
 	}
 

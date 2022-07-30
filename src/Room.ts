@@ -56,7 +56,7 @@ export class Room {
 		)
 	}
 
-	toJson() {
+	toJSON() {
 		return {
 			x: this.x,
 			y: this.y,

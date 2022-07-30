@@ -189,8 +189,8 @@ describe('Room', () => {
 		})
 	})
 
-	it('Room.toJson() should return a POJO', () => {
-		expect(new Room(0, 0, 10, 10).toJson()).toStrictEqual({
+	it('Room.toJSON() should return a POJO', () => {
+		expect(new Room(0, 0, 10, 10).toJSON()).toStrictEqual({
 			x: 0,
 			y: 0,
 			width: 10,
