@@ -50,8 +50,8 @@ describe('Corridor', () => {
 		expect(typeof Corridor.prototype.toString).toBe('function')
 	})
 
-	it('should have a .toString() method', () => {
-		expect(typeof Corridor.prototype.toString).toBe('function')
+	it('should have a .toString() method that returns the region', () => {
+		expect(new Corridor(region_id, tiles).toString()).toBe(String(region_id))
 	})
 
 	it('should be iterable', () => {
