@@ -303,82 +303,79 @@ export class Query {
 		for (const tile of tiles) {
 			// Skip falsy tiles
 			if (!tile) {
-				this.#out('Skipping falsy tile')
+				// Skipping falsy tile
 				continue
 			}
 
-			let regionMessage = tile.region + (tile.regionType ? ` [${tile.regionType}]` : '')
-			let message = `${tile.x}x${tile.y} [${tile.type}] (${regionMessage}}). `
-
 			// Skip tiles that don't match the type
 			if (!isEmpty(options.type) && !options.type.includes(tile.type)) {
-				this.#out(`${message}Skipping tile, should be type ${options.type}`)
+				// Skipping tile, should be type ${options.type}
 				continue
 			}
 
 			// Skip tiles that match the notType
 			if (!isEmpty(options.notType) && options.notType.includes(tile.type)) {
-				this.#out(`${message}Skipping tile, should not be ${options.notType}`)
+				// Skipping tile, should not be ${options.notType}
 				continue
 			}
 
 			if (!isEmpty(options.region) && !options.region.includes(tile.region)) {
-				this.#out(`${message}Skipping tile, region should be ${options.region}`)
+				// Skipping tile, region should be ${options.region}
 				continue
 			}
 
 			if (!isEmpty(options.notRegion) && options.notRegion.includes(tile.region)) {
-				this.#out(`${message}Skipping tile, region should not be ${options.notRegion}`)
+				// Skipping tile, region should not be ${options.notRegion}
 				continue
 			}
 
 			if (!isEmpty(options.regionType) && !options.regionType.includes(tile.regionType)) {
-				this.#out(`${message}Skipping tile, region type should be ${options.regionType}`)
+				// Skipping tile, region type should be ${options.regionType}
 				continue
 			}
 
 			if (!isEmpty(options.notRegionType) && options.notRegionType.includes(tile.regionType)) {
-				this.#out(`${message}Skipping tile, region type should not be ${options.notRegionType}`)
+				// Skipping tile, region type should not be ${options.notRegionType}
 				continue
 			}
 
 			// if we have a start tile, check start tile queries
 			if (this.requiresStart(options)) {
-				this.#out(`${message}Checking start tile queries`)
+				// Checking start tile queries
 
 				if (tile.x === options.start.x && tile.y === options.start.y) {
-					this.#out(`${message}Skipping tile. Start tile found.`)
+					// Skipping tile. Start tile found.
 					continue
 				}
 
 				if (options?.directions.length) {
 					if (!hasNorth && tile.y < options.start.y) {
-						this.#out(`${message}Skipping tile. Tile should not be north of start tile.`)
+						// Skipping tile. Tile should not be north of start tile.
 						continue
 					}
 
 					if (!hasSouth && tile.y > options.start.y) {
-						this.#out(`${message}Skipping tile. Tile should not be south of start tile.`)
+						// Skipping tile. Tile should not be south of start tile.
 						continue
 					}
 
 					if (!hasEast && tile.x > options.start.x) {
-						this.#out(`${message}Skipping tile. Tile should not be east of start tile.`)
+						// Skipping tile. Tile should not be east of start tile.
 						continue
 					}
 
 					if (!hasWest && tile.x < options.start.x) {
-						this.#out(`${message}Skipping tile. Tile should not be west of start tile.`)
+						// Skipping tile. Tile should not be west of start tile.
 						continue
 					}
 
 					if (this.options.strictDirections) {
 						if (!hasCardinal && tile.x === options.start.x && tile.y === options.start.y) {
-							this.#out(`${message}Skipping tile. Tile should not be cardinal of start tile.`)
+							// Skipping tile. Tile should not be cardinal of start tile.
 							continue
 						}
 						if (!hasIntercardinal && tile.x !== options.start.x && tile.y !== options.start.y) {
-							this.#out(`${message}Skipping tile. Tile should not be intercardinal of start tile.`)
+							// Skipping tile. Tile should not be intercardinal of start tile.
 							continue
 						}
 					}
@@ -396,13 +393,13 @@ export class Query {
 						xDiff > options.levels ||
 						yDiff > options.levels
 					) {
-						this.#out(`${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
+						// Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}
 						continue
 					}
 				}
 			}
 
-			this.#out(`${message}Adding tile`)
+			// Adding tile
 
 			results.push(tile)
 		}
