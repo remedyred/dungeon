@@ -1,6 +1,6 @@
 import {DungeonState, safeMerge, State} from './State'
 import {$out} from '../common'
-import {arrayUnique, arrayWrap, isNumber, isString} from '@snickbit/utilities'
+import {arrayWrap, isNumber, isString} from '@snickbit/utilities'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from '../coordinates/Coordinates'
 import {Region, RegionType, regionTypes} from '../structures/Region'
 import {Results} from '../Results'
@@ -287,12 +287,9 @@ export class Builder {
 
 		for (const [check, def] of Object.entries(checks)) {
 			if (!await this.isCarvable(def, check)) {
-				$out.verbose(`growMaze.canCarve [${check}] ${def.x}x${def.y} is not carvable`)
 				return false
 			}
 		}
-
-		$out.verbose(`growMaze.canCarve ${cell.x}x${cell.y} is carvable`)
 		return true
 	}
 
@@ -301,18 +298,14 @@ export class Builder {
 		let reclean = false
 		const tilesToClean: Tile[] = []
 
-		$out.verbose('Cleaning corridors...', corridors)
-
 		for (let corridor of corridors) {
 			if (corridor.tiles.length < this.options.minCorridorLength) {
-				$out.debug(`Corridor ${corridor} is too short, removing... ${corridor.tiles.map(tile => tile.name).join(', ')}`)
 				tilesToClean.push(...corridor.tiles)
 			} else if (!corridor.tiles.find(async tile => await tile.find().levels(2).cardinal().notRegion(tile.region).notRegion(-1).count() === 0)) {
 				tilesToClean.push(...corridor.tiles)
 			} else {
 				for (let tile of corridor.tiles) {
 					if ((await tile.cardinal()).find(tile => tile.isRoom())) {
-						$out.debug(`Corridor ${corridor} tile ${tile.name} is connected to a room, removing...`)
 						tilesToClean.push(...this.walkStraight(tile, false))
 					}
 				}
@@ -323,8 +316,6 @@ export class Builder {
 			for (let tile of tilesToClean) {
 				this.resetTile(tile)
 			}
-
-			$out.debug('Found tiles to clean, recleaning...')
 			reclean = true
 		}
 
@@ -334,8 +325,6 @@ export class Builder {
 	}
 
 	protected async connectCorridors(a: number | string, b: number | string, connection: Tile): Promise<void> {
-		$out.debug(`connectCorridors(${a}, ${b}, ${connection})`)
-
 		const corridors = await this.getCorridors()
 		const corridorA = corridors.find(c => c.isRegion(a))
 		if (!corridorA) {
@@ -385,8 +374,6 @@ export class Builder {
 
 		const regionConnections: Record<string, Connection> = {}
 
-		$out.debug('Connecting regions...').extra(arrayUnique(this.tiles.flat().map(v => v.region)))
-
 		for (const row of this.tiles) {
 			for (const tile of row) {
 				if (tile.type !== 'wall' || tile.region !== -1) {
@@ -418,12 +405,9 @@ export class Builder {
 			}
 		}
 
-		$out.debug(`Found ${Object.keys(regionConnections).length} regions to connect`, Object.keys(regionConnections).sort()).extra(Object.keys(regionConnections))
-
 		let added_connections = 0
 
 		const makeConnection = (key: string, door: Tile, type: string) => {
-			$out.verbose(`Door at ${door.x}, ${door.y}`)
 			if (type === 'door') {
 				this.connectDoor(door, {name: key})
 			} else if (type === 'corridor') {
@@ -433,7 +417,6 @@ export class Builder {
 				const parsedB = connection.x.find(v => v.region === b) || connection.y.find(v => v.region === b)
 
 				if (!parsedA || !parsedB) {
-					$out.error(`Could not find connection for ${key}`, {connection, parsedB, parsedA})
 					return
 				}
 
@@ -478,7 +461,6 @@ export class Builder {
 				const doors: Tile[] = failedByChance.length ? failedByChance : tiles
 				const rand: number = this.randBetween(0, doors.length - 1)
 				const door: Tile = doors[rand]
-				$out.debug(`Forced Door at ${door.x}, ${door.y}`)
 				makeConnection(key, door, type)
 			}
 
@@ -574,8 +556,6 @@ export class Builder {
 			}
 		}
 
-		$out.debug(`Generating maze with ${availableStartPoints.length} starting points. ${this.options.mazeCorridors ? 'With maze corridors.' : 'Without maze corridors.'}`)
-
 		if (this.options.mazeCorridors) {
 			for (const point of availableStartPoints) {
 				await this.growMaze(point)
@@ -659,8 +639,6 @@ export class Builder {
 			}
 		}
 
-		$out.verbose(`growMaze ${start.x}x${start.y} carving complete after ${count} tries. Found ${carvable.length} carvable cells`)
-
 		// carve the paths
 		if (carvable.length > 1) {
 			await this.carve(carvable, 'corridor')
@@ -669,29 +647,20 @@ export class Builder {
 
 	protected async isCarvable(cell: Point, check: string): Promise<boolean> {
 		if (!this.hasTile(cell)) {
-			$out.verbose(`No tile at ${cell.x}x${cell.y}`)
 			return false
 		}
 
 		const tile: Tile = this.getTile(cell)
 
 		if (!tile.isWall()) {
-			$out.verbose(`Tile at ${cell.x}x${cell.y} is not a wall`)
 			return false
 		}
 
 		if (check !== 'after' && await tile.nearRoom()) {
-			$out.verbose(`Tile at ${cell.x}x${cell.y} is near a room`)
 			return false
 		}
 
-		if (check !== 'after' && this.nearEdge(tile)) {
-			$out.verbose(`Tile at ${cell.x}x${cell.y} is near the edge`)
-			return false
-		}
-
-		$out.verbose(`Tile at ${cell.x}x${cell.y} is carvable`)
-		return true
+		return !(check !== 'after' && this.nearEdge(tile))
 	}
 
 	protected async normalizeRegions(): Promise<void> {
@@ -726,7 +695,6 @@ export class Builder {
 						await tile.find().cardinal().notType('wall').count() <= 1 &&
 						!this.rooms.find(room => room.containsTile(tile.x, tile.y))
 					) {
-						$out.debug(`Found dead end at ${tile.x}, ${tile.y}`)
 						this.resetTile(tile)
 						done = false
 					}
@@ -750,19 +718,15 @@ export class Builder {
 			return
 		}
 
-		$out.debug('Splitting corridors...', corridors.map(corridor => corridor.region))
-
 		// get the lowest region number
 		let regionId = corridors[0].region
 
 		const checkedTiles: Tile[] = []
 
 		for (const corridor of corridors) {
-			$out.debug(`Splitting corridor ${corridor}`)
 			for (let tile of corridor.tiles) {
 				if (!checkedTiles.includes(tile)) {
 					const corridorTiles = this.walk(tile)
-					$out.debug(`Found ${corridorTiles.length} tiles in corridor ${corridor}`).extra(corridorTiles.map(tile => tile.name))
 					this.startRegion('corridor', regionId++)
 					for (const corridorTile of corridorTiles) {
 						this.setTile(corridorTile, 'floor')

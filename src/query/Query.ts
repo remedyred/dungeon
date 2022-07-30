@@ -86,8 +86,6 @@ export class Query {
 		})
 
 		this.out = $out.clone().prefix('Query')
-
-		$out.verbose('Constructed query:', this.options)
 	}
 
 	setTiles(tiles: Tile[] | TileMatrix): this {

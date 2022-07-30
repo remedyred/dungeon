@@ -1,7 +1,6 @@
 import {DungeonState, safeMerge, State} from './State'
 import {Coordinates, parsePoint} from '../coordinates/Coordinates'
 import {isNumber} from '@snickbit/utilities'
-import {$out} from '../common'
 import {Query, QueryOptions} from '../query/Query'
 import Tile, {TileMatrix, TileType} from '../structures/Tile'
 
@@ -56,8 +55,6 @@ export class TileManager {
 		}
 
 		const region = region_id in this.regions ? this.regions[region_id] : this.region
-
-		$out.verbose('setTile', {x, y, type, region: region.id, regionType: region.type})
 
 		const tile = this.getTile(x, y)
 		tile.type = type ?? 'floor'
