@@ -62,6 +62,7 @@ describe('Room', () => {
 	describe('Room.intersects()', () => {
 		it('Should throw if the object has no getBoundingBox method', () => {
 			expect(() => {
+				// @ts-expect-error
 				new Room(0, 0, 3, 3).intersects({foo: 'bar'})
 			}).toThrow()
 		})
@@ -107,6 +108,7 @@ describe('Room', () => {
 	describe('Room.touches()', () => {
 		it('Should throw if the object has no getBoundingBox method', () => {
 			expect(() => {
+				// @ts-expect-error
 				new Room(0, 0, 3, 3).touches({foo: 'bar'})
 			}).toThrow()
 		})

@@ -1,9 +1,10 @@
 import {TileMatrix} from './Dungeon'
 import {Tile, TileType} from './Tile'
 import {Coordinates, parsePoint, Point} from './Coordinates'
-import {arrayUnique} from '@snickbit/utilities'
+import {arrayUnique, arrayWrap, isEmpty} from '@snickbit/utilities'
 import {$out} from './common'
 import {Out} from '@snickbit/out'
+import {RegionType} from './Region'
 
 export type CardinalDirection = 'e' | 'n' | 's' | 'w'
 export type IntercardinalDirection = 'ne' | 'nw' | 'se' | 'sw'
@@ -16,12 +17,14 @@ export interface QueryOptions {
 	inclusive?: boolean
 	directions?: Direction[]
 	strictDirections?: boolean
-	type?: TileType
-	notType?: TileType
+	type?: TileType | TileType[]
+	notType?: TileType | TileType[]
 	start?: Coordinates
 	offset?: Point
-	region?: number
-	notRegion?: number
+	region?: number[] | number
+	notRegion?: number[] | number
+	regionType?: RegionType | RegionType[]
+	notRegionType?: RegionType | RegionType[]
 	debug?: boolean
 	unique?: string
 	where?: TileCallback[]
@@ -32,51 +35,56 @@ interface ParsedOptions {
 	inclusive: boolean
 	directions: Direction[]
 	strictDirections?: boolean
-	type?: TileType
-	notType?: TileType
-	start: Tile
+	type?: TileType[]
+	notType?: TileType[]
+	start: Point
 	offset?: Point
-	region?: number
-	notRegion?: number
+	region?: number[]
+	notRegion?: number[]
+	regionType?: RegionType[]
+	notRegionType?: RegionType[]
 	debug: boolean
 	unique?: string
 	where?: TileCallback[]
 }
 
-const cardinal: CardinalDirection[] = [
+export const cardinal: CardinalDirection[] = [
 	'n',
 	'e',
 	's',
 	'w'
 ]
-const intercardinal: IntercardinalDirection[] = [
+export const intercardinal: IntercardinalDirection[] = [
 	'ne',
 	'se',
 	'sw',
 	'nw'
 ]
 
-const directions: Direction[] = [...cardinal, ...intercardinal]
-
-const defaultOptions: QueryOptions = {
-	levels: 1,
-	inclusive: false,
-	directions: [],
-	debug: false,
-	where: []
-}
+export const directions: Direction[] = [...cardinal, ...intercardinal]
 
 export class Query {
 	private tiles: Tile[]
-	private readonly options: QueryOptions
+	private readonly options: ParsedOptions
 	private out: Out
+	private customDirections = false
 
 	constructor(tiles: Tile[] | TileMatrix, options: QueryOptions = {}) {
 		this.tiles = tiles.flat()
-		this.options = {
-			...defaultOptions,
+		this.options = this.validate({
+			levels: 1,
+			inclusive: false,
+			directions: [],
+			debug: false,
+			where: [],
+			regionType: [],
+			notRegionType: [],
+			region: [],
+			notRegion: [],
+			type: [],
+			notType: [],
 			...options
-		}
+		})
 
 		this.out = $out.clone().prefix('Query')
 
@@ -106,44 +114,61 @@ export class Query {
 	}
 
 	cardinal(): this {
-		this.options.directions.push(...cardinal)
-		this.options.strictDirections = true
-		return this
+		return this.directions(cardinal, true)
 	}
 
 	intercardinal(): this {
-		this.options.directions.push(...intercardinal)
-		this.options.strictDirections = true
-		return this
+		return this.directions(intercardinal, true)
 	}
 
-	setDirections(directions: Direction[]): this {
+	setDirections(directions: Direction[], strict?: boolean): this {
 		this.options.directions = directions
+		if (strict !== undefined) {
+			this.options.strictDirections = strict
+		}
+		this.customDirections = true
 		return this
 	}
 
-	directions(directions: Direction[]): this {
-		this.options.directions.push(...directions)
+	directions(directions: Direction[], strict?: boolean): this {
+		return this.setDirections([...this.options.directions || [], ...directions], strict)
+	}
+
+	setDirection(direction: Direction, strict?: boolean): this {
+		return this.setDirections([direction], strict)
+	}
+
+	direction(direction: Direction, strict?: boolean): this {
+		return this.setDirections([...this.options.directions || [], direction], strict)
+	}
+
+	private pushOption(key: string, value: any): this {
+		if (!this.options[key]) {
+			this.options[key] = []
+		}
+
+		this.options[key].push(...arrayWrap(value))
+
 		return this
 	}
 
-	setDirection(direction: Direction): this {
-		this.options.directions = [direction]
+	region(region: number[] | number): this {
+		this.pushOption('region', region)
 		return this
 	}
 
-	direction(direction: Direction): this {
-		this.options.directions.push(direction)
+	notRegion(region: number[] | number): this {
+		this.pushOption('notRegion', region)
 		return this
 	}
 
-	region(region: number): this {
-		this.options.region = region
+	regionType(type: RegionType | RegionType[]): this {
+		this.pushOption('regionType', type)
 		return this
 	}
 
-	notRegion(region: number): this {
-		this.options.notRegion = region
+	notRegionType(type: RegionType | RegionType[]): this {
+		this.pushOption('notRegionType', type)
 		return this
 	}
 
@@ -152,34 +177,35 @@ export class Query {
 		return this
 	}
 
-	type(type: TileType): this {
-		this.options.type = type
+	type(type: TileType | TileType[]): this {
+		this.pushOption('type', type)
 		return this
 	}
 
-	notType(type: TileType): this {
-		this.options.notType = type
+	notType(type: TileType | TileType[]): this {
+		this.pushOption('notType', type)
 		return this
 	}
 
 	start(x: number, y: number): this
 	start(location: Coordinates): this
 	start(optionalX: Coordinates | number, optionalY?: number): this {
-		const {x, y} = parsePoint(optionalX, optionalY)
-		this.options.start = {x, y}
+		this.options.start = parsePoint(optionalX, optionalY)
 		return this
 	}
 
-	private requiresStart(): boolean {
-		return !!this.options.start ||
-			!!this.options.offset ||
-			this.options.directions?.length > 0
+	private requiresStart(options?: ParsedOptions | QueryOptions): boolean {
+		options = options || this.options
+		if (!options) {
+			return false
+		}
+		return !!options.start ||
+			!!options.offset ||
+			this.customDirections
 	}
 
-	private validate(): ParsedOptions {
-		const options = {...this.options}
-
-		if (!options.start && this.requiresStart()) {
+	private validate(options: QueryOptions): ParsedOptions {
+		if (!options.start && this.requiresStart(options)) {
 			this.#out('No start location specified, using first tile')
 			if (this.tiles.length === 0) {
 				throw new Error('No tiles provided')
@@ -201,17 +227,37 @@ export class Query {
 				start.y += options.offset.y
 			}
 
-			const foundStart = this.tiles.find(tile => tile.x === start.x && tile.y === start.y)
-
-			if (!foundStart) {
+			if (!this.tiles.find(tile => tile.x === start.x && tile.y === start.y)) {
 				throw new Error(`Start location not found: ${JSON.stringify(start)}`)
 			}
-
-			options.start = foundStart
 		}
 
 		if (options.levels < 0) {
 			options.levels = 0
+		}
+
+		if (options.type) {
+			options.type = arrayWrap(options.type)
+		}
+
+		if (options.notType) {
+			options.notType = arrayWrap(options.notType)
+		}
+
+		if (options.region) {
+			options.region = arrayWrap(options.region)
+		}
+
+		if (options.notRegion) {
+			options.notRegion = arrayWrap(options.notRegion)
+		}
+
+		if (options.regionType) {
+			options.regionType = arrayWrap(options.regionType)
+		}
+
+		if (options.notRegionType) {
+			options.notRegionType = arrayWrap(options.notRegionType)
 		}
 
 		this.#out('Validated options:', options)
@@ -220,7 +266,7 @@ export class Query {
 	}
 
 	#out(...args: any[]) {
-		if (this.options.debug) {
+		if (this.options?.debug) {
 			this.out.force.debug(...args)
 		}
 	}
@@ -230,8 +276,12 @@ export class Query {
 		return this
 	}
 
-	get(): Tile[] {
-		const options: ParsedOptions = this.validate()
+	async count(): Promise<number> {
+		return (await this.get())?.length || 0
+	}
+
+	async get(): Promise<Tile[]> {
+		const options: ParsedOptions = this.validate(this.options)
 
 		let results: Tile[] = []
 		let tiles: Tile[] = this.tiles.slice()
@@ -242,7 +292,7 @@ export class Query {
 		let hasCardinal = false
 		let hasIntercardinal = false
 
-		if (this.requiresStart()) {
+		if (this.requiresStart(options)) {
 			if (options?.directions.length) {
 				hasNorth = options.directions.includes('n') || options.directions.includes('ne') || options.directions.includes('nw')
 				hasEast = options.directions.includes('e') || options.directions.includes('ne') || options.directions.includes('se')
@@ -260,22 +310,43 @@ export class Query {
 				continue
 			}
 
-			let message = `${tile.x}x${tile.y} [${tile.type}] (${tile.region}). `
+			let regionMessage = tile.region + (tile.regionType ? ` [${tile.regionType}]` : '')
+			let message = `${tile.x}x${tile.y} [${tile.type}] (${regionMessage}}). `
 
 			// Skip tiles that don't match the type
-			if (options.type && tile.type !== options.type) {
+			if (!isEmpty(options.type) && !options.type.includes(tile.type)) {
 				this.#out(`${message}Skipping tile, should be type ${options.type}`)
 				continue
 			}
 
 			// Skip tiles that match the notType
-			if (options.notType && tile.type === options.notType) {
+			if (!isEmpty(options.notType) && options.notType.includes(tile.type)) {
 				this.#out(`${message}Skipping tile, should not be ${options.notType}`)
 				continue
 			}
 
+			if (!isEmpty(options.region) && !options.region.includes(tile.region)) {
+				this.#out(`${message}Skipping tile, region should be ${options.region}`)
+				continue
+			}
+
+			if (!isEmpty(options.notRegion) && options.notRegion.includes(tile.region)) {
+				this.#out(`${message}Skipping tile, region should not be ${options.notRegion}`)
+				continue
+			}
+
+			if (!isEmpty(options.regionType) && !options.regionType.includes(tile.regionType)) {
+				this.#out(`${message}Skipping tile, region type should be ${options.regionType}`)
+				continue
+			}
+
+			if (!isEmpty(options.notRegionType) && options.notRegionType.includes(tile.regionType)) {
+				this.#out(`${message}Skipping tile, region type should not be ${options.notRegionType}`)
+				continue
+			}
+
 			// if we have a start tile, check start tile queries
-			if (this.requiresStart()) {
+			if (this.requiresStart(options)) {
 				this.#out(`${message}Checking start tile queries`)
 
 				if (tile.x === options.start.x && tile.y === options.start.y) {
@@ -314,16 +385,6 @@ export class Query {
 							continue
 						}
 					}
-				}
-
-				if (options.region && tile.region !== options.region) {
-					this.#out(`${message}Skipping tile, region should be ${options.region}`)
-					continue
-				}
-
-				if (options.notRegion && tile.region === options.notRegion) {
-					this.#out(`${message}Skipping tile, region should not be ${options.notRegion}`)
-					continue
 				}
 
 				if (options.levels) {

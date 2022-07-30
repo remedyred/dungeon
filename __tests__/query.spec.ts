@@ -146,6 +146,14 @@ describe('Query', () => {
 		expect(typeof Query.prototype.notRegion).toBe('function')
 	})
 
+	it('should have a .regionType() method', () => {
+		expect(typeof Query.prototype.regionType).toBe('function')
+	})
+
+	it('should have a .notRegionType() method', () => {
+		expect(typeof Query.prototype.notRegionType).toBe('function')
+	})
+
 	it('should have a .unique() method', () => {
 		expect(typeof Query.prototype.unique).toBe('function')
 	})
@@ -154,8 +162,17 @@ describe('Query', () => {
 		expect(typeof Query.prototype.get).toBe('function')
 	})
 
-	it('.get() should return an array of tiles', () => {
+	it('should have a .count() method', () => {
+		expect(typeof Query.prototype.count).toBe('function')
+	})
+
+	it('.get() should return an array of tiles', async () => {
 		const query = new Query(tiles)
-		expect(query.get()).toEqual(expect.arrayContaining(tiles))
+		expect(await query.get()).toEqual(expect.arrayContaining(tiles))
+	})
+
+	it('.count() should return a number the length of the results', async () => {
+		const query = new Query(tiles)
+		expect(await query.count()).toBe(tiles.length)
 	})
 })

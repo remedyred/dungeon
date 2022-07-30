@@ -1,5 +1,7 @@
 export type RegionType = 'corridor' | 'room'
 
+export const regionTypes = ['corridor', 'room']
+
 export interface RegionState {
 	type: RegionType
 	id: number

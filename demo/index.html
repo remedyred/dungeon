@@ -34,39 +34,72 @@
 		<li><strong id="seed"></strong></li>
 	</ul>
 	<ul>
-		<li><button x-data x-on:click="createMap"><strong>Generate</strong></button></li>
-		<li><a href="https://github.com/snickbit/dungeon" target="_blank" class="contrast"><strong>GitHub</strong></a></li>
+		<li>
+			<button id="generate"><strong>Generate</strong></button>
+		</li>
+		<li>
+			<a href="https://github.com/snickbit/dungeon" target="_blank" class="contrast"><strong>GitHub</strong></a>
+		</li>
 	</ul>
 </nav>
 
 
 <main class="container">
 	<section>
-		<canvas></canvas>
+		<section id="dungeon" aria-busy="true"></section>
 	</section>
 </main>
 <script src="../dist/index.bundle.js"></script>
 <script>
 	const options = {
-		width: 15,
-		height: 15,
+		width: 21,
+		height: 21,
 		cellSize: 40,
 		gridPadding: 0,
-		removeDeadEnds: false
+		removeDeadEnds: false,
+		seed: 'orange-icy-disease-0'
+	}
+	const $dungeon = document.getElementById('dungeon')
+	const $generate = document.getElementById('generate')
+	const $seed = document.getElementById('seed')
+
+	options.canvasWidth = options.width * options.cellSize
+	options.canvasHeight = options.height * options.cellSize
+
+	function start() {
+		console.log('start')
+		const $canvas = $dungeon.querySelector('canvas')
+		if ($canvas) {
+			$canvas.remove()
+		}
+		$dungeon.setAttribute('aria-busy', 'true')
 	}
 
-	options.canvasWidth = options.width * options.cellSize;
-	options.canvasHeight = options.height * options.cellSize;
+	function stop() {
+		console.log('stop')
+		$dungeon.setAttribute('aria-busy', 'false')
+	}
 
-	const $canvas = document.querySelector('canvas')
-	const ctx = $canvas.getContext('2d')
+	function generate() {
+		start()
+		console.log('waiting for dungeon to generate...')
+		window.dungeon().build(options).then(generated_dungeon => {
+			console.log('Generated dungeon', generated_dungeon)
 
-	ctx.imageSmoothingEnabled = false
+			stop()
+			drawMap(generated_dungeon)
 
-	function createMap() {
-		const $dungeon = window.dungeon().build(options)
+			// set the seed
+			$seed.innerText = generated_dungeon.seed
+		})
+	}
 
-		console.log('Generated dungeon', $dungeon)
+	function drawMap(generated_dungeon) {
+		$dungeon.innerHTML = '<canvas></canvas>'
+
+		const $canvas = document.querySelector('canvas')
+		const ctx = $canvas.getContext('2d')
+		ctx.imageSmoothingEnabled = false
 
 		$canvas.width = options.canvasWidth
 		$canvas.height = options.canvasHeight
@@ -80,13 +113,13 @@
 
 		// Blue for rooms
 		ctx.fillStyle = '#6479a3'
-		for (const room of $dungeon.rooms) {
+		for (const room of generated_dungeon.rooms) {
 			ctx.fillRect(room.x * options.cellSize, room.y * options.cellSize, room.width * options.cellSize, room.height * options.cellSize)
 		}
 
-		for (let x = 0; x < $dungeon.tiles.length; x++) {
-			for (let y = 0; y < $dungeon.tiles[x].length; y++) {
-				const tile = $dungeon.tiles[x][y]
+		for (let x = 0; x < generated_dungeon.tiles.length; x++) {
+			for (let y = 0; y < generated_dungeon.tiles[x].length; y++) {
+				const tile = generated_dungeon.tiles[x][y]
 
 				if (tile.isRoom()) {
 					// Use an overlay for corridors
@@ -108,20 +141,25 @@
 
 				ctx.fillStyle = 'black'
 				ctx.textAlign = 'center'
-				ctx.fillText(`${x}x${y}`, x * options.cellSize + 18, y * options.cellSize + 10)
-				ctx.fillText(`${tile.type}`, x * options.cellSize + 18, y * options.cellSize + 22)
+
+				const xPos = x * options.cellSize + options.cellSize / 2
+
+				ctx.fillText(tile.name, xPos, y * options.cellSize + 10)
+
+				let subtext = `[${tile.type?.substring(0, 1).toUpperCase()}]`
+				if (tile.regionType) {
+					subtext += ` [${tile.regionType?.substring(0, 1).toUpperCase()}]`
+				}
+				ctx.fillText(subtext, xPos, y * options.cellSize + 22)
 
 				if (tile.region > -1) {
-					ctx.fillText(`${tile.region}`, x * options.cellSize + 18, y * options.cellSize + 35)
+					ctx.fillText(`${tile.region}`, xPos, y * options.cellSize + 35)
 				}
 			}
 		}
 
 		// Draw the grid
 		drawGrid(ctx)
-
-		const $seed = document.getElementById('seed')
-		$seed.innerText = $dungeon.seed
 	}
 
 	function drawGrid(context) {
@@ -138,10 +176,15 @@
 		context.stroke()
 	}
 
-	document.addEventListener('alpine:initialized', () => {
-		createMap()
+
+	window.addEventListener('load', (event) => {
+		console.log('page is fully loaded')
+		generate()
 	})
 
+	$generate.addEventListener('click', (event) => {
+		generate()
+	})
 </script>
 </body>
 </html>

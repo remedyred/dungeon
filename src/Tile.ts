@@ -3,10 +3,12 @@ import {Coordinates, parsePoint} from './Coordinates'
 import {Query} from './Query'
 import {RegionType} from './Region'
 
-export type TileType = 'door' | 'floor' | 'shaft' | 'stairs' | 'wall'
+export type TileType = 'door' | 'floor' | 'wall'
 
+// todo: convert region to an array of Region objects. Most will contain only 1 region, but doors will have 2.
 export interface TileState {
 	type: TileType
+	name?: string
 	neighbors: Neighbors
 	x: number
 	y: number
@@ -27,15 +29,23 @@ export class Tile {
 		}
 	}
 
-	get x() {
+	get name(): string {
+		return `${this.state.x}x${this.state.y}${this.state.name ? ` (${this.state.name})` : ''}`
+	}
+
+	set name(name: string) {
+		this.state.name = name
+	}
+
+	get x(): number {
 		return parseInt(String(this.state.x))
 	}
 
-	get y() {
+	get y(): number {
 		return parseInt(String(this.state.y))
 	}
 
-	get type() {
+	get type(): TileType {
 		return this.state.type
 	}
 
@@ -43,12 +53,12 @@ export class Tile {
 		this.state.type = type
 	}
 
-	get region() {
+	get region(): number {
 		return this.state.region
 	}
 
 	set region(region: number) {
-		this.state.region = region
+		this.state.region = parseInt(String(region))
 	}
 
 	get regionType(): RegionType {
@@ -59,7 +69,7 @@ export class Tile {
 		this.state.regionType = type
 	}
 
-	get neighbors() {
+	get neighbors(): Neighbors {
 		return this.state.neighbors
 	}
 
@@ -72,11 +82,15 @@ export class Tile {
 		return this
 	}
 
-	getNeighbors() {
-		return this.neighbors
+	getNeighbors(): Tile[] {
+		return Object.values(this.neighbors)
 	}
 
-	find() {
+	getNeighbor(direction: string): Tile | undefined {
+		return this.neighbors[direction]
+	}
+
+	find(): Query {
 		const tiles = Object.values(this.neighbors)
 		tiles.push(this)
 		return new Query(tiles, {
@@ -85,14 +99,6 @@ export class Tile {
 				y: this.state.y
 			}
 		})
-	}
-
-	cardinal(levels = 1): Tile[] {
-		return this.find().levels(levels).cardinal().get()
-	}
-
-	intercardinal(levels = 1): Tile[] {
-		return this.find().levels(levels).intercardinal().get()
 	}
 
 	isCorner(): boolean {
@@ -140,28 +146,16 @@ export class Tile {
 		return this
 	}
 
-	nearDoors(levels = 1): boolean {
-		return this.doors(levels).length > 0
-	}
-
-	floors(levels = 1): Tile[] {
-		return this.find().levels(levels).type('floor').get()
-	}
-
-	doors(levels = 1): Tile[] {
-		return this.find().levels(levels).type('door').get()
-	}
-
-	walls(levels = 1): Tile[] {
-		return this.find().levels(levels).type('wall').get()
-	}
-
 	isFloor(): boolean {
 		return this.type === 'floor'
 	}
 
 	isDoor(): boolean {
 		return this.type === 'door'
+	}
+
+	inRegion(region: number | string): boolean {
+		return this.region === parseInt(String(region))
 	}
 
 	isWall(): boolean {
@@ -176,17 +170,53 @@ export class Tile {
 		return this.state.regionType === 'corridor'
 	}
 
-	isAtEnd(): boolean {
-		return this.floors().length === 1
-	}
-
 	toJSON() {
-		const {x, y, type} = this.state
-		return {x, y, type}
+		const {x, y, type, region} = this.state
+		return {x, y, type, region}
 	}
 
 	toString() {
 		return `${this.state.x},${this.state.y}`
+	}
+
+	async nearDoors(levels = 1): Promise<boolean> {
+		return (await this.doors(levels)).length > 0
+	}
+
+	async touchesAnother(): Promise<boolean> {
+		return (await this.around()).some(tile => tile.isFloor() && tile.region === -1 || tile.region !== this.region)
+	}
+
+	async isAtEnd(): Promise<boolean> {
+		return (await this.floors()).length === 1
+	}
+
+	async nearRoom(levels = 1): Promise<boolean> {
+		return (await this.find().levels(levels).type('floor').regionType('room').notRegion(this.region).get()).length > 0
+	}
+
+	async doors(levels = 1): Promise<Tile[]> {
+		return await this.find().levels(levels).type('door').get()
+	}
+
+	async walls(levels = 1): Promise<Tile[]> {
+		return await this.find().levels(levels).type('wall').get()
+	}
+
+	async floors(levels = 1): Promise<Tile[]> {
+		return await this.find().levels(levels).type('floor').get()
+	}
+
+	async cardinal(levels = 1): Promise<Tile[]> {
+		return await this.find().levels(levels).cardinal().get()
+	}
+
+	async intercardinal(levels = 1): Promise<Tile[]> {
+		return await this.find().levels(levels).intercardinal().get()
+	}
+
+	async around(levels = 1): Promise<Tile[]> {
+		return await this.find().levels(levels).get()
 	}
 }
 

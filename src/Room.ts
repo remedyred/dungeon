@@ -1,3 +1,5 @@
+import {Point} from './Coordinates'
+
 export class Room {
 	x: number
 	y: number
@@ -11,21 +13,61 @@ export class Room {
 		this.height = height
 	}
 
-	getBoundingBox() {
+	getOuterBox(padding = 0) {
 		return {
-			top: this.y,
-			right: this.x + this.width - 1,
-			bottom: this.y + this.height - 1,
-			left: this.x
+			top: this.y - 1 - padding,
+			right: this.x + this.width + padding,
+			bottom: this.y + this.height + padding,
+			left: this.x - padding
 		}
 	}
 
-	intersects(other) {
-		if (!other.getBoundingBox) {
-			throw new Error('Given entity has no method getBoundingBox')
+	getInnerBox(padding = 0) {
+		return {
+			top: this.y + padding,
+			right: this.x + this.width - padding,
+			bottom: this.y + this.height - padding,
+			left: this.x + padding
 		}
+	}
+
+	getBoundingBox(padding = 0) {
+		return {
+			top: this.y - padding,
+			right: this.x + this.width - 1 + padding,
+			bottom: this.y + this.height - 1 + padding,
+			left: this.x - padding
+		}
+	}
+
+	getBorderPoints(padding = 0): Point[] {
+		const tilesTouchingRoom: Point[] = []
+
+		const room = {
+			x: this.x - padding,
+			y: this.y - padding,
+			height: this.height + padding,
+			width: this.width + padding
+		}
+
+		for (let x = room.x - 1; x <= this.x + room.width; x++) {
+			for (let y = room.y - 1; y <= this.y + room.height; y++) {
+				if (
+					x === room.x - 1 ||
+					y === room.y - 1 ||
+					x === this.x + room.width ||
+					y === this.y + room.height
+				) {
+					tilesTouchingRoom.push({x, y})
+				}
+			}
+		}
+		return tilesTouchingRoom
+	}
+
+	intersects(room: Room) {
 		const r1 = this.getBoundingBox()
-		const r2 = other.getBoundingBox()
+		const r2 = room.getBoundingBox()
 
 		return !(r2.left > r1.right ||
 			r2.right < r1.left ||
@@ -33,12 +75,9 @@ export class Room {
 			r2.bottom < r1.top)
 	}
 
-	touches(other) {
-		if (!other.getBoundingBox) {
-			throw new Error('Given entity has no method getBoundingBox')
-		}
-		const r1 = this.getBoundingBox()
-		const r2 = other.getBoundingBox()
+	touches(room: Room, padding = 0) {
+		const r1 = this.getBoundingBox(padding)
+		const r2 = room.getBoundingBox(padding)
 
 		return !(r2.left - 1 > r1.right ||
 			r2.right + 1 < r1.left ||
