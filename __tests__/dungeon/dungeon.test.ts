@@ -1,4 +1,5 @@
 import {dungeon, Tile} from '../../src'
+import {$chance} from '../../src/common'
 
 const RELIABILITY_COUNT = 10
 
@@ -39,98 +40,6 @@ describe('dungeon.build()', () => {
 		}
 	})
 
-	it('tiles should contain at least one floor tile', () => {
-		const width = 21
-		const height = 21
-		const $dungeon = dungeon().build({
-			width,
-			height
-		})
-
-		const floorTiles = []
-
-		for (let x = 0; x < width; x++) {
-			for (let y = 0; y < height; y++) {
-				const tile = $dungeon.tiles[x][y]
-				if (tile.type === 'floor') {
-					floorTiles.push(tile)
-				}
-			}
-		}
-
-		expect(floorTiles.length).toBeTruthy()
-	})
-
-	it('every floor tile should be connected to a floor or door tile', () => {
-		const width = 21
-		const height = 21
-		const $dungeon = dungeon().build({
-			width,
-			height
-		})
-
-		for (let x = 0; x < width; x++) {
-			for (let y = 0; y < height; y++) {
-				const tile = $dungeon.tiles[x][y]
-				if (tile.type === 'floor') {
-					const neighbors = $dungeon.tiles[x][y].neighbors
-
-					expect(Object.values(neighbors).find((n: Tile) => {
-						return n.type === 'floor' || n.type === 'door'
-					})).toBeTruthy()
-				}
-			}
-		}
-	})
-
-	it('every door tile should be connected to at least two floor tiles', () => {
-		const width = 21
-		const height = 21
-		const $dungeon = dungeon().build({
-			width,
-			height
-		})
-
-		for (let x = 0; x < width; x++) {
-			for (let y = 0; y < height; y++) {
-				const tile = $dungeon.tiles[x][y]
-				if (tile.type === 'door') {
-					const neighbors = $dungeon.tiles[x][y].neighbors
-
-					expect(Object.values(neighbors).filter((n: Tile) => {
-						return n.type === 'floor'
-					}).length >= 2).toBeTruthy()
-				}
-			}
-		}
-	})
-
-	test.concurrent.each(counter)('every floor and door tile should be accessible', async (i: number) => {
-		expect(() => {
-			const width = 10 + i
-			const height = 10 + i
-			const $dungeon = dungeon().build({
-				width,
-				height
-			})
-
-			const visited = walkDungeon($dungeon)
-
-			for (let x = 0; x < width; x++) {
-				for (let y = 0; y < height; y++) {
-					const tile = $dungeon.tiles[x][y]
-					if (tile.type === 'door' || tile.type === 'floor') {
-						if (!visited[tile.x][tile.y]) {
-							throw new Error(`Tile ${x}, ${y} was not visited for dungeon of size ${width}x${height} : ${$dungeon.seed}`)
-						}
-					}
-				}
-			}
-
-			return true
-		}).not.toThrow()
-	}, 3000)
-
 	it('even numbers for options.width and options.height should be rounded up', () => {
 		const width = 20
 		const height = 20
@@ -167,28 +76,106 @@ describe('dungeon.build()', () => {
 		}).toThrow(`DungeonError: options.height must not be less than 5, received ${height}`)
 	})
 
-	const sizes = [
-		[5, 7],
-		[7, 7],
-		[21, 21],
-		[51, 51],
-		[101, 101]
-	]
+	describe('reliability', () => {
+		const sizes = [
+			[5, 7],
+			[7, 7],
+			[21, 21],
+			[51, 51],
+			[101, 101]
+		]
 
-	for (const [width, height] of sizes) {
-		it(`Should reliably create ${width} x ${height} dungeons`, () => {
-			expect(() => {
-				let count = 10
+		let seed = $chance.generateSlug()
 
-				while (count--) {
-					dungeon().build({
-						width,
-						height
-					})
+		describe.each(counter)(`Should reliably generate random dungeons (seed: ${seed}-%i)`, (i: number) => {
+			describe.each(sizes)('Should reliably create %i x %i dungeons', (width: number, height: number) => {
+				const $gen = dungeon()
+				const options = {
+					width,
+					height,
+					seed: `${seed}-${i}`
 				}
-			}).not.toThrow()
-		})
-	}
+
+				it('should generate a random dungeon', () => {
+					expect(() => {
+						$gen.build(options)
+					}).not.toThrow()
+				})
+
+				it('tiles should contain at least one floor tile', () => {
+					const $dungeon = $gen.build(options)
+
+					const floorTiles = []
+
+					for (let x = 0; x < width; x++) {
+						for (let y = 0; y < height; y++) {
+							const tile = $dungeon.tiles[x][y]
+							if (tile.type === 'floor') {
+								floorTiles.push(tile)
+							}
+						}
+					}
+
+					expect(floorTiles.length).toBeTruthy()
+				})
+
+				it('every floor tile should be connected to a floor or door tile', () => {
+					const $dungeon = $gen.build(options)
+
+					for (let x = 0; x < width; x++) {
+						for (let y = 0; y < height; y++) {
+							const tile = $dungeon.tiles[x][y]
+							if (tile.type === 'floor') {
+								const neighbors = $dungeon.tiles[x][y].neighbors
+
+								expect(Object.values(neighbors).find((n: Tile) => {
+									return n.type === 'floor' || n.type === 'door'
+								})).toBeTruthy()
+							}
+						}
+					}
+				})
+
+				it('every door tile should be connected to at least two floor tiles', () => {
+					const $dungeon = $gen.build(options)
+
+					for (let x = 0; x < width; x++) {
+						for (let y = 0; y < height; y++) {
+							const tile = $dungeon.tiles[x][y]
+							if (tile.type === 'door') {
+								const neighbors = $dungeon.tiles[x][y].neighbors
+
+								expect(Object.values(neighbors).filter((n: Tile) => {
+									return n.type === 'floor'
+								}).length >= 2).toBeTruthy()
+							}
+						}
+					}
+				})
+
+				it('every floor and door tile should be accessible', () => {
+					const $dungeon = $gen.build(options)
+
+					expect(() => {
+						const visited = walkDungeon($dungeon)
+
+						for (let x = 0; x < width; x++) {
+							for (let y = 0; y < height; y++) {
+								const tile = $dungeon.tiles[x][y]
+								if (tile.type === 'door' || tile.type === 'floor') {
+									if (!visited[tile.x][tile.y]) {
+										throw new Error(`Tile ${x}, ${y} was not visited for dungeon of size ${width}x${height} : ${$dungeon.seed}`)
+									}
+								}
+							}
+						}
+
+						return true
+					}).not.toThrow()
+				})
+			}, 3000)
+		}, 3000)
+	})
 })
 
 function walkDungeon(dungeon) {
