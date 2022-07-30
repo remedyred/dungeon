@@ -1,4 +1,4 @@
-import {Room} from '../src/Room'
+import {Room} from '../src/structures/Room'
 
 describe('Room', () => {
 	it('Room objects should contain an x property', () => {

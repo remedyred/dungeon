@@ -1,10 +1,10 @@
-import {Region, RegionType} from './Region'
+import {Region, RegionType} from './structures/Region'
 import {Results} from './Results'
 import {defaultStageOptions, StageOptions} from './common'
 import {isString, slugify} from '@snickbit/utilities'
 import {$chance} from './random/chance'
-import {TileMatrix} from './Tile'
-import Room from './Room'
+import {TileMatrix} from './structures/Tile'
+import Room from './structures/Room'
 
 export interface DungeonState {
 	tiles: TileMatrix

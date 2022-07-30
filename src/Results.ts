@@ -1,5 +1,5 @@
-import {TileMatrix} from './Tile'
-import Room from './Room'
+import {TileMatrix} from './structures/Tile'
+import Room from './structures/Room'
 
 export class Results {
 	rooms: Room[]

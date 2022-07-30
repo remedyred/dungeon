@@ -3,13 +3,13 @@ import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from './
 import {isBrowser} from 'browser-or-node'
 import {$out, defaultDungeonOptions, defaultStageOptions, DungeonOptions, StageOptions} from './common'
 import {cardinal, Query, QueryOptions} from './Query'
-import {Region, RegionType, regionTypes} from './Region'
-import {Corridor} from './Corridor'
+import {Region, RegionType, regionTypes} from './structures/Region'
+import {Corridor} from './structures/Corridor'
 import {State} from './State'
 import {Results} from './Results'
-import Tile, {Neighbors, TileMatrix, TileType} from './Tile'
+import Tile, {Neighbors, TileMatrix, TileType} from './structures/Tile'
 import Chance from 'chance'
-import Room from './Room'
+import Room from './structures/Room'
 
 export class Dungeon extends State {
 	options: DungeonOptions

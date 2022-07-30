@@ -1,9 +1,9 @@
-import {Tile, TileMatrix, TileType} from './Tile'
+import {Tile, TileMatrix, TileType} from './structures/Tile'
 import {Coordinates, parsePoint, Point} from './Coordinates'
 import {arrayUnique, arrayWrap, isEmpty} from '@snickbit/utilities'
 import {$out} from './common'
 import {Out} from '@snickbit/out'
-import {RegionType} from './Region'
+import {RegionType} from './structures/Region'
 
 export type CardinalDirection = 'e' | 'n' | 's' | 'w'
 export type IntercardinalDirection = 'ne' | 'nw' | 'se' | 'sw'
