@@ -1,5 +1,5 @@
 import {Coordinates, parsePoint} from '../Coordinates'
-import {Query} from '../Query'
+import {Query} from '../query/Query'
 import {RegionType} from './Region'
 
 export type TileType = 'door' | 'floor' | 'wall'
