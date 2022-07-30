@@ -46,8 +46,6 @@ export class Builder {
 	}
 
 	async build(stage?: StageOptions): Promise<this> {
-		stage = safeMerge<StageOptions>(stage, default_stage)
-
 		// validate the state options
 		this.validate(stage)
 
@@ -161,6 +159,8 @@ export class Builder {
 	}
 
 	protected validate(stage: StageOptions): void {
+		stage = safeMerge<StageOptions>(stage, default_stage)
+
 		if (stage.width < 5) {
 			throw new RangeError(`DungeonError: options.width must not be less than 5, received ${stage.width}`)
 		}
