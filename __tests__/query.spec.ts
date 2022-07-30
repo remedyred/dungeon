@@ -1,44 +1,65 @@
-import {Query, Tile} from '../src'
+import {Query, Tile, TileState} from '../src'
 
-export function setupQueryVars() {
+export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, start_type = 'floor') {
 	let tiles: Tile[] = []
-	let tile = new Tile('floor', 2, 10, -1)
-	let n = new Tile('floor', 2, 11, -1)
-	let e = new Tile('floor', 3, 10, -1)
-	let s = new Tile('wall', 2, 9, -1)
-	let w = new Tile('wall', 1, 10, -1)
-	let ne = new Tile('wall', 3, 11, -1)
-	let se = new Tile('wall', 3, 9, -1)
-	let sw = new Tile('floor', 1, 9, -1)
-	let nw = new Tile('floor', 1, 11, -1)
-	tile.setNeighbors({n, e, s, w, ne, se, sw, nw})
+	const $tile = {
+		x: start_x,
+		y: start_y,
+		type: start_type,
+		region: start_region
+	} as Pick<TileState, 'region' | 'type' | 'x' | 'y'>
+
+	let tile = new Tile($tile.type, $tile.x, $tile.y, $tile.region)
+	let n = new Tile('floor', $tile.x, $tile.y + 1, $tile.region)
+	let e = new Tile('floor', $tile.x + 1, $tile.y, $tile.region)
+	let s = new Tile('wall', $tile.x, $tile.y - 1, $tile.region)
+	let w = new Tile('wall', $tile.x - 1, $tile.y, $tile.region)
+	let ne = new Tile('wall', $tile.x + 1, $tile.y + 1, $tile.region)
+	let se = new Tile('wall', $tile.x + 1, $tile.y - 1, $tile.region)
+	let sw = new Tile('floor', $tile.x - 1, $tile.y - 1, $tile.region)
+	let nw = new Tile('floor', $tile.x - 1, $tile.y + 1, $tile.region)
+	const neighbors = [
+		n,
+		e,
+		s,
+		w,
+		ne,
+		se,
+		sw,
+		nw
+	]
+	const $neighbors = {n, e, s, w, ne, se, sw, nw}
+	tile.setNeighbors($neighbors)
 
 	for (let x = 0; x < 10; x++) {
 		for (let y = 0; y < 10; y++) {
-			new Tile('wall', x, y, -1)
+			const fillTile = new Tile('wall', x, y, $tile.region)
 			if (x > 2 && x < 5 && y > 2 && y < 5) {
-				tile.type = 'floor'
-				tile.regionType = 'room'
-				tile.region = 0
+				fillTile.type = 'floor'
+				fillTile.regionType = 'room'
+				fillTile.region = 0
 			} else if (x > 7 && x < 10 && y > 7 && y < 10) {
-				tile.type = 'floor'
-				tile.regionType = 'room'
-				tile.region = 1
+				fillTile.type = 'floor'
+				fillTile.regionType = 'room'
+				fillTile.region = 1
 			} else if (x === 6 && y > 0 && y < 10) {
-				tile.type = 'floor'
-				tile.regionType = 'corridor'
-				tile.region = 2
+				fillTile.type = 'floor'
+				fillTile.regionType = 'corridor'
+				fillTile.region = 2
 			} else if (x === 5 && y === 4 || x === 5 && y === 7) {
-				tile.type = 'door'
+				fillTile.type = 'door'
 			}
 
-			tiles.push(tile)
+			tiles.push(fillTile)
 		}
 	}
 
 	return {
 		tiles,
 		tile,
+		$tile,
+		neighbors,
+		$neighbors,
 		n,
 		e,
 		s,
