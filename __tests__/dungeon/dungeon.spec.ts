@@ -22,6 +22,6 @@ describe('Dungeon', () => {
 	})
 
 	it('Dungeon.build() should return a Results instance', () => {
-		expect(dungeon().build()).toBeInstanceOf(Results)
+		expect(dungeon().build()).resolves.toBeInstanceOf(Results)
 	})
 })

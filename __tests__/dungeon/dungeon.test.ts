@@ -6,8 +6,8 @@ const RELIABILITY_COUNT = 10
 const counter = Array.from(Array(RELIABILITY_COUNT).keys())
 
 describe('dungeon.build()', () => {
-	it('should return an object containing the key "tiles"', () => {
-		const $dungeon = dungeon().build({
+	it('should return an object containing the key "tiles"', async () => {
+		const $dungeon = await dungeon().build({
 			width: 21,
 			height: 21
 		})
@@ -15,8 +15,8 @@ describe('dungeon.build()', () => {
 		expect($dungeon.tiles).toBeTruthy()
 	})
 
-	it('should return an object containing the key "rooms"', () => {
-		const $dungeon = dungeon().build({
+	it('should return an object containing the key "rooms"', async () => {
+		const $dungeon = await dungeon().build({
 			width: 21,
 			height: 21
 		})
@@ -24,11 +24,11 @@ describe('dungeon.build()', () => {
 		expect($dungeon.rooms).toBeTruthy()
 	})
 
-	it('should return a 2d array of tiles proportional to the width and height options', () => {
+	it('should return a 2d array of tiles proportional to the width and height options', async () => {
 		const width = 21
 		const height = 31
 
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
@@ -40,10 +40,10 @@ describe('dungeon.build()', () => {
 		}
 	})
 
-	it('even numbers for options.width and options.height should be rounded up', () => {
+	it('even numbers for options.width and options.height should be rounded up', async () => {
 		const width = 20
 		const height = 20
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
@@ -56,24 +56,20 @@ describe('dungeon.build()', () => {
 		const width = 4
 		const height = 20
 
-		expect(() => {
-			dungeon().build({
-				width,
-				height
-			})
-		}).toThrow(`DungeonError: options.width must not be less than 5, received ${width}`)
+		return expect(dungeon().build({
+			width,
+			height
+		})).rejects.toThrow(`DungeonError: options.width must not be less than 5, received ${width}`)
 	})
 
 	it('should throw an error if height is less than 5', () => {
 		const width = 20
 		const height = 4
 
-		expect(() => {
-			dungeon().build({
-				width,
-				height
-			})
-		}).toThrow(`DungeonError: options.height must not be less than 5, received ${height}`)
+		return expect(dungeon().build({
+			width,
+			height
+		})).rejects.toThrow(`DungeonError: options.height must not be less than 5, received ${height}`)
 	})
 
 	describe('reliability', () => {
@@ -102,8 +98,8 @@ describe('dungeon.build()', () => {
 					}).not.toThrow()
 				})
 
-				it('tiles should contain at least one floor tile', () => {
-					const $dungeon = $gen.build(options)
+				it('tiles should contain at least one floor tile', async () => {
+					const $dungeon = await $gen.build(options)
 
 					const floorTiles = []
 
@@ -119,8 +115,8 @@ describe('dungeon.build()', () => {
 					expect(floorTiles.length).toBeTruthy()
 				})
 
-				it('every floor tile should be connected to a floor or door tile', () => {
-					const $dungeon = $gen.build(options)
+				it('every floor tile should be connected to a floor or door tile', async () => {
+					const $dungeon = await $gen.build(options)
 
 					for (let x = 0; x < width; x++) {
 						for (let y = 0; y < height; y++) {
@@ -136,8 +132,8 @@ describe('dungeon.build()', () => {
 					}
 				})
 
-				it('every door tile should be connected to at least two floor tiles', () => {
-					const $dungeon = $gen.build(options)
+				it('every door tile should be connected to at least two floor tiles', async () => {
+					const $dungeon = await $gen.build(options)
 
 					for (let x = 0; x < width; x++) {
 						for (let y = 0; y < height; y++) {
@@ -153,8 +149,8 @@ describe('dungeon.build()', () => {
 					}
 				})
 
-				it('every floor and door tile should be accessible', () => {
-					const $dungeon = $gen.build(options)
+				it('every floor and door tile should be accessible', async () => {
+					const $dungeon = await $gen.build(options)
 
 					expect(() => {
 						const visited = walkDungeon($dungeon)

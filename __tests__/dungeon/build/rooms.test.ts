@@ -1,10 +1,10 @@
 import {dungeon} from '../../../src'
 
 describe('rooms', () => {
-	it('every room should have numerical height, width, x, and y properties', () => {
+	it('every room should have numerical height, width, x, and y properties', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
@@ -17,10 +17,10 @@ describe('rooms', () => {
 		}
 	})
 
-	it('every room should fall within the bounds of the declared height and width', () => {
+	it('every room should fall within the bounds of the declared height and width', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
@@ -31,10 +31,10 @@ describe('rooms', () => {
 		}
 	})
 
-	it('every room should be surrounded by either wall or door tiles', () => {
+	it('every room should be surrounded by either wall or door tiles', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
@@ -75,10 +75,10 @@ describe('rooms', () => {
 		}
 	})
 
-	it('every room should have at least one adjacent door tile', () => {
+	it('every room should have at least one adjacent door tile', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
@@ -119,15 +119,15 @@ describe('rooms', () => {
 		}
 	})
 
-	it('every room should be made up of an area of floor tiles', () => {
-		expect(() => {
-			const width = 21
-			const height = 21
-			const $dungeon = dungeon().build({
-				width,
-				height
-			})
+	it('every room should be made up of an area of floor tiles', async () => {
+		const width = 21
+		const height = 21
+		const $dungeon = await dungeon().build({
+			width,
+			height
+		})
 
+		expect(() => {
 			for (const room of $dungeon.rooms) {
 				for (let x = room.x; x < room.x + room.width; x++) {
 					for (let y = room.y; y < room.y + room.height; y++) {

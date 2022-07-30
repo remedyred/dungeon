@@ -1,8 +1,8 @@
 import {dungeon} from '../src'
 
 describe('Results', () => {
-	it('Dungeon.build() should return an object containing the key "tiles"', () => {
-		const $dungeon = dungeon().build({
+	it('Dungeon.build() should return an object containing the key "tiles"', async () => {
+		const $dungeon = await dungeon().build({
 			width: 21,
 			height: 21
 		})
@@ -10,8 +10,8 @@ describe('Results', () => {
 		expect($dungeon.tiles).toBeTruthy()
 	})
 
-	it('Dungeon.build() should return an object containing the key "rooms"', () => {
-		const $dungeon = dungeon().build({
+	it('Dungeon.build() should return an object containing the key "rooms"', async () => {
+		const $dungeon = await dungeon().build({
 			width: 21,
 			height: 21
 		})
@@ -19,11 +19,11 @@ describe('Results', () => {
 		expect($dungeon.rooms).toBeTruthy()
 	})
 
-	it('Dungeon.build() should return a 2d array of tiles proportional to the width and height options', () => {
+	it('Dungeon.build() should return a 2d array of tiles proportional to the width and height options', async () => {
 		const width = 21
 		const height = 31
 
-		const $dungeon = dungeon().build({
+		const $dungeon = await dungeon().build({
 			width,
 			height
 		})
