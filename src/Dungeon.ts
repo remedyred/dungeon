@@ -236,7 +236,7 @@ export class Dungeon {
 			tiles.push(tile)
 			for (const direction of cardinal) {
 				const neighbor = tile.getNeighbor(direction)
-				if (neighbor.isCorridor()) {
+				if (neighbor?.isCorridor()) {
 					walkSet(neighbor)
 				}
 			}
