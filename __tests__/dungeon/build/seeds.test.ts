@@ -15,7 +15,7 @@ describe('seeds', () => {
 			seed: dungeon1.seed
 		})
 
-		expect(dungeon1.toJson()).toStrictEqual(dungeon2.toJson())
+		expect(dungeon1.toJSON()).toStrictEqual(dungeon2.toJSON())
 	})
 
 	it('seeded dungeons should be consistent', () => {
@@ -26,7 +26,7 @@ describe('seeds', () => {
 			height,
 			seed: 'snickbit'
 		})
-		expect($dungeon.toJson()).toMatchSnapshot()
+		expect($dungeon.toJSON()).toMatchSnapshot()
 	})
 
 	it('should be seedable', () => {
@@ -44,6 +44,6 @@ describe('seeds', () => {
 			seed: 'snickbit'
 		})
 
-		expect(dungeon1.toJson()).toStrictEqual(dungeon2.toJson())
+		expect(dungeon1.toJSON()).toStrictEqual(dungeon2.toJSON())
 	})
 })
