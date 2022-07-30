@@ -526,42 +526,56 @@ export class Builder {
 
 		// Get all the tiles bordering rooms, and prioritize them as maze starting points
 		for (const room of this.rooms) {
-			// get the tiles bordering the room
+			const roomAvailableStartPoints: Point[] = []
+			// get all available tiles bordering the room
 			const points = room.getBorderPoints(1)
 			for (const point of points) {
 				if (
 					await this.canCarve(point) &&
 					!availableStartPoints.includes(point)
 				) {
-					const byChance: boolean = this.oneIn(Math.ceil(points.length / 2))
-					if (byChance) {
-						availableStartPoints.push(point)
-					}
+					roomAvailableStartPoints.push(point)
 				}
 			}
-		}
 
-		if (this.options.mazeCorridors) {
-			// Grab the remaining maze generation points to fill in the rest of the map
-			for (let y = 1; y < stage.height; y += 2) {
-				for (let x = 1; x < stage.width; x += 2) {
-					const point = {x, y}
-					if (
-						await this.canCarve(point) &&
-						!availableStartPoints.includes(point)
-					) {
-						availableStartPoints.push(point)
+			// Randomly select some tiles to be the maze starting points
+			const roomStartPoints: Point[] = []
+			if (roomAvailableStartPoints.length > 1) {
+				let startPointCount: number = this.randBetween(1, roomAvailableStartPoints.length)
+				while (startPointCount > 0) {
+					for (let i = 0; i < roomAvailableStartPoints.length; i++) {
+						if (this.oneIn(i + 1)) {
+							availableStartPoints.push(roomAvailableStartPoints.splice(i, 1)[0])
+							startPointCount--
+						}
 					}
 				}
+				availableStartPoints.push(...roomStartPoints)
 			}
-		}
 
-		if (this.options.mazeCorridors) {
-			for (const point of availableStartPoints) {
-				await this.growMaze(point)
+			// If generating maze corridors, add every other empty tile to the available start points
+			if (this.options.mazeCorridors) {
+				// Grab the remaining maze generation points to fill in the rest of the map
+				for (let y = 1; y < stage.height; y += 2) {
+					for (let x = 1; x < stage.width; x += 2) {
+						const point = {x, y}
+						if (
+							await this.canCarve(point) &&
+							!availableStartPoints.includes(point)
+						) {
+							availableStartPoints.push(point)
+						}
+					}
+				}
+
+				// Now generate the maze corridors
+				for (const point of availableStartPoints) {
+					await this.growMaze(point)
+				}
+			} else {
+				// If not generating maze corridors, just fill in the points around the rooms
+				await this.carve(availableStartPoints, 'corridor')
 			}
-		} else {
-			await this.carve(availableStartPoints, 'corridor')
 		}
 	}
 
