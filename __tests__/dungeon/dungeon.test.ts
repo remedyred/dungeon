@@ -1,5 +1,5 @@
 import {dungeon, Tile} from '../../src'
-import {$chance} from '../../src/common'
+import {$chance} from '../../src/random/chance'
 
 const RELIABILITY_COUNT = 10
 
