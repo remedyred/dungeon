@@ -11,6 +11,8 @@ export type Direction = CardinalDirection | IntercardinalDirection
 
 export type TileCallback = (tiles: Tile[]) => Tile[]
 
+export type SortCallback = (a: Tile, b: Tile) => number
+
 export interface QueryOptions {
 	levels?: number
 	inclusive?: boolean
@@ -19,6 +21,7 @@ export interface QueryOptions {
 	type?: TileType | TileType[]
 	notType?: TileType | TileType[]
 	start?: Coordinates
+	sort?: SortCallback
 	offset?: Point
 	region?: number[] | number
 	notRegion?: number[] | number
@@ -184,6 +187,11 @@ export class Query {
 	start(location: Coordinates): this
 	start(optionalX: Coordinates | number, optionalY?: number): this {
 		this.options.start = parsePoint(optionalX, optionalY)
+		return this
+	}
+
+	sort(callback: SortCallback): this {
+		this.options.sort = callback
 		return this
 	}
 
@@ -432,6 +440,6 @@ export class Query {
 			results = arrayUnique(results, options.unique)
 		}
 
-		return results
+		return results.sort(options.sort)
 	}
 }
