@@ -22,21 +22,24 @@ describe('Query', () => {
 		})
 
 		it('.cardinal() should return the cardinal neighbors of the start tile', () => {
-			expect(query.cardinal().get()).toEqual([
-				n,
-				e,
-				s,
-				w
-			].sort())
+			const expected = [
+				tiles[tile.x + 1][tile.y],
+				tiles[tile.x - 1][tile.y],
+				tiles[tile.x][tile.y + 1],
+				tiles[tile.x][tile.y - 1]
+			].sort()
+
+			expect(query.cardinal().debug().get()).toEqual(expected)
 		})
 
 		it('.intercardinal() should return the intercardinal neighbors of the start tile', () => {
-			expect(query.intercardinal().get()).toEqual([
-				ne,
-				se,
-				sw,
-				nw
-			].sort())
+			const expected = [
+				tiles[tile.x + 1][tile.y + 1],
+				tiles[tile.x + 1][tile.y - 1],
+				tiles[tile.x - 1][tile.y + 1],
+				tiles[tile.x - 1][tile.y - 1]
+			].sort()
+			expect(query.intercardinal().get()).toEqual(expected)
 		})
 
 		it('.levels(1) should return tiles 1 level away from the start tile', () => {
