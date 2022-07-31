@@ -59,13 +59,13 @@ export class Builder {
 		await this.generateMaze(stage)
 
 		// Clear broken corridors, corridors that are too small, and corridors bordering a room
-		// await this.cleanCorridors()
+		await this.cleanCorridors()
 
 		// Split the corridors into regions
-		// await this.splitCorridors()
+		await this.splitCorridors()
 
 		// create doors between rooms and corridors
-		// await this.connectRegions()
+		await this.connectRegions()
 
 		if (this.options.removeDeadEnds) {
 			// remove dead ends
