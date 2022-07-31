@@ -7,7 +7,7 @@ import {RegionManager} from './RegionManager'
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CorridorManager extends State, TileManager, Walker, RegionManager {}
 
-export type CorridorStrategy = 'maze' | 'room'
+export type CorridorStrategy = 'maze' | 'prim' | 'room'
 
 export class CorridorManager {
 	protected getCorridors(): Corridor[] {

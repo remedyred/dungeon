@@ -53,17 +53,17 @@ export class Builder {
 		// fill the entire area with solid 'wall' tiles
 		await this.fill('wall')
 
-		// create the rooms
-		await this.addRooms()
-
 		// Generate the maze
 		await this.generateMaze(stage)
 
-		// Clear broken corridors, corridors that are too small, and corridors bordering a room
-		await this.cleanCorridors()
+		// create the rooms
+		await this.addRooms()
 
 		// Split the corridors into regions
 		await this.splitCorridors()
+
+		// Clear broken corridors, corridors that are too small, and corridors bordering a room
+		await this.cleanCorridors()
 
 		// create doors between rooms and corridors
 		await this.connectRegions()
@@ -189,7 +189,8 @@ export class Builder {
 			const region = this.startRegion('room')
 
 			// Convert room tiles to floor, but don't wait for the promise to resolve
-			carvePromises.push(this.carveArea(x, y, width, height, region.id))
+			carvePromises.push(this.carveArea({x, y}, width, height, {region: region.id}))
+			carvePromises.push(this.carveHollow({x, y}, width, height, {region: -1, type: 'wall'}))
 		}
 
 		// Wait for all the room carving to finish
@@ -283,8 +284,8 @@ export class Builder {
 					continue
 				}
 
-				const tileRegions = arrayUnique(tile.cardinal().filter(tile => tile.region !== -1), 'region')
-				if (tileRegions.length !== 2) {
+				const tileRegions = arrayUnique(tile.find().cardinal().debug().get().filter(tile => tile.region !== -1), 'region')
+				if (tileRegions.length <= 1) {
 					continue
 				}
 
@@ -422,7 +423,22 @@ export class Builder {
 	protected async generateMaze(stage: StageOptions): Promise<void> {
 		const availableStartPoints: Point[] = []
 
-		if (this.options.corridorStrategy.includes('room')) {
+		if (this.options.corridorStrategy.includes('prim')) {
+			const maze: Point[] = this.generateMazePrim()
+			const tiles: Point[] = []
+
+			// remove the tiles that are already rooms, or around the edge, etc.
+			for (const point of maze) {
+				if (this.canCarve(point)) {
+					tiles.push(point)
+				}
+			}
+
+			// carve the maze
+			if (tiles.length) {
+				await this.carve(tiles, 'corridor')
+			}
+		} else if (this.options.corridorStrategy.includes('room')) {
 		// Get all the tiles bordering rooms, and prioritize them as maze starting points
 			for (const room of this.rooms) {
 				const roomAvailableStartPoints: Point[] = []
@@ -454,7 +470,7 @@ export class Builder {
 			}
 
 			// If generating maze corridors, add every other empty tile to the available start points
-			if (this.options.corridorStrategy.includes('maze')) {
+			if (this.options.corridorStrategy.find(s => s === 'maze' || s === 'prim')) {
 				// Grab the remaining maze generation points to fill in the rest of the map
 				for (let y = 1; y < stage.height; y += 2) {
 					for (let x = 1; x < stage.width; x += 2) {
@@ -468,8 +484,9 @@ export class Builder {
 					}
 				}
 
-				// Now generate the maze corridors
 				let maze: Point[] = []
+
+				// Now generate the maze corridors
 				for (const point of availableStartPoints) {
 					maze = this.growMaze(point, maze)
 				}
@@ -593,31 +610,68 @@ export class Builder {
 		return maze
 	}
 
-	protected isCarvable(cell: Point, check: string): boolean {
-		if (!this.hasTile(cell)) {
-			return false
+	protected generateMazePrim(): Point[] {
+		const maze: TileType[][] = new Array(this.stage.height)
+		for (let y = 0; y < maze.length; y++) {
+			maze[y] = new Array(this.stage.width).fill('wall')
 		}
 
-		const tile: Tile = this.getTile(cell)
-
-		if (!tile.isWall()) {
-			return false
+		const lookup = (field, x, y, defaultValue = 'floor') => {
+			if (x < 0 || y < 0 || x >= this.stage.width || y >= this.stage.height) {
+				return defaultValue
+			}
+			return field[y][x]
 		}
 
-		if (check !== 'after' && tile.nearRoom()) {
-			return false
+		const walls = []
+		const makePassage = (x, y) => {
+			maze[y][x] = 'floor'
+			const candidates = cardinalDirections.map(direction => ({
+				x: x + direction[0],
+				y: y + direction[1]
+			}))
+
+			for (const wall of candidates) {
+				if (lookup(maze, wall.x, wall.y) === 'wall') {
+					walls.push(wall)
+				}
+			}
 		}
 
-		if (tile.floors().length > 2) {
-			return false
+		makePassage(this.randBetween(0, this.stage.width), this.randBetween(0, this.stage.height))
+
+		while (walls.length !== 0) {
+			const {x, y} = walls.splice(this.randBetween(1, walls.length) - 1, 1)[0]
+
+			const left = lookup(maze, x - 1, y, null)
+			const right = lookup(maze, x + 1, y, null)
+			const top = lookup(maze, x, y - 1, null)
+			const bottom = lookup(maze, x, y + 1, null)
+
+			if (left === 'floor' && right === 'wall') {
+				maze[y][x] = 'floor'
+				makePassage(x + 1, y)
+			} else if (right === 'floor' && left === 'wall') {
+				maze[y][x] = 'floor'
+				makePassage(x - 1, y)
+			} else if (top === 'floor' && bottom === 'wall') {
+				maze[y][x] = 'floor'
+				makePassage(x, y + 1)
+			} else if (bottom === 'floor' && top === 'wall') {
+				maze[y][x] = 'floor'
+				makePassage(x, y - 1)
+			}
 		}
 
-		// noinspection RedundantIfStatementJS
-		if (check !== 'after' && this.nearEdge(tile)) {
-			return false
+		const points: Point[] = []
+		for (let y = 0; y < maze.length; y++) {
+			for (let x = 0; x < maze[y].length; x++) {
+				if (maze[y][x] === 'floor') {
+					points.push({x, y})
+				}
+			}
 		}
-
-		return true
+		return points
 	}
 
 	protected async normalizeRegions(): Promise<void> {
