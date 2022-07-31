@@ -284,7 +284,7 @@ export class Builder {
 					continue
 				}
 
-				const tileRegions = arrayUnique(tile.find().cardinal().debug().get().filter(tile => tile.region !== -1), 'region')
+				const tileRegions = arrayUnique(tile.find().cardinal().get().filter(tile => tile.region !== -1), 'region')
 				if (tileRegions.length <= 1) {
 					continue
 				}
