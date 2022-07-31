@@ -27,7 +27,7 @@ export interface QueryOptions {
 	notRegion?: number[] | number
 	regionType?: RegionType | RegionType[]
 	notRegionType?: RegionType | RegionType[]
-	debug?: boolean
+	debug?: boolean | string
 	unique?: string
 	where?: TileCallback[]
 }
@@ -43,7 +43,7 @@ interface ParsedOptions extends QueryOptions {
 	notRegion?: number[]
 	regionType?: RegionType[]
 	notRegionType?: RegionType[]
-	debug: boolean
+	debug: boolean | string
 }
 
 export const cardinal: CardinalDirection[] = [
@@ -105,7 +105,7 @@ export class Query {
 		return this
 	}
 
-	debug(enabled = true): this {
+	debug(enabled: boolean | string = true): this {
 		this.options.debug = enabled
 		return this
 	}
@@ -208,7 +208,7 @@ export class Query {
 
 	private validate(options: QueryOptions): ParsedOptions {
 		if (!options.start && this.requiresStart(options)) {
-			this.#out('No start location specified, using first tile')
+			this.#out('validate', 'No start location specified, using first tile')
 			if (this.tiles.length === 0) {
 				throw new Error('No tiles provided')
 			} else {
@@ -261,13 +261,15 @@ export class Query {
 			options.notRegionType = arrayWrap(options.notRegionType)
 		}
 
-		this.#out('Validated options:', options)
+		this.#out('validate', 'Validated options:', options)
 
 		return options as ParsedOptions
 	}
 
-	#out(...args: any[]) {
-		if (this.options?.debug) {
+	#out(type: string[] | string, ...args: any[]) {
+		const debug: boolean | string = this.options?.debug || false
+		type = arrayWrap(type) as string[]
+		if (debug === true || type.includes(String(debug))) {
 			this.out.force.debug(...args)
 		}
 	}
@@ -305,7 +307,7 @@ export class Query {
 				hasCardinal = options.directions.includes('n') || options.directions.includes('e') || options.directions.includes('s') || options.directions.includes('w')
 				hasIntercardinal = options.directions.includes('ne') || options.directions.includes('se') || options.directions.includes('sw') || options.directions.includes('nw')
 
-				this.#out({
+				this.#out('directions', {
 					hasNorth,
 					hasEast,
 					hasSouth,
@@ -321,7 +323,7 @@ export class Query {
 		for (const tile of tiles) {
 			// Skip falsy tiles
 			if (!tile) {
-				this.#out('Skipping falsy tile')
+				this.#out('tile', 'Skipping falsy tile')
 				continue
 			}
 
@@ -330,42 +332,42 @@ export class Query {
 
 			// Skip tiles that don't match the type
 			if (!isEmpty(options.type) && !options.type.includes(tile.type)) {
-				this.#out(`${message}Skipping tile, should be type ${options.type}`)
+				this.#out('type', `${message}Skipping tile, should be type ${options.type}`)
 				continue
 			}
 
 			// Skip tiles that match the notType
 			if (!isEmpty(options.notType) && options.notType.includes(tile.type)) {
-				this.#out(`${message}Skipping tile, should not be ${options.notType}`)
+				this.#out('type', `${message}Skipping tile, should not be ${options.notType}`)
 				continue
 			}
 
 			if (!isEmpty(options.region) && !options.region.includes(tile.region)) {
-				this.#out(`${message}Skipping tile, region should be ${options.region}`)
+				this.#out('region', `${message}Skipping tile, region should be ${options.region}`)
 				continue
 			}
 
 			if (!isEmpty(options.notRegion) && options.notRegion.includes(tile.region)) {
-				this.#out(`${message}Skipping tile, region should not be ${options.notRegion}`)
+				this.#out(['notRegion', 'region'], `${message}Skipping tile, region should not be ${options.notRegion}`)
 				continue
 			}
 
 			if (!isEmpty(options.regionType) && !options.regionType.includes(tile.regionType)) {
-				this.#out(`${message}Skipping tile, region type should be ${options.regionType}`)
+				this.#out(['regionType', 'region'], `${message}Skipping tile, region type should be ${options.regionType}`)
 				continue
 			}
 
 			if (!isEmpty(options.notRegionType) && options.notRegionType.includes(tile.regionType)) {
-				this.#out(`${message}Skipping tile, region type should not be ${options.notRegionType}`)
+				this.#out(['regionType', 'region', 'notRegionType'], `${message}Skipping tile, region type should not be ${options.notRegionType}`)
 				continue
 			}
 
 			// if we have a start tile, check start tile queries
 			if (this.requiresStart(options)) {
-				this.#out(`${message}Checking start tile queries`)
+				this.#out('start', `${message}Checking start tile queries`)
 
 				if (tile.x === options.start.x && tile.y === options.start.y) {
-					this.#out(`${message}Skipping tile. Start tile found.`)
+					this.#out('start', `${message}Skipping tile. Start tile found.`)
 					continue
 				}
 
@@ -381,7 +383,7 @@ export class Query {
 						xDiff > options.levels ||
 						yDiff > options.levels
 					) {
-						this.#out(`${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
+						this.#out('levels', `${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
 						continue
 					}
 
@@ -392,50 +394,50 @@ export class Query {
 						options.start.y !== tile.y - options.levels &&
 						options.start.y !== tile.y + options.levels
 					) {
-						this.#out(`${message}Skipping tile, should be ${options.levels} levels from ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
+						this.#out('levels', `${message}Skipping tile, should be ${options.levels} levels from ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
 						continue
 					}
 				}
 
 				if (options?.directions.length) {
 					if (!hasNorth && tile.y < options.start.y) {
-						this.#out(`${message}Skipping tile. Tile should not be north of start tile.`)
+						this.#out(['north', 'directions'], `${message}Skipping tile. Tile should not be north of start tile.`)
 						continue
 					}
 
 					if (!hasSouth && tile.y > options.start.y) {
-						this.#out(`${message}Skipping tile. Tile should not be south of start tile.`)
+						this.#out(['south', 'directions'], `${message}Skipping tile. Tile should not be south of start tile.`)
 						continue
 					}
 
 					if (!hasEast && tile.x > options.start.x) {
-						this.#out(`${message}Skipping tile. Tile should not be east of start tile.`)
+						this.#out(['east', 'directions'], `${message}Skipping tile. Tile should not be east of start tile.`)
 						continue
 					}
 
 					if (!hasWest && tile.x < options.start.x) {
-						this.#out(`${message}Skipping tile. Tile should not be west of start tile.`)
+						this.#out(['west', 'directions'], `${message}Skipping tile. Tile should not be west of start tile.`)
 						continue
 					}
 
 					if (options.strictDirections) {
 						if (!hasCardinal && (tile.x === options.start.x || tile.y === options.start.y)) {
-							this.#out(`${message}Skipping tile. Tile should not be cardinal of start tile.`)
+							this.#out(['cardinal', 'directions'], `${message}Skipping tile. Tile should not be cardinal of start tile.`)
 							continue
 						}
 						if (!hasIntercardinal && (tile.x !== options.start.x || tile.y !== options.start.y)) {
-							this.#out(`${message}Skipping tile. Tile should not be intercardinal of start tile.`)
+							this.#out(['intercardinal', 'directions'], `${message}Skipping tile. Tile should not be intercardinal of start tile.`)
 							continue
 						}
 					}
 
-					this.#out(`${message}Passing tile, all directions match.`)
+					this.#out('directions', `${message}Passing tile, all directions match.`)
 				} else {
-					this.#out('No directions specified, skipping start tile checks')
+					this.#out('start', 'No directions specified, skipping start tile checks')
 				}
 			}
 
-			this.#out(`${message}Adding tile`)
+			this.#out('tile', `${message}Adding tile`)
 
 			results.push(tile)
 		}
@@ -444,11 +446,12 @@ export class Query {
 			try {
 				results = where(results)
 			} catch (e) {
-				this.#out('Error in where callback:', e)
+				this.#out('where', 'Error in where callback:', e)
 			}
 		}
 
 		if (options.unique) {
+			this.#out('unique', `Filtering tiles by unique field ${options.unique}`)
 			results = arrayUnique(results, options.unique)
 		}
 
