@@ -420,7 +420,7 @@ export class Query {
 			results.push(tile)
 		}
 
-		for (const where of this.options.where) {
+		for (const where of options.where) {
 			try {
 				results = where(results)
 			} catch (e) {
