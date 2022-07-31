@@ -211,10 +211,9 @@ export class Query {
 			}
 		}
 
-		if (!options.directions?.length) {
-			options.directions = [...directions]
+		if (options.directions?.length) {
+			options.directions = arrayUnique(options.directions)
 		}
-		options.directions = arrayUnique(options.directions)
 
 		if (options.start) {
 			const start = parsePoint(options.start)
@@ -279,6 +278,9 @@ export class Query {
 
 	get(): Tile[] {
 		const options: ParsedOptions = this.validate(this.options)
+		if (!options.directions?.length) {
+			options.directions = [...directions]
+		}
 
 		let results: Tile[] = []
 		let tiles: Tile[] = this.tiles.slice()
@@ -297,6 +299,17 @@ export class Query {
 				hasWest = options.directions.includes('w') || options.directions.includes('nw') || options.directions.includes('sw')
 				hasCardinal = options.directions.includes('n') || options.directions.includes('e') || options.directions.includes('s') || options.directions.includes('w')
 				hasIntercardinal = options.directions.includes('ne') || options.directions.includes('se') || options.directions.includes('sw') || options.directions.includes('nw')
+
+				this.#out({
+					hasNorth,
+					hasEast,
+					hasSouth,
+					hasWest,
+					hasCardinal,
+					hasIntercardinal,
+					directions: options.directions,
+					strictDirections: options.strictDirections
+				})
 			}
 		}
 
@@ -351,6 +364,23 @@ export class Query {
 					continue
 				}
 
+				if (options.levels) {
+					const xMin = Math.min(options.start.x, tile.x)
+					const xMax = Math.max(options.start.x, tile.x)
+					const yMin = Math.min(options.start.y, tile.y)
+					const yMax = Math.max(options.start.y, tile.y)
+					const xDiff = xMax - xMin
+					const yDiff = yMax - yMin
+
+					if (
+						xDiff > options.levels ||
+						yDiff > options.levels
+					) {
+						// this.#out(`${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
+						continue
+					}
+				}
+
 				if (options?.directions.length) {
 					if (!hasNorth && tile.y < options.start.y) {
 						this.#out(`${message}Skipping tile. Tile should not be north of start tile.`)
@@ -372,33 +402,20 @@ export class Query {
 						continue
 					}
 
-					if (this.options.strictDirections) {
-						if (!hasCardinal && tile.x === options.start.x && tile.y === options.start.y) {
+					if (options.strictDirections) {
+						if (!hasCardinal && (tile.x === options.start.x || tile.y === options.start.y)) {
 							this.#out(`${message}Skipping tile. Tile should not be cardinal of start tile.`)
 							continue
 						}
-						if (!hasIntercardinal && tile.x !== options.start.x && tile.y !== options.start.y) {
+						if (!hasIntercardinal && (tile.x !== options.start.x || tile.y !== options.start.y)) {
 							this.#out(`${message}Skipping tile. Tile should not be intercardinal of start tile.`)
 							continue
 						}
 					}
-				}
 
-				if (options.levels) {
-					const xMin = Math.min(options.start.x, tile.x)
-					const xMax = Math.max(options.start.x, tile.x)
-					const yMin = Math.min(options.start.y, tile.y)
-					const yMax = Math.max(options.start.y, tile.y)
-					const xDiff = xMax - xMin
-					const yDiff = yMax - yMin
-
-					if (
-						xDiff > options.levels ||
-						yDiff > options.levels
-					) {
-						this.#out(`${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
-						continue
-					}
+					this.#out(`${message}Passing tile, all directions match.`)
+				} else {
+					this.#out('No directions specified, skipping start tile checks')
 				}
 			}
 
