@@ -162,6 +162,10 @@ describe('Query', () => {
 		expect(typeof Query.prototype.unique).toBe('function')
 	})
 
+	it('should have a .sort() method', () => {
+		expect(typeof Query.prototype.sort).toBe('function')
+	})
+
 	it('should have a .get() method', () => {
 		expect(typeof Query.prototype.get).toBe('function')
 	})
