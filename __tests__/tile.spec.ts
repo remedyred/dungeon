@@ -1,4 +1,4 @@
-import {setupQueryVars} from './query.spec'
+import {setupQueryVars} from './query/query.spec'
 import {directions, Query} from '../src/query/Query'
 import Tile from '../src/structures/Tile'
 

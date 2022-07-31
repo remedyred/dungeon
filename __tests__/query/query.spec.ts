@@ -1,8 +1,8 @@
-import {Tile, TileState} from '../src/structures/Tile'
-import {Query} from '../src/query/Query'
+import {Tile, TileMatrix, TileState} from '../../src/structures/Tile'
+import {Query} from '../../src/query/Query'
 
 export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, start_type = 'floor') {
-	let tiles: Tile[] = []
+	let tiles: TileMatrix = []
 	const $tile = {
 		x: start_x,
 		y: start_y,
@@ -10,30 +10,9 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 		region: start_region
 	} as Pick<TileState, 'region' | 'type' | 'x' | 'y'>
 
-	let tile = new Tile($tile.type, $tile.x, $tile.y, $tile.region)
-	let n = new Tile('floor', $tile.x, $tile.y + 1, $tile.region)
-	let e = new Tile('floor', $tile.x + 1, $tile.y, $tile.region)
-	let s = new Tile('wall', $tile.x, $tile.y - 1, $tile.region)
-	let w = new Tile('wall', $tile.x - 1, $tile.y, $tile.region)
-	let ne = new Tile('wall', $tile.x + 1, $tile.y + 1, $tile.region)
-	let se = new Tile('wall', $tile.x + 1, $tile.y - 1, $tile.region)
-	let sw = new Tile('floor', $tile.x - 1, $tile.y - 1, $tile.region)
-	let nw = new Tile('floor', $tile.x - 1, $tile.y + 1, $tile.region)
-	const neighbors = [
-		n,
-		e,
-		s,
-		w,
-		ne,
-		se,
-		sw,
-		nw
-	]
-	const $neighbors = {n, e, s, w, ne, se, sw, nw}
-	tile.setNeighbors($neighbors)
-
-	for (let x = 0; x < 10; x++) {
-		for (let y = 0; y < 10; y++) {
+	for (let x = 0; x < 13; x++) {
+		tiles.push([])
+		for (let y = 0; y < 13; y++) {
 			const fillTile = new Tile('wall', x, y, $tile.region)
 			if (x > 2 && x < 5 && y > 2 && y < 5) {
 				fillTile.type = 'floor'
@@ -51,9 +30,33 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 				fillTile.type = 'door'
 			}
 
-			tiles.push(fillTile)
+			tiles[x].push(fillTile)
 		}
 	}
+
+	const tile = tiles[$tile.x][$tile.y]
+
+	let n = tiles[$tile.x][$tile.y + 1]
+	let e = tiles[$tile.x + 1][$tile.y]
+	let s = tiles[$tile.x][$tile.y - 1]
+	let w = tiles[$tile.x - 1][$tile.y]
+	let ne = tiles[$tile.x + 1][$tile.y + 1]
+	let se = tiles[$tile.x + 1][$tile.y - 1]
+	let sw = tiles[$tile.x - 1][$tile.y - 1]
+	let nw = tiles[$tile.x - 1][$tile.y + 1]
+
+	const neighbors = [
+		n,
+		e,
+		s,
+		w,
+		ne,
+		se,
+		sw,
+		nw
+	]
+	const $neighbors = {n, e, s, w, ne, se, sw, nw}
+	tile.setNeighbors($neighbors)
 
 	return {
 		tiles,

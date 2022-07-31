@@ -1,4 +1,4 @@
-import {setupQueryVars} from './Query.spec'
+import {setupQueryVars} from './query/query.spec'
 import {Corridor} from '../src/structures/Corridor'
 import {TileType} from '../src/structures/Tile'
 
