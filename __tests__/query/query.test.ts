@@ -1,4 +1,4 @@
-import {setupQueryVars} from './query.spec'
+import {getLevelsAway, setupQueryVars} from './query.spec'
 import {Query} from '../../src/query/Query'
 
 describe('Query', () => {
@@ -40,16 +40,35 @@ describe('Query', () => {
 		})
 
 		it('.levels(1) should return tiles 1 level away from the start tile', () => {
-			expect(query.levels(1).get()).toEqual([
-				n,
-				e,
-				s,
-				w,
-				ne,
-				se,
-				sw,
-				nw
-			].sort())
+			expect(query.levels(1).get()).toEqual(getLevelsAway(tiles, tile, 1))
+		})
+
+		it('.levels(2) should return tiles 2 level away from the start tile', () => {
+			expect(query.levels(2).get()).toEqual(getLevelsAway(tiles, tile, 2))
+		})
+
+		it('.levels(3) should return tiles 3 level away from the start tile', () => {
+			expect(query.levels(3).get()).toEqual(getLevelsAway(tiles, tile, 3))
+		})
+
+		it('.levels(4) should return tiles 4 level away from the start tile', () => {
+			expect(query.levels(4).get()).toEqual(getLevelsAway(tiles, tile, 4))
+		})
+
+		it('.levels(1, false) should only return tiles 1 level away from the start tile', () => {
+			expect(query.levels(1, false).get()).toEqual(getLevelsAway(tiles, tile, 1, false))
+		})
+
+		it('.levels(2, false) should only return tiles 1 level away from the start tile', () => {
+			expect(query.levels(2, false).get()).toEqual(getLevelsAway(tiles, tile, 2, false))
+		})
+
+		it('.levels(3, false) should only return tiles 1 level away from the start tile', () => {
+			expect(query.levels(3, false).get()).toEqual(getLevelsAway(tiles, tile, 3, false))
+		})
+
+		it('.levels(4, false) should only return tiles 1 level away from the start tile', () => {
+			expect(query.levels(4, false).get()).toEqual(getLevelsAway(tiles, tile, 4, false))
 		})
 	})
 })

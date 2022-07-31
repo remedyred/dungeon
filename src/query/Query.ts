@@ -99,8 +99,9 @@ export class Query {
 		return this
 	}
 
-	levels(levels = 1): this {
+	levels(levels = 1, inclusive = true): this {
 		this.options.levels = levels
+		this.options.inclusive = inclusive
 		return this
 	}
 
@@ -380,7 +381,18 @@ export class Query {
 						xDiff > options.levels ||
 						yDiff > options.levels
 					) {
-						// this.#out(`${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
+						this.#out(`${message}Skipping tile, should be within ${options.levels} of ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
+						continue
+					}
+
+					if (
+						!options.inclusive &&
+						options.start.x !== tile.x - options.levels &&
+						options.start.x !== tile.x + options.levels &&
+						options.start.y !== tile.y - options.levels &&
+						options.start.y !== tile.y + options.levels
+					) {
+						this.#out(`${message}Skipping tile, should be ${options.levels} levels from ${options.start.x}x${options.start.y}`, {xDiff, yDiff})
 						continue
 					}
 				}

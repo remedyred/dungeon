@@ -75,6 +75,31 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 	}
 }
 
+export function getLevelsAway(tiles: TileMatrix, tile: Tile, levels = 1, inclusive = true) {
+	const expected: Tile[] = []
+	for (let x = tile.x - levels; x <= tile.x + levels; x++) {
+		for (let y = tile.y - levels; y <= tile.y + levels; y++) {
+			if (x === tile.x && y === tile.y) {
+				continue
+			}
+
+			if (
+				tiles[x] && tiles[x][y] &&
+				(
+					inclusive ||
+					x === tile.x - levels ||
+					x === tile.x + levels ||
+					y === tile.y - levels ||
+					y === tile.y + levels
+				)
+			) {
+				expected.push(tiles[x][y])
+			}
+		}
+	}
+	return expected.sort()
+}
+
 describe('Query', () => {
 	let {tiles} = setupQueryVars()
 
