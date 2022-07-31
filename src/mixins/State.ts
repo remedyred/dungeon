@@ -12,7 +12,7 @@ export interface DungeonState extends BuilderState, RandomState, RegionManagerSt
 
 export class State {
 	protected state = {} as DungeonState
-	options: DungeonOptions
+	options: ParsedDungeonOptions
 
 	constructor(options?: DungeonOptions) {
 		options = {...defaultDungeonOptions, ...options}
