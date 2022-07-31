@@ -30,6 +30,6 @@ export const defaultDungeonOptions: DungeonOptions = {
 	windingPercent: 50,
 	minCorridorLength: 2,
 	maxMazeTries: 50,
-	corridorStrategy: ['room', 'maze']
+	corridorStrategy: 'prim'
 }
 
