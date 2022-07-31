@@ -1,4 +1,5 @@
 import {Out} from '@snickbit/out'
+import {CorridorStrategy} from './mixins'
 
 export const $out = new Out('dungeon')
 
@@ -7,7 +8,7 @@ export interface DungeonOptions {
 	maxDoors?: number
 	roomTries?: number
 	roomExtraSize?: number
-	mazeCorridors?: boolean
+	corridorStrategy: CorridorStrategy | CorridorStrategy[]
 	maxMazeTries?: number
 	minCorridorLength?: number
 	windingPercent?: number
@@ -15,6 +16,10 @@ export interface DungeonOptions {
 	width?: number
 	height?: number
 	removeDeadEnds?: boolean
+}
+
+export interface ParsedDungeonOptions extends DungeonOptions {
+	corridorStrategy: CorridorStrategy[]
 }
 
 export const defaultDungeonOptions: DungeonOptions = {
@@ -25,6 +30,6 @@ export const defaultDungeonOptions: DungeonOptions = {
 	windingPercent: 50,
 	minCorridorLength: 2,
 	maxMazeTries: 50,
-	mazeCorridors: true
+	corridorStrategy: ['room', 'maze']
 }
 

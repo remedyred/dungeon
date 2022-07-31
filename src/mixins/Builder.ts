@@ -1,6 +1,6 @@
 import {DungeonState, safeMerge, State} from './State'
 import {$out} from '../common'
-import {arrayWrap, isNumber, isString} from '@snickbit/utilities'
+import {arrayUnique, arrayWrap, isNumber, isString} from '@snickbit/utilities'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from '../coordinates/Coordinates'
 import {Region, RegionType, regionTypes} from '../structures/Region'
 import {Results} from '../Results'
@@ -380,14 +380,8 @@ export class Builder {
 					continue
 				}
 
-				const tileRegions = this.find()
-					.start(tile)
-					.unique('region')
-					.cardinal()
-					.levels()
-					.notRegion(-1)
-					.get()
-				if (tileRegions.length <= 1) {
+				const tileRegions = arrayUnique(tile.cardinal().filter(tile => tile.region !== -1), 'region')
+				if (tileRegions.length !== 2) {
 					continue
 				}
 
@@ -446,7 +440,8 @@ export class Builder {
 				if (
 					!door.isCorner() &&
 					!door.nearDoors() &&
-					!door.isAtEnd()
+					!door.isAtEnd() &&
+					!this.nearEdge(door)
 				) {
 					if (byChance) {
 						makeConnection(key, door, type)
@@ -524,37 +519,39 @@ export class Builder {
 	protected async generateMaze(stage: StageOptions): Promise<void> {
 		const availableStartPoints: Point[] = []
 
+		if (this.options.corridorStrategy.includes('room')) {
 		// Get all the tiles bordering rooms, and prioritize them as maze starting points
-		for (const room of this.rooms) {
-			const roomAvailableStartPoints: Point[] = []
-			// get all available tiles bordering the room
-			const points = room.getBorderPoints(1)
-			for (const point of points) {
-				if (
-					this.canCarve(point) &&
+			for (const room of this.rooms) {
+				const roomAvailableStartPoints: Point[] = []
+				// get all available tiles bordering the room
+				const points = room.getBorderPoints(1)
+				for (const point of points) {
+					if (
+						this.canCarve(point) &&
 					!availableStartPoints.includes(point)
-				) {
-					roomAvailableStartPoints.push(point)
-				}
-			}
-
-			// Randomly select some tiles to be the maze starting points
-			const roomStartPoints: Point[] = []
-			if (roomAvailableStartPoints.length > 1) {
-				let startPointCount: number = this.randBetween(1, roomAvailableStartPoints.length)
-				while (startPointCount > 0) {
-					for (let i = 0; i < roomAvailableStartPoints.length; i++) {
-						if (this.oneIn(i + 1)) {
-							availableStartPoints.push(roomAvailableStartPoints.splice(i, 1)[0])
-							startPointCount--
-						}
+					) {
+						roomAvailableStartPoints.push(point)
 					}
 				}
-				availableStartPoints.push(...roomStartPoints)
+
+				// Randomly select some tiles to be the maze starting points
+				const roomStartPoints: Point[] = []
+				if (roomAvailableStartPoints.length > 1) {
+					let startPointCount: number = this.randBetween(1, roomAvailableStartPoints.length)
+					while (startPointCount > 0) {
+						for (let i = 0; i < roomAvailableStartPoints.length; i++) {
+							if (this.oneIn(i + 1)) {
+								availableStartPoints.push(roomAvailableStartPoints.splice(i, 1)[0])
+								startPointCount--
+							}
+						}
+					}
+					availableStartPoints.push(...roomStartPoints)
+				}
 			}
 
 			// If generating maze corridors, add every other empty tile to the available start points
-			if (this.options.mazeCorridors) {
+			if (this.options.corridorStrategy.includes('maze')) {
 				// Grab the remaining maze generation points to fill in the rest of the map
 				for (let y = 1; y < stage.height; y += 2) {
 					for (let x = 1; x < stage.width; x += 2) {
@@ -608,16 +605,41 @@ export class Builder {
 			return direction
 		}
 
-		const inMaze = (point: Point, direction?: PointArray): boolean => {
-			point = direction ? {
+		const pointDirection = (point: Point, direction?: PointArray): Point => {
+			return point && direction ? {
 				x: point.x + direction[0],
 				y: point.y + direction[1]
 			} : point
+		}
+
+		const inMaze = (point: Point, direction?: PointArray): boolean => {
+			point = pointDirection(point, direction)
 			return carvable.some(tile => tile.x === point.x && tile.y === point.y) || maze.some(tile => tile.x === point.x && tile.y === point.y)
 		}
 
-		if (!start || inMaze(start) || !this.canCarve(start)) {
-			return carvable
+		const canCarve = (point: Point, direction?: PointArray): boolean => {
+			point = pointDirection(point, direction)
+			if (point && !inMaze(point) && this.canCarve(point)) {
+				let floor_count = 0
+
+				for (const direction of cardinalDirections) {
+					const pt = pointDirection(point, direction)
+					if (inMaze(pt)) {
+						floor_count++
+
+						if (floor_count > 2) {
+							return false
+						}
+					}
+				}
+
+				return true
+			}
+			return false
+		}
+
+		if (!canCarve(start)) {
+			return maze
 		}
 
 		cells.push(start)
@@ -634,7 +656,7 @@ export class Builder {
 
 			// Get the possible directions to carve from this cell
 			// Get them fresh each time, so we can check if it's different from the previous loop(s)
-			const carvableDirections: PointArray[] = cardinalDirections.filter(direction => cell && !inMaze(cell, direction) && this.canCarve(cell, direction))
+			const carvableDirections: PointArray[] = cardinalDirections.filter(direction => canCarve(cell, direction))
 
 			// Check if there are any carvable directions
 			if (carvableDirections.length) {
@@ -683,7 +705,16 @@ export class Builder {
 			return false
 		}
 
-		return !(check !== 'after' && this.nearEdge(tile))
+		if (tile.floors().length > 2) {
+			return false
+		}
+
+		// noinspection RedundantIfStatementJS
+		if (check !== 'after' && this.nearEdge(tile)) {
+			return false
+		}
+
+		return true
 	}
 
 	protected async normalizeRegions(): Promise<void> {

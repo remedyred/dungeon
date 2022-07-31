@@ -3,9 +3,10 @@ import {TileManagerState} from './TileManager'
 import {RandomState} from './Random'
 import {Region} from '../structures/Region'
 import {TileMatrix} from '../structures/Tile'
-import {defaultDungeonOptions, DungeonOptions} from '../common'
+import {defaultDungeonOptions, DungeonOptions, ParsedDungeonOptions} from '../common'
 import {RoomManagerState} from './RoomManager'
 import {BuilderState, StageOptions} from './Builder'
+import {arrayWrap} from '@snickbit/utilities'
 
 export interface DungeonState extends BuilderState, RandomState, RegionManagerState, RoomManagerState, TileManagerState {}
 
@@ -14,8 +15,10 @@ export class State {
 	options: DungeonOptions
 
 	constructor(options?: DungeonOptions) {
-		this.options = {...defaultDungeonOptions, ...options}
-		this.options.multiplier = this.options.multiplier > 0 ? parseInt(String(this.options.multiplier || 1)) || 1 : 1
+		options = {...defaultDungeonOptions, ...options}
+		options.multiplier = options.multiplier > 0 ? parseInt(String(options.multiplier || 1)) || 1 : 1
+		options.corridorStrategy = arrayWrap(options.corridorStrategy)
+		this.options = options as ParsedDungeonOptions
 	}
 
 	get region(): Region {
