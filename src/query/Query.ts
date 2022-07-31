@@ -29,22 +29,18 @@ export interface QueryOptions {
 	where?: TileCallback[]
 }
 
-interface ParsedOptions {
+interface ParsedOptions extends QueryOptions {
 	levels: number
 	inclusive: boolean
 	directions: Direction[]
-	strictDirections?: boolean
 	type?: TileType[]
 	notType?: TileType[]
 	start: Point
-	offset?: Point
 	region?: number[]
 	notRegion?: number[]
 	regionType?: RegionType[]
 	notRegionType?: RegionType[]
 	debug: boolean
-	unique?: string
-	where?: TileCallback[]
 }
 
 export const cardinal: CardinalDirection[] = [
