@@ -1,8 +1,8 @@
 import {DungeonState, safeMerge, State} from './State'
 import {$out} from '../common'
-import {arrayUnique, arrayWrap, isNumber, isString} from '@snickbit/utilities'
+import {arrayUnique} from '@snickbit/utilities'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from '../coordinates/Coordinates'
-import {Region, RegionType, regionTypes} from '../structures/Region'
+import {Region} from '../structures/Region'
 import {Results} from '../Results'
 import {Random} from './Random'
 import {RegionManager} from './RegionManager'
@@ -10,6 +10,7 @@ import {RoomManager} from './RoomManager'
 import {CorridorManager} from './CorridorManager'
 import {Walker} from './Walker'
 import {Corridor} from '../structures/Corridor'
+import {Carver} from './Carver'
 import Tile, {Neighbors, TileMatrix, TileType} from '../structures/Tile'
 import Room from '../structures/Room'
 import Chance from 'chance'
@@ -26,7 +27,7 @@ export interface BuilderState {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Builder extends State, Random, RegionManager, RoomManager, CorridorManager, Walker {
+export interface Builder extends State, Random, RegionManager, RoomManager, CorridorManager, Walker, Carver {
 }
 
 const default_stage: StageOptions = {
@@ -76,86 +77,6 @@ export class Builder {
 		await this.normalizeRegions()
 
 		return this
-	}
-
-	async carve(points: Coordinates | Coordinates[], optionalTypeOrRegion?: RegionType | TileType, optionalRegion?: RegionType | number): Promise<Tile[]> {
-		const carvePromises = []
-		const tiles: Tile[] = []
-
-		points = arrayWrap(points)
-
-		let type: TileType
-
-		if (regionTypes.includes(optionalTypeOrRegion)) {
-			type = 'floor'
-			if (!optionalRegion) {
-				optionalRegion = optionalTypeOrRegion as RegionType
-			}
-		} else {
-			type = optionalTypeOrRegion as TileType
-		}
-
-		let region: number
-		if (optionalRegion !== undefined) {
-			if (isString(optionalRegion)) {
-				region = this.startRegion(optionalRegion).id
-			} else {
-				region = optionalRegion
-			}
-		}
-
-		for (let i = 0; i < points.length; i++) {
-			const point = points[i]
-			carvePromises.push(this.carveTile(point, type, region).then(tile => {
-				return tiles.push(tile)
-			}).catch(e => {
-				$out.verbose(`[CarveError]`, e)
-			}))
-			if (i % 100 === 0 || i === points.length - 1) {
-				await Promise.all(carvePromises.splice(0))
-				carvePromises.length = 0
-			}
-		}
-
-		if (carvePromises.length) {
-			await Promise.all(carvePromises.splice(0))
-		}
-
-		return tiles
-	}
-
-	async carveArea(x: number, y: number, width: number, height: number, region?: number): Promise<void>
-	async carveArea(location: Coordinates, width: number, height: number, region?: number): Promise<void>
-	async carveArea(optionalX: Coordinates | number, yOrWidth: number, widthOrHeight: number, optionalHeightOrRegion?: number, optionalRegion?: number): Promise<void> {
-		let x: number
-		let y: number
-		let width: number
-		let height: number
-		let region: number
-
-		if (isNumber(optionalX)) {
-			({x, y} = parsePoint(optionalX, yOrWidth as number))
-			width = widthOrHeight
-			height = optionalHeightOrRegion
-			region = optionalRegion
-		} else {
-			({x, y} = parsePoint(optionalX as Coordinates))
-			width = yOrWidth
-			height = widthOrHeight
-			region = optionalHeightOrRegion
-		}
-
-		for (let i = x; i < x + width; i++) {
-			for (let j = y; j < y + height; j++) {
-				this.setTile(i, j, 'floor', region)
-			}
-		}
-	}
-
-	async carveTile(x: number, y: number, type?: TileType, region?: number): Promise<Tile>
-	async carveTile(location: Coordinates, type?: TileType, region?: number): Promise<Tile>
-	async carveTile(optionalX: any, optionalY?: any, optionalType?: any, optionalRegion?: number): Promise<Tile> {
-		return this.setTile(optionalX, optionalY, optionalType, optionalRegion)
 	}
 
 	protected validate(stage: StageOptions): void {
@@ -273,24 +194,6 @@ export class Builder {
 
 		// Wait for all the room carving to finish
 		await Promise.all(carvePromises)
-	}
-
-	protected canCarve(cell: Point, offset?: Coordinates): boolean {
-		const checks: Record<string, Point> = {start: cell}
-
-		if (offset) {
-			const parsed = parsePoint(offset)
-			checks.next = {x: cell.x + parsed.x, y: cell.y + parsed.y}
-			checks.dest = {x: cell.x + parsed.x * 2, y: cell.y + parsed.y * 2}
-			checks.after = {x: cell.x + parsed.x * 3, y: cell.y + parsed.y * 3}
-		}
-
-		for (const [check, def] of Object.entries(checks)) {
-			if (!this.isCarvable(def, check)) {
-				return false
-			}
-		}
-		return true
 	}
 
 	protected cleanCorridors(): void {
