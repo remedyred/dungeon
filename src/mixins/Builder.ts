@@ -569,8 +569,14 @@ export class Builder {
 				}
 
 				// Now generate the maze corridors
+				let maze: Point[] = []
 				for (const point of availableStartPoints) {
-					await this.growMaze(point)
+					maze = this.growMaze(point, maze)
+				}
+
+				// carve the maze
+				if (maze.length) {
+					await this.carve(maze, 'corridor')
 				}
 			} else {
 				// If not generating maze corridors, just fill in the points around the rooms
@@ -579,13 +585,11 @@ export class Builder {
 		}
 	}
 
-	protected async growMaze(startX: number, startY: number): Promise<void>
-	protected async growMaze(start: Coordinates): Promise<void>
-	protected async growMaze(startOrX: Coordinates | number, startY?: number): Promise<void> {
-		let start = parsePoint(startOrX, startY)
+	protected growMaze(coordinates: Coordinates, maze: Point[]): Point[] {
+		const start = parsePoint(coordinates)
 
-		const cells: Point[] = []
 		const carvable: Point[] = []
+		const cells: Point[] = []
 		let lastDirection: Point
 
 		const getDirection = (possibleCells: PointArray[]): Point => {
@@ -604,15 +608,25 @@ export class Builder {
 			return direction
 		}
 
-		if (!this.canCarve(start)) {
-			return
+		const inMaze = (point: Point, direction?: PointArray): boolean => {
+			point = direction ? {
+				x: point.x + direction[0],
+				y: point.y + direction[1]
+			} : point
+			return carvable.some(tile => tile.x === point.x && tile.y === point.y) || maze.some(tile => tile.x === point.x && tile.y === point.y)
+		}
+
+		if (!start || inMaze(start) || !this.canCarve(start)) {
+			return carvable
 		}
 
 		cells.push(start)
 		carvable.push(start)
 
 		let count = 0
-		while (cells.length && count < this.options.maxMazeTries) {
+
+		const cell_count = this.randBetween(2, 3)
+		while (carvable.length < cell_count && count < this.options.maxMazeTries) {
 			count++
 
 			// get the last cell in the list as the start point for this segment
@@ -620,7 +634,7 @@ export class Builder {
 
 			// Get the possible directions to carve from this cell
 			// Get them fresh each time, so we can check if it's different from the previous loop(s)
-			const carvableDirections: PointArray[] = cardinalDirections.filter(direction => this.canCarve(cell, direction))
+			const carvableDirections: PointArray[] = cardinalDirections.filter(direction => cell && !inMaze(cell, direction) && this.canCarve(cell, direction))
 
 			// Check if there are any carvable directions
 			if (carvableDirections.length) {
@@ -647,10 +661,11 @@ export class Builder {
 			}
 		}
 
-		// carve the paths
-		if (carvable.length > 1) {
-			await this.carve(carvable, 'corridor')
+		if (carvable.length) {
+			maze.push(...carvable)
 		}
+
+		return maze
 	}
 
 	protected isCarvable(cell: Point, check: string): boolean {

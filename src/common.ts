@@ -24,7 +24,7 @@ export const defaultDungeonOptions: DungeonOptions = {
 	roomExtraSize: 0,
 	windingPercent: 50,
 	minCorridorLength: 2,
-	maxMazeTries: 500,
+	maxMazeTries: 50,
 	mazeCorridors: true
 }
 
