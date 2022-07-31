@@ -38,5 +38,18 @@ describe('Query', () => {
 				nw
 			].sort())
 		})
+
+		it('.levels(1) should return tiles 1 level away from the start tile', () => {
+			expect(query.levels(1).get()).toEqual([
+				n,
+				e,
+				s,
+				w,
+				ne,
+				se,
+				sw,
+				nw
+			].sort())
+		})
 	})
 })
