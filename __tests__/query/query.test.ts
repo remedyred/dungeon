@@ -22,7 +22,7 @@ describe('Query', () => {
 		})
 
 		it('.cardinal() should return the cardinal neighbors of the start tile', () => {
-			expect(query.cardinal().get().sort()).toEqual([
+			expect(query.cardinal().get()).toEqual([
 				n,
 				e,
 				s,
@@ -31,7 +31,7 @@ describe('Query', () => {
 		})
 
 		it('.intercardinal() should return the intercardinal neighbors of the start tile', () => {
-			expect(query.intercardinal().get().sort()).toEqual([
+			expect(query.intercardinal().get()).toEqual([
 				ne,
 				se,
 				sw,
