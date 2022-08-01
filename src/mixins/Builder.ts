@@ -642,15 +642,17 @@ export class Builder {
 
 		const walls = []
 		const makePassage = (x, y) => {
-			maze[y][x] = 'floor'
-			const candidates = cardinalDirections.map(direction => ({
-				x: x + direction[0],
-				y: y + direction[1]
-			}))
+			if (maze[y]) {
+				maze[y][x] = 'floor'
+				const candidates = cardinalDirections.map(direction => ({
+					x: x + direction[0],
+					y: y + direction[1]
+				}))
 
-			for (const wall of candidates) {
-				if (lookup(maze, wall.x, wall.y) === 'wall') {
-					walls.push(wall)
+				for (const wall of candidates) {
+					if (lookup(maze, wall.x, wall.y) === 'wall') {
+						walls.push(wall)
+					}
 				}
 			}
 		}
