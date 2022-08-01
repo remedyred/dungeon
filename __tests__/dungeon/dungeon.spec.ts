@@ -21,7 +21,11 @@ describe('Dungeon', () => {
 		expect(typeof dungeon().build()).toBe('object')
 	})
 
-	it('Dungeon.build() should return a Results instance', () => {
-		expect(dungeon().build()).resolves.toBeInstanceOf(Results)
+	it('Dungeon.build() should return a Dungeon instance', () => {
+		expect(dungeon().build()).toBeInstanceOf(Dungeon)
+	})
+
+	it('Dungeon.build().toJSON() should return a Results instance', async () => {
+		expect((await dungeon().build()).toJSON()).toBeInstanceOf(Results)
 	})
 })
