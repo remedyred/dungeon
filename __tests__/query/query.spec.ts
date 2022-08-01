@@ -14,7 +14,10 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 		tiles.push([])
 		for (let y = 0; y < 13; y++) {
 			const fillTile = new Tile('wall', x, y, $tile.region)
-			if (x > 2 && x < 5 && y > 2 && y < 5) {
+			if (x === $tile.x && y === $tile.y) {
+				fillTile.type = $tile.type
+				fillTile.region = $tile.region
+			} else if (x > 2 && x < 5 && y > 2 && y < 5) {
 				fillTile.type = 'floor'
 				fillTile.regionType = 'room'
 				fillTile.region = 0
