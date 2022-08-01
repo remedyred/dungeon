@@ -4,46 +4,54 @@ describe('seeds', () => {
 	it('should return a re-usable seed', async () => {
 		const width = 21
 		const height = 21
-		const dungeon1 = await dungeon().build({
+		await dungeon().build({
 			width,
 			height
 		})
 
-		const dungeon2 = await dungeon().build({
+		const dungeon1 = dungeon().toJSON()
+
+		await dungeon().build({
 			width,
 			height,
 			seed: dungeon1.seed
 		})
 
-		expect(dungeon1.toJSON()).toStrictEqual(dungeon2.toJSON())
+		const dungeon2 = dungeon().toJSON()
+
+		expect(dungeon1).toStrictEqual(dungeon2)
 	})
 
 	it('seeded dungeons should be consistent', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await dungeon().build({
 			width,
 			height,
 			seed: 'snickbit'
 		})
-		expect($dungeon.toJSON()).toMatchSnapshot()
+		expect(dungeon().toJSON()).toMatchSnapshot()
 	})
 
 	it('should be seedable', async () => {
 		const width = 21
 		const height = 21
-		const dungeon1 = await dungeon().build({
+
+		await dungeon().build({
+			width,
+			height,
+			seed: 'snickbit'
+		})
+		const dungeon1 = dungeon().toJSON()
+
+		await dungeon().build({
 			width,
 			height,
 			seed: 'snickbit'
 		})
 
-		const dungeon2 = await dungeon().build({
-			width,
-			height,
-			seed: 'snickbit'
-		})
+		const dungeon2 = dungeon().toJSON()
 
-		expect(dungeon1.toJSON()).toStrictEqual(dungeon2.toJSON())
+		expect(dungeon1).toStrictEqual(dungeon2)
 	})
 })
