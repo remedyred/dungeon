@@ -29,7 +29,7 @@ describe('Query', () => {
 				tiles[tile.x][tile.y - 1]
 			].sort()
 
-			expect(query.cardinal().debug().get()).toEqual(expected)
+			expect(query.cardinal().get()).toEqual(expected)
 		})
 
 		it('.intercardinal() should return the intercardinal neighbors of the start tile', () => {

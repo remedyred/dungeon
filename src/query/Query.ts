@@ -1,6 +1,6 @@
 import {Tile, TileMatrix, TileType} from '../structures/Tile'
 import {Coordinates, parsePoint, Point} from '../coordinates/Coordinates'
-import {arrayUnique, arrayWrap, isEmpty} from '@snickbit/utilities'
+import {arrayUnique, arrayWrap, isBoolean, isEmpty} from '@snickbit/utilities'
 import {$out} from '../common'
 import {Out} from '@snickbit/out'
 import {RegionType} from '../structures/Region'
@@ -422,12 +422,15 @@ export class Query {
 					}
 
 					if (options.strictDirections) {
-						if (!hasCardinal && (tile.x === options.start.x || tile.y === options.start.y)) {
-							this.#out(['cardinal', 'directions'], `${message}Skipping tile. Tile should not be cardinal of start tile.`)
+						if (hasCardinal && tile.x !== options.start.x && tile.y !== options.start.y) {
+							this.#out(['cardinal', 'directions'], `${message}Skipping tile. Tile should be cardinal of start tile.`)
 							continue
 						}
-						if (!hasIntercardinal && (tile.x !== options.start.x || tile.y !== options.start.y)) {
-							this.#out(['intercardinal', 'directions'], `${message}Skipping tile. Tile should not be intercardinal of start tile.`)
+
+						if (hasIntercardinal &&
+							!(tile.x - tile.y === options.start.x - options.start.y || tile.x + tile.y === options.start.x + options.start.y)
+						) {
+							this.#out(['intercardinal', 'directions'], `${message}Skipping tile. Tile should be intercardinal of start tile.`)
 							continue
 						}
 					}
