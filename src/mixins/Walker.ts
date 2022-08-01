@@ -67,4 +67,21 @@ export class Walker {
 
 		return tiles
 	}
+
+	protected guessCorridorDirection(start: Tile): string {
+		const tiles = {
+			n: [] as Tile[],
+			s: [] as Tile[],
+			e: [] as Tile[],
+			w: [] as Tile[]
+		}
+
+		for (const direction of cardinal) {
+			tiles[direction].push(...this.walkToEdge(start, direction))
+		}
+
+		const guess = Math.max(...Object.values(tiles).map(tiles => tiles.length))
+
+		return Object.keys(tiles).find(direction => tiles[direction].length === guess) || 'n'
+	}
 }
