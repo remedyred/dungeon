@@ -6,39 +6,39 @@ import Tile from '../structures/Tile'
 export interface Walker extends State {}
 
 export class Walker {
+	protected walkToEdge(start: Tile, direction: string, inclusive = true): Tile[] {
+		const tiles: Tile[] = []
+
+		let current: Tile = start
+
+		while (current?.isCorridor()) {
+			tiles.push(current)
+			const next = current.getNeighbor(direction)
+			if (!next) {
+				break
+			} else {
+				current = next
+			}
+		}
+
+		if (current?.isCorridor() && !tiles.includes(current)) {
+			tiles.push(current)
+		}
+
+		if (!inclusive) {
+			// Remove the last tile
+			tiles.pop()
+		}
+
+		return tiles
+	}
+
 	protected walkStraight(start: Tile, inclusive = true): Tile[] {
 		const tiles: Tile[] = []
 
-		const walkToEdge = (start: Tile, direction: string) => {
-			const tiles: Tile[] = []
-
-			let current: Tile = start
-
-			while (current?.isCorridor()) {
-				tiles.push(current)
-				const next = current.getNeighbor(direction)
-				if (!next) {
-					break
-				} else {
-					current = next
-				}
-			}
-
-			if (current?.isCorridor() && !tiles.includes(current)) {
-				tiles.push(current)
-			}
-
-			if (!inclusive) {
-				// Remove the last tile
-				tiles.pop()
-			}
-
-			return tiles
-		}
-
 		for (const direction of cardinal) {
 			if (start.getNeighbor(direction)?.isCorridor()) {
-				tiles.push(...walkToEdge(start, direction))
+				tiles.push(...this.walkToEdge(start, direction, inclusive))
 			}
 		}
 
