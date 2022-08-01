@@ -71,7 +71,7 @@ describe('rooms', () => {
 		}
 
 		for (const tile of tiles) {
-			expect(tile.type === 'wall' || tile.type === 'door').toBeTruthy()
+			expect(['wall', 'door']).toContain(tile.type)
 		}
 	})
 
@@ -88,7 +88,9 @@ describe('rooms', () => {
 
 			const points = room.getBorderPoints(1)
 			for (const point of points) {
-				tiles.push(dungeon().getTile(point))
+				if (dungeon().hasTile(point)) {
+					tiles.push(dungeon().getTile(point))
+				}
 			}
 
 			const north = room.y - 1
