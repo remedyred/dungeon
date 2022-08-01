@@ -49,6 +49,9 @@ export class Builder {
 		// validate the state options
 		this.validate(stage)
 
+		// reset the state
+		this.reset()
+
 		// fill the entire area with solid 'wall' tiles
 		await this.fill('wall')
 
@@ -368,13 +371,28 @@ export class Builder {
 		}
 	}
 
+	protected reset(): void {
+		// reset the region
+		Region._id = 0
+
+		// reset the regions
+		this.state.regions = {}
+
+		// reset the tiles
+		this.state.tiles = []
+
+		// reset the regions
+		this.state.regions = []
+
+		// reset the rooms
+		this.state.rooms = []
+	}
+
 	protected async fill(type: TileType): Promise<TileMatrix> {
 		let neighbors: Neighbors = {}
 		let x
 		let y
 
-		// reset the region
-		Region._id = 0
 		const region = new Region(null, -1)
 		this.regions[region.id] = region
 
