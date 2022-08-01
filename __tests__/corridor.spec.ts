@@ -4,14 +4,14 @@ import {TileType} from '../src/structures/Tile'
 
 describe('Corridor', () => {
 	const region_id = 0
-	let {tiles} = setupQueryVars()
+	const {tiles} = setupQueryVars()
+	const corridorTiles = tiles.flat().filter(tile => tile.y === 6 && tile.x > 2 && tile.x < 5)
 	let expected: {region: number; tiles: {x: number; y: number; type: TileType}[]}
 
 	beforeEach(() => {
-		({tiles} = setupQueryVars())
 		expected = {
 			region: region_id,
-			tiles: tiles.map(tile => tile.toJSON())
+			tiles: corridorTiles.map(tile => tile.toJSON())
 		}
 	})
 
@@ -20,11 +20,11 @@ describe('Corridor', () => {
 	})
 
 	it('should be constructable', () => {
-		expect(new Corridor(region_id, tiles)).toBeTruthy()
+		expect(new Corridor(region_id, corridorTiles)).toBeTruthy()
 	})
 
 	it('should have a .length property', () => {
-		expect(typeof new Corridor(region_id, tiles).length).toBe('number')
+		expect(typeof new Corridor(region_id, corridorTiles).length).toBe('number')
 	})
 
 	it('should have a .isRegion() method', () => {
@@ -44,7 +44,7 @@ describe('Corridor', () => {
 	})
 
 	it('.toJSON() should return a corridor object', () => {
-		expect(new Corridor(region_id, tiles).toJSON()).toStrictEqual(expected)
+		expect(new Corridor(region_id, corridorTiles).toJSON()).toStrictEqual(expected)
 	})
 
 	it('should have a .toString() method', () => {
@@ -52,7 +52,7 @@ describe('Corridor', () => {
 	})
 
 	it('should have a .toString() method that returns the region', () => {
-		expect(new Corridor(region_id, tiles).toString()).toBe(String(region_id))
+		expect(new Corridor(region_id, corridorTiles).toString()).toBe(String(region_id))
 	})
 
 	it('should be iterable', () => {
@@ -60,7 +60,7 @@ describe('Corridor', () => {
 	})
 
 	it('should iterate over the tiles', () => {
-		const corridor = new Corridor(region_id, tiles)
+		const corridor = new Corridor(region_id, corridorTiles)
 		const iteratedTiles = []
 		for (const tile of corridor) {
 			iteratedTiles.push(tile)
