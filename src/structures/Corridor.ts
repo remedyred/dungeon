@@ -1,12 +1,12 @@
-import Tile from './Tile'
+import Tile, {TileMatrix} from './Tile'
 
 export class Corridor {
 	region: number
 	tiles: Tile[]
 
-	constructor(region: number, tiles: Tile[]) {
+	constructor(region: number, tiles: Tile[] | TileMatrix) {
 		this.region = region
-		this.tiles = tiles
+		this.tiles = tiles.flat()
 	}
 
 	get length(): number {
