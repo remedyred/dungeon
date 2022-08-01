@@ -27,7 +27,7 @@ export interface QueryOptions {
 	notRegion?: number[] | number
 	regionType?: RegionType | RegionType[]
 	notRegionType?: RegionType | RegionType[]
-	debug?: boolean | string
+	debug?: string[] | boolean | string
 	unique?: string
 	where?: TileCallback[]
 }
@@ -43,7 +43,7 @@ interface ParsedOptions extends QueryOptions {
 	notRegion?: number[]
 	regionType?: RegionType[]
 	notRegionType?: RegionType[]
-	debug: boolean | string
+	debug: string[] | boolean | string
 }
 
 export const cardinal: CardinalDirection[] = [
@@ -69,6 +69,8 @@ export class Query {
 
 	constructor(tiles: Tile[] | TileMatrix, options: QueryOptions = {}) {
 		this.tiles = tiles.flat()
+		this.out = $out.clone().prefix('Query')
+
 		this.options = this.validate({
 			levels: 1,
 			inclusive: false,
@@ -83,8 +85,6 @@ export class Query {
 			notType: [],
 			...options
 		})
-
-		this.out = $out.clone().prefix('Query')
 	}
 
 	setTiles(tiles: Tile[] | TileMatrix): this {
@@ -105,7 +105,7 @@ export class Query {
 		return this
 	}
 
-	debug(enabled: boolean | string = true): this {
+	debug(enabled: string[] | boolean | string = true): this {
 		this.options.debug = enabled
 		return this
 	}
@@ -267,9 +267,10 @@ export class Query {
 	}
 
 	#out(type: string[] | string, ...args: any[]) {
-		const debug: boolean | string = this.options?.debug || false
+		const debug: string[] | boolean = isBoolean(this.options?.debug) ? this.options.debug : arrayWrap(this.options?.debug)
 		type = arrayWrap(type) as string[]
-		if (debug === true || type.includes(String(debug))) {
+
+		if (debug === true || Array.isArray(debug) && type.filter(t => debug.includes(t)).length > 0) {
 			this.out.force.debug(...args)
 		}
 	}
