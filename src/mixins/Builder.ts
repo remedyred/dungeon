@@ -1,6 +1,5 @@
 import {DungeonState, safeMerge, State} from './State'
 import {$out} from '../common'
-import {arrayUnique} from '@snickbit/utilities'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from '../coordinates/Coordinates'
 import {Region} from '../structures/Region'
 import {Results} from '../Results'
@@ -280,11 +279,11 @@ export class Builder {
 
 		for (const row of this.tiles) {
 			for (const tile of row) {
-				if (tile.type !== 'wall' || tile.region !== -1) {
+				if (tile.type !== 'wall' || tile.region !== -1 || this.nearEdge(tile)) {
 					continue
 				}
 
-				const tileRegions = arrayUnique(tile.find().cardinal().get().filter(tile => tile.region !== -1), 'region')
+				const tileRegions = this.find().start(tile).cardinal().notRegion(-1).unique('region').get()
 				if (tileRegions.length <= 1) {
 					continue
 				}
