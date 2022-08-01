@@ -11,7 +11,7 @@ export class Walker {
 
 		let current: Tile = start
 
-		while (current?.isCorridor()) {
+		while (current?.isFloor()) {
 			tiles.push(current)
 			const next = current.getNeighbor(direction)
 			if (!next) {
@@ -21,7 +21,7 @@ export class Walker {
 			}
 		}
 
-		if (current?.isCorridor() && !tiles.includes(current)) {
+		if (current?.isFloor() && !tiles.includes(current)) {
 			tiles.push(current)
 		}
 
@@ -37,7 +37,7 @@ export class Walker {
 		const tiles: Tile[] = []
 
 		for (const direction of cardinal) {
-			if (start.getNeighbor(direction)?.isCorridor()) {
+			if (start.getNeighbor(direction)?.isFloor()) {
 				tiles.push(...this.walkToEdge(start, direction, inclusive))
 			}
 		}
@@ -57,7 +57,7 @@ export class Walker {
 			tiles.push(tile)
 			for (const direction of cardinal) {
 				const neighbor = tile.getNeighbor(direction)
-				if (neighbor?.isCorridor()) {
+				if (neighbor?.isFloor()) {
 					walkSet(neighbor)
 				}
 			}
