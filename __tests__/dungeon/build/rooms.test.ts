@@ -58,7 +58,7 @@ describe(`rooms ${options.seed}`, () => {
 		for (const room of $builder.rooms) {
 			const tiles = []
 
-			const points = room.getBorderPoints(0, false)
+			const points = room.getBorderPoints()
 			for (const point of points) {
 				if ($builder.hasTile(point)) {
 					tiles.push($builder.getTile(point))
