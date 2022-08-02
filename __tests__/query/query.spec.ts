@@ -31,6 +31,7 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 	for (let x = 0; x < 13; x++) {
 		tiles.push([])
 		for (let y = 0; y < 13; y++) {
+			// y x is backwards because of the way the matrix is set up
 			const region = parseInt(fillTiles[y][x])
 			const fillTile = new Tile('wall', x, y, $tile.region)
 
