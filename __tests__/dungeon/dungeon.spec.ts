@@ -22,7 +22,7 @@ describe('Dungeon', () => {
 	})
 
 	it('Dungeon.build() should return a Dungeon instance', () => {
-		expect(dungeon().build()).toBeInstanceOf(Dungeon)
+		expect(dungeon().build()).resolves.toBeInstanceOf(Dungeon)
 	})
 
 	it('Dungeon.build().toJSON() should return a Results instance', async () => {
