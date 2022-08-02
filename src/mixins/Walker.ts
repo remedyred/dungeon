@@ -87,4 +87,17 @@ export class Walker {
 
 		return directions
 	}
+
+	protected longestCorridorDirection(start: Tile): CardinalDirection | undefined {
+		let longest: {direction: CardinalDirection; length: number} | undefined
+
+		for (const direction of cardinal) {
+			const tiles = this.walkToEdge(start, direction)
+			if (tiles.length > direction?.length) {
+				longest = {direction, length: tiles.length}
+			}
+		}
+
+		return longest?.direction
+	}
 }

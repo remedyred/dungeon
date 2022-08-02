@@ -19,6 +19,10 @@ class TestWalker extends Walker {
 	guessCorridorDirections(start: Tile): CardinalDirection[] {
 		return super.guessCorridorDirections(start)
 	}
+
+	longestCorridorDirection(start: Tile): CardinalDirection {
+		return super.longestCorridorDirection(start)
+	}
 }
 
 describe('Walker', () => {
@@ -75,5 +79,16 @@ describe('Walker', () => {
 		const walker = new TestWalker()
 		const results = walker.guessCorridorDirections(tiles[3][10])
 		expect(results).toStrictEqual(['w'])
+	})
+
+	it('should have a .longestCorridorDirection() method', () => {
+		const walker = new TestWalker()
+		expect(typeof walker.longestCorridorDirection).toBe('function')
+	})
+
+	it('.longestCorridorDirection() should correctly give the longest corridor direction', () => {
+		const walker = new TestWalker()
+		const results = walker.longestCorridorDirection(tiles[6][3])
+		expect(results).toBe('s')
 	})
 })
