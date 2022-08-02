@@ -1,5 +1,5 @@
 import {State} from './State'
-import {cardinal} from '../query/Query'
+import {cardinal, CardinalDirection} from '../query/Query'
 import Tile from '../structures/Tile'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -68,20 +68,23 @@ export class Walker {
 		return tiles
 	}
 
-	protected guessCorridorDirection(start: Tile): string {
-		const tiles = {
-			n: [] as Tile[],
-			s: [] as Tile[],
-			e: [] as Tile[],
-			w: [] as Tile[]
-		}
+	protected guessCorridorDirections(start: Tile): CardinalDirection[] {
+		const directions: CardinalDirection[] = []
 
 		for (const direction of cardinal) {
-			tiles[direction].push(...this.walkToEdge(start, direction))
+			const neighbor = start.getNeighbor(direction)
+			if (!neighbor) {
+				continue
+			}
+
+			const isInRegion = neighbor.inRegion(start.region)
+			const isFloor = neighbor.isFloor()
+
+			if (isInRegion && isFloor) {
+				directions.push(direction)
+			}
 		}
 
-		const guess = Math.max(...Object.values(tiles).map(tiles => tiles.length))
-
-		return Object.keys(tiles).find(direction => tiles[direction].length === guess) || 'n'
+		return directions
 	}
 }
