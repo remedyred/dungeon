@@ -59,10 +59,10 @@ export class Room {
 					y === this.y + room.height
 				) {
 					if (corners ||
-						x !== room.x &&
-						y !== room.y &&
-						x !== room.x + room.width &&
-						y !== room.y + room.height
+						x !== room.x - 1 &&
+						y !== room.y - 1 &&
+						x !== this.x + room.width &&
+						y !== this.y + room.height
 					) {
 						tilesTouchingRoom.push({x, y})
 					}
