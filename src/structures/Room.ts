@@ -40,7 +40,7 @@ export class Room {
 		}
 	}
 
-	getBorderPoints(padding = 0): Point[] {
+	getBorderPoints(padding = 0, corners = true): Point[] {
 		const tilesTouchingRoom: Point[] = []
 
 		const room = {
@@ -58,7 +58,14 @@ export class Room {
 					x === this.x + room.width ||
 					y === this.y + room.height
 				) {
-					tilesTouchingRoom.push({x, y})
+					if (corners ||
+						x !== room.x &&
+						y !== room.y &&
+						x !== room.x + room.width &&
+						y !== room.y + room.height
+					) {
+						tilesTouchingRoom.push({x, y})
+					}
 				}
 			}
 		}
