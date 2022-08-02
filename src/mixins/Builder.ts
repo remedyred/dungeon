@@ -61,11 +61,8 @@ export class Builder {
 		// create the rooms
 		await this.addRooms()
 
-		// Split the corridors into regions
-		await this.splitCorridors()
-
-		// Clear broken corridors, corridors that are too small, and corridors bordering a room
-		await this.cleanCorridors()
+		// Normalize region numbers
+		await this.normalizeRegions()
 
 		// create doors between rooms and corridors
 		await this.connectRegions()
@@ -74,9 +71,6 @@ export class Builder {
 			// remove dead ends
 			await this.removeDeadEnds()
 		}
-
-		// Normalize region numbers
-		await this.normalizeRegions()
 
 		return this
 	}
@@ -197,37 +191,6 @@ export class Builder {
 
 		// Wait for all the room carving to finish
 		await Promise.all(carvePromises)
-	}
-
-	protected cleanCorridors(): void {
-		const corridors = this.getCorridors()
-		let reclean = false
-		const tilesToClean: Tile[] = []
-
-		for (let corridor of corridors) {
-			if (corridor.tiles.length < this.options.minCorridorLength) {
-				tilesToClean.push(...corridor.tiles)
-			} else if (!corridor.tiles.find(tile => tile.find().levels(2).cardinal().notRegion(tile.region).notRegion(-1).count() === 0)) {
-				tilesToClean.push(...corridor.tiles)
-			} else {
-				for (let tile of corridor.tiles) {
-					if (tile.cardinal().find(tile => tile.isRoom())) {
-						tilesToClean.push(...this.walkStraight(tile, false))
-					}
-				}
-			}
-		}
-
-		if (tilesToClean.length) {
-			for (let tile of tilesToClean) {
-				this.resetTile(tile)
-			}
-			reclean = true
-		}
-
-		if (reclean) {
-			return this.cleanCorridors()
-		}
 	}
 
 	protected connectCorridors(a: number | string, b: number | string, connection: Tile): void {
@@ -694,19 +657,61 @@ export class Builder {
 	}
 
 	protected async normalizeRegions(): Promise<void> {
-		// normalize the region numbers so there aren't any gaps
-		const regions = this.getRegions()
+		// Get all floor tiles
+		const floorTiles = this.find().type('floor').get()
+		const walked = new Set<Tile>()
 
-		if (regions[-1]) {
-			delete regions[-1]
+		const cleanTile = (tile: Tile) => {
+			this.resetTile(tile)
+			walked.add(tile)
 		}
 
 		let region_id = 0
-		for (const tiles of Object.values(regions)) {
-			for (const tile of tiles) {
-				tile.region = region_id
+		for (const areaStartTile of floorTiles) {
+			const corridor = areaStartTile.isCorridor()
+
+			if (!walked.has(areaStartTile)) {
+				const area = this.walk(areaStartTile)
+
+				for (const tile of area) {
+					if (!walked.has(tile)) {
+						tile.region = region_id
+
+						if (corridor) {
+							// do corridor checks
+
+							// corridor length should be at least the minimum length
+							const isNotLongEnough = area.length < this.options.minCorridorLength
+
+							// Corridor should not border a room
+							const isNearRoom = tile.nearRoom()
+
+							// Corridor should not border the edge of the map
+							const isNearEdge = this.nearEdge(tile)
+
+							if (isNearRoom || isNearEdge || isNotLongEnough) {
+								// if the tile is near a room, it should be cleaned
+								cleanTile(tile)
+
+								// Guess corridor direction, then remove tiles bordering that are also corridors
+								const direction = this.longestCorridorDirection(tile)
+
+								// if it has any cardinal corridor neighbors in the same region, they should also be cleaned
+								for (let neighbor of this.walkToEdge(tile, direction)) {
+									if (neighbor.cardinal().find(t => t.isRoom())) {
+										this.walkStraight(neighbor, false).map(cleanTile)
+									}
+								}
+							}
+						}
+
+						// add changed tile to walked
+						walked.add(tile)
+					}
+				}
+
+				region_id++
 			}
-			region_id++
 		}
 	}
 
@@ -737,34 +742,6 @@ export class Builder {
 		while (!done) {
 			done = true
 			done = cycle()
-		}
-	}
-
-	protected async splitCorridors(): Promise<void> {
-		const corridors = this.getCorridors().sort((a, b) => b.region - a.region)
-
-		if (corridors.length === 0) {
-			$out.warn('No corridors found!')
-			return
-		}
-
-		// get the lowest region number
-		let regionId = corridors[0].region
-
-		const checkedTiles: Tile[] = []
-
-		for (const corridor of corridors) {
-			for (let tile of corridor.tiles) {
-				if (!checkedTiles.includes(tile)) {
-					const corridorTiles = this.walk(tile)
-					this.startRegion('corridor', regionId++)
-					for (const corridorTile of corridorTiles) {
-						this.setTile(corridorTile, 'floor')
-					}
-
-					checkedTiles.push(...corridorTiles)
-				}
-			}
 		}
 	}
 }

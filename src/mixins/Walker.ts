@@ -92,7 +92,7 @@ export class Walker {
 		let longest: {direction: CardinalDirection; length: number} | undefined
 
 		for (const direction of cardinal) {
-			const tiles = this.walkToEdge(start, direction)
+			const tiles = this.walkToEdge(start, direction).filter(tile => tile.inRegion(start.region))
 			if (tiles.length > direction?.length) {
 				longest = {direction, length: tiles.length}
 			}
