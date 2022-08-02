@@ -1,7 +1,7 @@
-import {dungeon} from './Dungeon'
+import {createBuilder} from './DungeonBuilder'
 
 declare global {
 	interface Window {
-		dungeon: typeof dungeon
+		createBuilder: typeof createBuilder
 	}
 }

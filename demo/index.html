@@ -57,8 +57,10 @@
 		cellSize: 50,
 		gridPadding: 0,
 		removeDeadEnds: false,
-		seed: 'orange-icy-disease-0'
+		seed: 'able-clumsy-dawn'
 	}
+
+	const $builder = window.createBuilder()
 	const $dungeon = document.getElementById('dungeon')
 	const $generate = document.getElementById('generate')
 	const $seed = document.getElementById('seed')
@@ -83,7 +85,7 @@
 	function generate() {
 		start()
 		console.log('waiting for dungeon to generate...')
-		window.dungeon().build(options).then(generated_dungeon => {
+		$builder.build(options).then(generated_dungeon => {
 			console.log('Generated dungeon', generated_dungeon)
 
 			stop()

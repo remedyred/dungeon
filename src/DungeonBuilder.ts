@@ -5,7 +5,7 @@ import {Mixin, settings} from 'ts-mixer'
 
 settings.initFunction = 'init'
 
-export class Dungeon extends Mixin(
+export class DungeonBuilder extends Mixin(
 	Builder,
 	Carver,
 	CorridorManager,
@@ -17,11 +17,11 @@ export class Dungeon extends Mixin(
 	Walker
 ) {}
 
-export function dungeon(options?: DungeonOptions): Dungeon {
-	return new Dungeon(options)
+export function createBuilder(options?: DungeonOptions): DungeonBuilder {
+	return new DungeonBuilder(options)
 }
 
 if (isBrowser) {
-	window.dungeon = dungeon
+	window.createBuilder = createBuilder
 }
 

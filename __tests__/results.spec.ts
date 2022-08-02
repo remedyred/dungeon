@@ -1,36 +1,38 @@
-import {dungeon} from '../src'
+import {createBuilder} from '../src'
+
+const $builder = createBuilder()
 
 describe('Results', () => {
-	it('Dungeon.build() should return an object containing the key "tiles"', async () => {
-		const $dungeon = await dungeon().build({
+	it('DungeonBuilder.build() should return an object containing the key "tiles"', async () => {
+		await $builder.build({
 			width: 21,
 			height: 21
 		})
 
-		expect($dungeon.tiles).toBeTruthy()
+		expect($builder.tiles).toBeTruthy()
 	})
 
-	it('Dungeon.build() should return an object containing the key "rooms"', async () => {
-		const $dungeon = await dungeon().build({
+	it('DungeonBuilder.build() should return an object containing the key "rooms"', async () => {
+		await $builder.build({
 			width: 21,
 			height: 21
 		})
 
-		expect($dungeon.rooms).toBeTruthy()
+		expect($builder.rooms).toBeTruthy()
 	})
 
-	it('Dungeon.build() should return a 2d array of tiles proportional to the width and height options', async () => {
+	it('DungeonBuilder.build() should return a 2d array of tiles proportional to the width and height options', async () => {
 		const width = 21
 		const height = 31
 
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
-		expect($dungeon.tiles.length).toBe(width)
+		expect($builder.tiles.length).toBe(width)
 
-		for (const column of $dungeon.tiles) {
+		for (const column of $builder.tiles) {
 			expect(column.length).toBe(height)
 		}
 	})

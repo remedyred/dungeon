@@ -1,10 +1,12 @@
-import {dungeon} from '../../../src'
+import {createBuilder} from '../../../src'
+
+const $builder = createBuilder()
 
 describe('neighbors', () => {
 	it('every tile should correctly reference its neighbors', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
@@ -12,38 +14,38 @@ describe('neighbors', () => {
 		expect(() => {
 			for (let x = 0; x < width; x++) {
 				for (let y = 0; y < height; y++) {
-					const neighbors = $dungeon.tiles[x][y].neighbors
+					const neighbors = $builder.tiles[x][y].neighbors
 
 					if (neighbors.n) {
-						expect(neighbors.n).toBe($dungeon.tiles[x][y - 1])
+						expect(neighbors.n).toBe($builder.tiles[x][y - 1])
 					}
 
 					if (neighbors.ne) {
-						expect(neighbors.ne).toBe($dungeon.tiles[x + 1][y - 1])
+						expect(neighbors.ne).toBe($builder.tiles[x + 1][y - 1])
 					}
 
 					if (neighbors.e) {
-						expect(neighbors.e).toBe($dungeon.tiles[x + 1][y])
+						expect(neighbors.e).toBe($builder.tiles[x + 1][y])
 					}
 
 					if (neighbors.se) {
-						expect(neighbors.se).toBe($dungeon.tiles[x + 1][y + 1])
+						expect(neighbors.se).toBe($builder.tiles[x + 1][y + 1])
 					}
 
 					if (neighbors.s) {
-						expect(neighbors.s).toBe($dungeon.tiles[x][y + 1])
+						expect(neighbors.s).toBe($builder.tiles[x][y + 1])
 					}
 
 					if (neighbors.sw) {
-						expect(neighbors.sw).toBe($dungeon.tiles[x - 1][y + 1])
+						expect(neighbors.sw).toBe($builder.tiles[x - 1][y + 1])
 					}
 
 					if (neighbors.w) {
-						expect(neighbors.w).toBe($dungeon.tiles[x - 1][y])
+						expect(neighbors.w).toBe($builder.tiles[x - 1][y])
 					}
 
 					if (neighbors.nw) {
-						expect(neighbors.nw).toBe($dungeon.tiles[x - 1][y - 1])
+						expect(neighbors.nw).toBe($builder.tiles[x - 1][y - 1])
 					}
 				}
 			}
@@ -53,13 +55,13 @@ describe('neighbors', () => {
 	it('tiles on the north edge should not list a northern neighbour', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
 		for (let x = 0; x < width; x++) {
-			const tile = $dungeon.tiles[x][0]
+			const tile = $builder.tiles[x][0]
 
 			expect(tile.neighbors.n).toBeFalsy()
 		}
@@ -68,13 +70,13 @@ describe('neighbors', () => {
 	it('tiles on the east edge should not list an eastern neighbour', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
 		for (let y = 0; y < height; y++) {
-			const tile = $dungeon.tiles[width - 1][y]
+			const tile = $builder.tiles[width - 1][y]
 
 			expect(tile.neighbors.e).toBeFalsy()
 		}
@@ -83,13 +85,13 @@ describe('neighbors', () => {
 	it('tiles on the south edge should not list a southern neighbour', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
 		for (let x = 0; x < width; x++) {
-			const tile = $dungeon.tiles[x][height - 1]
+			const tile = $builder.tiles[x][height - 1]
 
 			expect(tile.neighbors.s).toBeFalsy()
 		}
@@ -98,13 +100,13 @@ describe('neighbors', () => {
 	it('tiles on the west edge should not list a western neighbour', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
 		for (let y = 0; y < height; y++) {
-			const tile = $dungeon.tiles[0][y]
+			const tile = $builder.tiles[0][y]
 
 			expect(tile.neighbors.w).toBeFalsy()
 		}
@@ -113,12 +115,12 @@ describe('neighbors', () => {
 	it('the tile on north west corner should have only three neighbors', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
-		const tile = $dungeon.tiles[0][0]
+		const tile = $builder.tiles[0][0]
 
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['e', 'se', 's'])
 	})
@@ -126,12 +128,12 @@ describe('neighbors', () => {
 	it('the tile on north east corner should have only three neighbors', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
-		const tile = $dungeon.tiles[width - 1][0]
+		const tile = $builder.tiles[width - 1][0]
 
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['s', 'sw', 'w'])
 	})
@@ -139,12 +141,12 @@ describe('neighbors', () => {
 	it('the tile on south west corner should have only three neighbors', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
-		const tile = $dungeon.tiles[0][height - 1]
+		const tile = $builder.tiles[0][height - 1]
 
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['n', 'ne', 'e'])
 	})
@@ -152,12 +154,12 @@ describe('neighbors', () => {
 	it('the tile on south east corner should have only three neighbors', async () => {
 		const width = 21
 		const height = 21
-		const $dungeon = await dungeon().build({
+		await $builder.build({
 			width,
 			height
 		})
 
-		const tile = $dungeon.tiles[width - 1][height - 1]
+		const tile = $builder.tiles[width - 1][height - 1]
 
 		expect(Object.keys(tile.neighbors)).toStrictEqual(['n', 'w', 'nw'])
 	})
