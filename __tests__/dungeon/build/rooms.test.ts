@@ -1,9 +1,10 @@
 import {createBuilder} from '../../../src'
+import {$chance} from '../../../src/random/chance'
 
 const options = {
 	width: 21,
 	height: 21,
-	seed: 'able-clumsy-dawn' // $chance.generateSlug()
+	seed: $chance.generateSlug()
 }
 
 const $builder = createBuilder()
