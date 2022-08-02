@@ -58,7 +58,7 @@ describe('Tile', () => {
 	})
 
 	it('.getNeighbors() should return an array of tiles', () => {
-		expect(tile.getNeighbors()).toStrictEqual(neighbors)
+		expect(tile.getNeighbors().sort()).toStrictEqual(neighbors.sort())
 	})
 
 	it('should have a .getNeighbor() method', () => {
