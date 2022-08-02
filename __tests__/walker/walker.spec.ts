@@ -1,6 +1,6 @@
 import {Walker} from '../../src/mixins'
 import {setupQueryVars} from '../query/query.spec'
-import {cardinal} from '../../src/query/Query'
+import {cardinal, CardinalDirection} from '../../src/query/Query'
 import Tile from '../../src/structures/Tile'
 
 class TestWalker extends Walker {
@@ -16,8 +16,8 @@ class TestWalker extends Walker {
 		return super.walk(start)
 	}
 
-	guessCorridorDirection(start: Tile): string {
-		return super.guessCorridorDirection(start)
+	guessCorridorDirections(start: Tile): CardinalDirection[] {
+		return super.guessCorridorDirections(start)
 	}
 }
 
@@ -56,12 +56,24 @@ describe('Walker', () => {
 
 	it('should have a .guessCorridorDirection() method', () => {
 		const walker = new TestWalker()
-		expect(typeof walker.guessCorridorDirection).toBe('function')
+		expect(typeof walker.guessCorridorDirections).toBe('function')
 	})
 
 	it('.guessCorridorDirection() should return a cardinal direction', () => {
 		const walker = new TestWalker()
-		const results = walker.guessCorridorDirection(tile)
+		const results = walker.guessCorridorDirections(tile)
 		expect(cardinal).toContain(results)
+	})
+
+	it('.guessCorridorDirection() should correctly guess the corridor direction (n/s)', () => {
+		const walker = new TestWalker()
+		const results = walker.guessCorridorDirections(tiles[6][4])
+		expect(results).toStrictEqual(['n', 's'])
+	})
+
+	it('.guessCorridorDirection() should correctly guess the corridor direction (e/w)', () => {
+		const walker = new TestWalker()
+		const results = walker.guessCorridorDirections(tiles[3][10])
+		expect(results).toStrictEqual(['w'])
 	})
 })

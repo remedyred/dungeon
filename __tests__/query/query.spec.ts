@@ -1,4 +1,5 @@
-import {Tile, TileMatrix, TileState} from '../../src/structures/Tile'
+/* eslint-disable array-element-newline,array-bracket-newline */
+import {Neighbors, Tile, TileMatrix, TileState} from '../../src/structures/Tile'
 import {Query} from '../../src/query/Query'
 
 export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, start_type = 'floor') {
@@ -10,44 +11,77 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 		region: start_region
 	} as Pick<TileState, 'region' | 'type' | 'x' | 'y'>
 
+	const fillTiles = [
+		//          0     1     2     3     4     5     6     7     8     9    10    11    12
+		/* 0  */ ['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1'], // 0
+		/* 1  */ ['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1'], // 1
+		/* 2  */ ['-1', '-1', '00', '00', '00', '-1', '03', '-1', '-1', '-1', '-1', '-1', '-1'], // 2
+		/* 3  */ ['-1', '-1', '00', '00', '00', '-1', '03', '03', '03', '-1', '02', '02', '-1'], // 3
+		/* 4  */ ['-1', '-1', '00', '00', '00', '-1', '03', '-1', '-1', '-1', '-1', '-1', '-1'], // 4
+		/* 5  */ ['-1', '-1', '-1', '-1', '-1', '-1', '03', '-1', '-1', '-1', '-1', '-1', '-1'], // 5
+		/* 6  */ ['-1', '-1', '-1', '-1', '-1', '-1', '03', '-1', '-1', '-1', '-1', '-1', '-1'], // 6
+		/* 7  */ ['-1', '-1', '-1', '-1', '03', '03', '03', '-1', '01', '01', '-1', '-1', '-1'], // 7
+		/* 8  */ ['-1', '-1', '-1', '-1', '-1', '-1', '03', '-1', '01', '01', '-1', '-1', '-1'], // 8
+		/* 9  */ ['-1', '-1', '-1', '-1', '-1', '-1', '03', '-1', '01', '01', '-1', '-1', '-1'], // 9
+		/* 10 */ ['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1'], // 10
+		/* 11 */ ['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1'], // 11
+		/* 12 */ ['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1'] //  12
+	]//             0     1     2     3     4     5     6     7     8     9    10    11    12
+
 	for (let x = 0; x < 13; x++) {
 		tiles.push([])
 		for (let y = 0; y < 13; y++) {
+			const region = parseInt(fillTiles[y][x])
 			const fillTile = new Tile('wall', x, y, $tile.region)
+
 			if (x === $tile.x && y === $tile.y) {
 				fillTile.type = $tile.type
 				fillTile.region = $tile.region
-			} else if (x > 2 && x < 5 && y > 2 && y < 5) {
+			} else if (region !== -1) {
 				fillTile.type = 'floor'
-				fillTile.regionType = 'room'
-				fillTile.region = 0
-			} else if (x > 7 && x < 10 && y > 7 && y < 10) {
-				fillTile.type = 'floor'
-				fillTile.regionType = 'room'
-				fillTile.region = 1
-			} else if (x === 6 && y > 0 && y < 10) {
-				fillTile.type = 'floor'
-				fillTile.regionType = 'corridor'
-				fillTile.region = 2
-			} else if (x === 5 && y === 4 || x === 5 && y === 7) {
-				fillTile.type = 'door'
+				fillTile.region = region
+				fillTile.regionType = region > 2 ? 'room' : 'corridor'
 			}
-
 			tiles[x].push(fillTile)
+		}
+	}
+
+	for (let x = 0; x < fillTiles.length - 1; x++) {
+		const fillRow = fillTiles[x]
+		for (let y = 0; y < fillRow.length - 1; y++) {
+			const neighbors = {} as Neighbors
+			if (tiles[x][y - 1]) {
+				neighbors.n = tiles[x][y - 1]
+			}
+			if (tiles[x + 1] && tiles[x + 1][y - 1]) {
+				neighbors.ne = tiles[x + 1][y - 1]
+			}
+			if (tiles[x + 1] && tiles[x + 1][y]) {
+				neighbors.e = tiles[x + 1][y]
+			}
+			if (tiles[x + 1] && tiles[x + 1][y + 1]) {
+				neighbors.se = tiles[x + 1][y + 1]
+			}
+			if (tiles[x] && tiles[x][y + 1]) {
+				neighbors.s = tiles[x][y + 1]
+			}
+			if (tiles[x - 1] && tiles[x - 1][y + 1]) {
+				neighbors.sw = tiles[x - 1][y + 1]
+			}
+			if (tiles[x - 1] && tiles[x - 1][y]) {
+				neighbors.w = tiles[x - 1][y]
+			}
+			if (tiles[x - 1] && tiles[x - 1][y - 1]) {
+				neighbors.nw = tiles[x - 1][y - 1]
+			}
+			tiles[x][y].setNeighbors(neighbors)
 		}
 	}
 
 	const tile = tiles[$tile.x][$tile.y]
 
-	let n = tiles[$tile.x][$tile.y + 1]
-	let e = tiles[$tile.x + 1][$tile.y]
-	let s = tiles[$tile.x][$tile.y - 1]
-	let w = tiles[$tile.x - 1][$tile.y]
-	let ne = tiles[$tile.x + 1][$tile.y + 1]
-	let se = tiles[$tile.x + 1][$tile.y - 1]
-	let sw = tiles[$tile.x - 1][$tile.y - 1]
-	let nw = tiles[$tile.x - 1][$tile.y + 1]
-
+	const {n, e, s, w, ne, se, sw, nw} = tile.neighbors
+	const $neighbors = {n, e, s, w, ne, se, sw, nw}
 	const neighbors = [
 		n,
 		e,
@@ -58,8 +92,6 @@ export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, sta
 		sw,
 		nw
 	]
-	const $neighbors = {n, e, s, w, ne, se, sw, nw}
-	tile.setNeighbors($neighbors)
 
 	return {
 		tiles,
@@ -204,11 +236,11 @@ describe('Query', () => {
 
 	it('.get() should return an array of tiles', () => {
 		const query = new Query(tiles)
-		expect(query.get()).toEqual(expect.arrayContaining(tiles))
+		expect(query.get()).toStrictEqual(tiles.flat().sort())
 	})
 
 	it('.count() should return a number the length of the results', () => {
 		const query = new Query(tiles)
-		expect(query.count()).toBe(tiles.length)
+		expect(query.count()).toBe(tiles.flat().length)
 	})
 })
