@@ -1,5 +1,5 @@
 import {DungeonState, safeMerge, State} from './State'
-import {$out} from '../common'
+import {$out, DungeonOptions} from '../common'
 import {cardinalDirections, Coordinates, parsePoint, Point, PointArray} from '../coordinates/Coordinates'
 import {Region} from '../structures/Region'
 import {Results} from '../Results'
@@ -14,11 +14,7 @@ import Tile, {Neighbors, TileMatrix, TileType} from '../structures/Tile'
 import Room from '../structures/Room'
 import Chance from 'chance'
 
-export interface StageOptions {
-	width: number
-	height: number
-	seed?: string
-}
+export type StageOptions = Pick<DungeonOptions, 'height' | 'seed' | 'width'>
 
 export interface BuilderState {
 	stage: StageOptions
@@ -30,8 +26,8 @@ export interface Builder extends State, Random, RegionManager, RoomManager, Corr
 }
 
 const default_stage: StageOptions = {
-	width: 5,
-	height: 5
+	width: 10,
+	height: 10
 }
 
 const default_state: BuilderState = {stage: {...default_stage}}
