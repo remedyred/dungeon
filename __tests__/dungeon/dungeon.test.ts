@@ -2,27 +2,27 @@ import {createBuilder} from '../../src'
 import {$chance} from '../../src/random/chance'
 import Tile from '../../src/structures/Tile'
 
-const $builder = createBuilder()
+export const $builder = createBuilder()
 
-const RELIABILITY_COUNT = 10
+export const DEFAULT_TEST_OPTIONS = {
+	width: 21,
+	height: 21,
+	seed: $chance.generateSlug()
+}
 
-const counter = Array.from(Array(RELIABILITY_COUNT).keys())
+const RELIABILITY_MULTIPLIER = 10
+
+export const RELIABILITY_COUNTER = Array.from(Array(RELIABILITY_MULTIPLIER).keys())
 
 describe('dungeon.build()', () => {
 	it('should return an object containing the key "tiles"', async () => {
-		await $builder.build({
-			width: 21,
-			height: 21
-		})
+		await $builder.build(DEFAULT_TEST_OPTIONS)
 
 		expect($builder.tiles).toBeTruthy()
 	})
 
 	it('should return an object containing the key "rooms"', async () => {
-		await $builder.build({
-			width: 21,
-			height: 21
-		})
+		await $builder.build(DEFAULT_TEST_OPTIONS)
 
 		expect($builder.rooms).toBeTruthy()
 	})
@@ -32,6 +32,7 @@ describe('dungeon.build()', () => {
 		const height = 31
 
 		await $builder.build({
+			...DEFAULT_TEST_OPTIONS,
 			width,
 			height
 		})
@@ -86,7 +87,7 @@ describe('dungeon.build()', () => {
 
 		let seed = $chance.generateSlug()
 
-		describe.each(counter)(`Should reliably generate random dungeons (seed: ${seed}-%i)`, (i: number) => {
+		describe.each(RELIABILITY_COUNTER)(`Should reliably generate random dungeons (seed: ${seed}-%i)`, (i: number) => {
 			describe.each(sizes)('Should reliably create %i x %i dungeons', (width: number, height: number) => {
 				const options = {
 					width,

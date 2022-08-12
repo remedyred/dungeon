@@ -1,7 +1,5 @@
 import {createBuilder, DungeonBuilder, Results} from '../../src'
 
-const $builder = createBuilder()
-
 describe('DungeonBuilder', () => {
 	it('createBuilder should be a function', () => {
 		expect(typeof createBuilder).toBe('function')
@@ -16,18 +14,18 @@ describe('DungeonBuilder', () => {
 	})
 
 	it('DungeonBuilder should have a .build() method', () => {
-		expect(typeof $builder.build).toBe('function')
+		expect(typeof createBuilder().build).toBe('function')
 	})
 
 	it('DungeonBuilder.build() should return an object', () => {
-		expect(typeof $builder.build()).toBe('object')
+		expect(typeof createBuilder().build()).toBe('object')
 	})
 
 	it('DungeonBuilder.build() should return a DungeonBuilder instance', () => {
-		expect($builder.build()).resolves.toBeInstanceOf(DungeonBuilder)
+		expect(createBuilder().build()).resolves.toBeInstanceOf(DungeonBuilder)
 	})
 
 	it('DungeonBuilder.build().toJSON() should return a Results instance', async () => {
-		expect((await $builder.build()).toJSON()).toBeInstanceOf(Results)
+		expect((await createBuilder().build()).toJSON()).toBeInstanceOf(Results)
 	})
 })
