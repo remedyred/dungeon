@@ -6,19 +6,23 @@ import Tile from '../structures/Tile'
 export interface RegionManagerState {
 	regions: Record<number, Region>
 	region?: Region
+	regionId: number
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RegionManager extends State, TileManager {}
 
-const default_state: RegionManagerState = {regions: {}}
+const default_state: RegionManagerState = {
+	regions: {},
+	regionId: 0
+}
 
 export class RegionManager {
 	init() {
 		this.state = safeMerge<DungeonState>(this.state, default_state)
 	}
 
-	protected startRegion(type?: RegionType, id?: number): Region {
+	protected startRegion(type?: RegionType, id: number = this.state.regionId++): Region {
 		const region = new Region(type, id)
 		this.regions[region.id] = region
 		this.state.region = region

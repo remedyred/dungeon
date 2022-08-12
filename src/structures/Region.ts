@@ -10,9 +10,7 @@ export interface RegionState {
 export class Region {
 	private readonly state: RegionState
 
-	static _id = 0
-
-	constructor(type?: RegionType, id: number = Region._id++) {
+	constructor(type?: RegionType, id = -1) {
 		this.state = {
 			type,
 			id

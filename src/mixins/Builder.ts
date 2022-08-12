@@ -340,7 +340,7 @@ export class Builder {
 		let x
 		let y
 
-		const region = new Region(null, -1)
+		const region = new Region()
 		this.regions[region.id] = region
 
 		for (x = 0; x < this.stage.width; x++) {
