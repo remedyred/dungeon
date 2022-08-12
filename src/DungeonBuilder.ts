@@ -5,6 +5,9 @@ import {Mixin, settings} from 'ts-mixer'
 
 settings.initFunction = 'init'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DungeonBuilder extends State {}
+
 export class DungeonBuilder extends Mixin(
 	Builder,
 	Carver,
@@ -15,7 +18,12 @@ export class DungeonBuilder extends Mixin(
 	State,
 	TileManager,
 	Walker
-) {}
+) {
+	constructor(options?: DungeonOptions) {
+		super(options)
+		this.initialized()
+	}
+}
 
 export function createBuilder(options?: DungeonOptions): DungeonBuilder {
 	return new DungeonBuilder(options)

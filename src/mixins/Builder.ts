@@ -13,6 +13,7 @@ import {Carver} from './Carver'
 import Tile, {Neighbors, TileMatrix, TileType} from '../structures/Tile'
 import Room from '../structures/Room'
 import Chance from 'chance'
+import {objectCopy} from '@snickbit/utilities'
 
 export type StageOptions = Pick<DungeonOptions, 'height' | 'seed' | 'width'>
 
@@ -331,20 +332,7 @@ export class Builder {
 	}
 
 	protected reset(): void {
-		// reset the region
-		Region._id = 0
-
-		// reset the regions
-		this.state.regions = {}
-
-		// reset the tiles
-		this.state.tiles = []
-
-		// reset the regions
-		this.state.regions = []
-
-		// reset the rooms
-		this.state.rooms = []
+		this.state = objectCopy(this.initialState)
 	}
 
 	protected async fill(type: TileType): Promise<TileMatrix> {
