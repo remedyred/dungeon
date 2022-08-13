@@ -1,0 +1,10 @@
+{
+	"specials": [
+		"bin"
+	],
+	"ignores": [
+		"@types/jest"
+	],
+	"oneline": true,
+	"ignore-bin-package": true
+}
