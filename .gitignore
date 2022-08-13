@@ -14,5 +14,10 @@ node_modules/
 dist/
 
 # keep
+!.git*
 !.*ignore
-!.*rc.json
+!.*rc*
+!.husky/
+
+# Force
+.npmrc
