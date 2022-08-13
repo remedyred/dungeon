@@ -10,10 +10,10 @@ import {CorridorManager} from './CorridorManager'
 import {Walker} from './Walker'
 import {Corridor} from '../structures/Corridor'
 import {Carver} from './Carver'
+import {objectCopy} from '@snickbit/utilities'
 import Tile, {Neighbors, TileMatrix, TileType} from '../structures/Tile'
 import Room from '../structures/Room'
 import Chance from 'chance'
-import {objectCopy} from '@snickbit/utilities'
 
 export type StageOptions = Pick<DungeonOptions, 'height' | 'seed' | 'width'>
 
@@ -40,36 +40,6 @@ export class Builder {
 
 	toJSON(): Results {
 		return new Results(this.rooms, this.tiles, this.seed)
-	}
-
-	async build(stage?: StageOptions): Promise<this> {
-		// validate the state options
-		this.validate(stage)
-
-		// reset the state
-		this.reset()
-
-		// fill the entire area with solid 'wall' tiles
-		await this.fill('wall')
-
-		// Generate the maze
-		await this.generateMaze(stage)
-
-		// create the rooms
-		await this.addRooms()
-
-		// Normalize region numbers
-		await this.normalizeRegions()
-
-		// create doors between rooms and corridors
-		await this.connectRegions()
-
-		if (this.options.removeDeadEnds) {
-			// remove dead ends
-			await this.removeDeadEnds()
-		}
-
-		return this
 	}
 
 	protected validate(stage: StageOptions): void {
@@ -109,85 +79,6 @@ export class Builder {
 			tile.name = String(options.name)
 		}
 		tile.type = 'door'
-	}
-
-	protected async addRooms(): Promise<void> {
-		const roomRestrictionModifier = 4 * this.options.multiplier
-		let outer_width_limit = this.stage.width - roomRestrictionModifier
-		let outer_height_limit = this.stage.height - roomRestrictionModifier
-
-		if (this.stage.width > 10 && outer_width_limit > this.stage.width * 0.5) {
-			// if the width is greater than 10, it should not be greater than 40% of the stage width
-			outer_width_limit = Math.ceil(this.stage.width * 0.4)
-		}
-
-		if (this.stage.height > 10 && outer_height_limit > this.stage.height * 0.5) {
-			// if the height is greater than 10, it should not be greater than 40% of the stage height
-			outer_height_limit = Math.ceil(this.stage.height * 0.4)
-		}
-
-		const carvePromises: Promise<any>[] = []
-
-		for (let i = 0; i < this.options.roomTries; i++) {
-			// Pick a random room size. The funny math here does two things:
-			// - It makes sure rooms are odd-sized to line up with maze.
-			// - It avoids creating rooms that are too rectangular: too tall and
-			//   narrow or too wide and flat.
-			const size = this.randBetween(1, 3 + this.options.roomExtraSize) * 2 + 1
-			const rectangularity = this.randBetween(0, 1 + Math.floor(size / 2)) * 2
-			let width = size
-			let height = size
-			if (this.oneIn(2)) {
-				width += rectangularity
-			} else {
-				height += rectangularity
-			}
-
-			// Restrict the size of rooms relative to the stage size, but at least 3x3
-			width = Math.max(3, Math.min(width, outer_width_limit) - 1)
-			height = Math.max(3, Math.min(height, outer_height_limit) - 1)
-
-			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
-			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
-
-			// Make sure X dimension doesn't reach the edge of the stage
-			if (x + width >= this.stage.width) {
-				x = Math.max(1, this.stage.width - width - 1)
-			}
-
-			// Make sure Y dimension doesn't reach the edge of the stage
-			if (y + height >= this.stage.height) {
-				y = Math.max(1, this.stage.height - height - 1)
-			}
-
-			const room = new Room(x, y, width, height)
-
-			let overlaps = false
-			for (const other of this.rooms) {
-				// Check to make sure the room is either exactly 1 tile from another room (wall hugging)
-				// or at least 3 tiles from another room (wall, corridor, wall)
-				if (room.touches(other)) {
-					overlaps = true
-					break
-				}
-			}
-
-			if (overlaps) {
-				continue
-			}
-
-			this.rooms.push(room)
-
-			// Create a new region for the room
-			const region = this.startRegion('room')
-
-			// Convert room tiles to floor, but don't wait for the promise to resolve
-			carvePromises.push(this.carveArea({x, y}, width, height, {region: region.id}))
-			carvePromises.push(this.carveHollow({x, y}, width, height, {region: -1, type: 'wall'}))
-		}
-
-		// Wait for all the room carving to finish
-		await Promise.all(carvePromises)
 	}
 
 	protected connectCorridors(a: number | string, b: number | string, connection: Tile): void {
@@ -333,137 +224,6 @@ export class Builder {
 
 	protected reset(): void {
 		this.state = objectCopy(this.initialState)
-	}
-
-	protected async fill(type: TileType): Promise<TileMatrix> {
-		let neighbors: Neighbors = {}
-		let x
-		let y
-
-		const region = new Region()
-		this.regions[region.id] = region
-
-		for (x = 0; x < this.stage.width; x++) {
-			this.tiles.push([])
-			for (y = 0; y < this.stage.height; y++) {
-				this.tiles[x].push(new Tile(type, x, y))
-			}
-		}
-
-		for (x = 0; x < this.stage.width; x++) {
-			for (y = 0; y < this.stage.height; y++) {
-				neighbors = {}
-				if (this.tiles[x][y - 1]) {
-					neighbors.n = this.tiles[x][y - 1]
-				}
-				if (this.tiles[x + 1] && this.tiles[x + 1][y - 1]) {
-					neighbors.ne = this.tiles[x + 1][y - 1]
-				}
-				if (this.tiles[x + 1] && this.tiles[x + 1][y]) {
-					neighbors.e = this.tiles[x + 1][y]
-				}
-				if (this.tiles[x + 1] && this.tiles[x + 1][y + 1]) {
-					neighbors.se = this.tiles[x + 1][y + 1]
-				}
-				if (this.tiles[x] && this.tiles[x][y + 1]) {
-					neighbors.s = this.tiles[x][y + 1]
-				}
-				if (this.tiles[x - 1] && this.tiles[x - 1][y + 1]) {
-					neighbors.sw = this.tiles[x - 1][y + 1]
-				}
-				if (this.tiles[x - 1] && this.tiles[x - 1][y]) {
-					neighbors.w = this.tiles[x - 1][y]
-				}
-				if (this.tiles[x - 1] && this.tiles[x - 1][y - 1]) {
-					neighbors.nw = this.tiles[x - 1][y - 1]
-				}
-				this.tiles[x][y].setNeighbors(neighbors)
-			}
-		}
-
-		return this.tiles
-	}
-
-	protected async generateMaze(stage: StageOptions): Promise<void> {
-		const availableStartPoints: Point[] = []
-
-		if (this.options.corridorStrategy.includes('prim')) {
-			const maze: Point[] = this.generateMazePrim()
-			const tiles: Point[] = []
-
-			// remove the tiles that are already rooms, or around the edge, etc.
-			for (const point of maze) {
-				if (this.canCarve(point)) {
-					tiles.push(point)
-				}
-			}
-
-			// carve the maze
-			if (tiles.length) {
-				await this.carve(tiles, 'corridor')
-			}
-		} else if (this.options.corridorStrategy.includes('room')) {
-		// Get all the tiles bordering rooms, and prioritize them as maze starting points
-			for (const room of this.rooms) {
-				const roomAvailableStartPoints: Point[] = []
-				// get all available tiles bordering the room
-				const points = room.getBorderPoints(1)
-				for (const point of points) {
-					if (
-						this.canCarve(point) &&
-					!availableStartPoints.includes(point)
-					) {
-						roomAvailableStartPoints.push(point)
-					}
-				}
-
-				// Randomly select some tiles to be the maze starting points
-				const roomStartPoints: Point[] = []
-				if (roomAvailableStartPoints.length > 1) {
-					let startPointCount: number = this.randBetween(1, roomAvailableStartPoints.length)
-					while (startPointCount > 0) {
-						for (let i = 0; i < roomAvailableStartPoints.length; i++) {
-							if (this.oneIn(i + 1)) {
-								availableStartPoints.push(roomAvailableStartPoints.splice(i, 1)[0])
-								startPointCount--
-							}
-						}
-					}
-					availableStartPoints.push(...roomStartPoints)
-				}
-			}
-
-			// If generating maze corridors, add every other empty tile to the available start points
-			if (this.options.corridorStrategy.find(s => s === 'maze' || s === 'prim')) {
-				// Grab the remaining maze generation points to fill in the rest of the map
-				for (let y = 1; y < stage.height; y += 2) {
-					for (let x = 1; x < stage.width; x += 2) {
-						const point = {x, y}
-						if (
-							this.canCarve(point) &&
-							!availableStartPoints.includes(point)
-						) {
-							availableStartPoints.push(point)
-						}
-					}
-				}
-
-				let maze: Point[] = []
-
-				// Now generate the maze corridors
-				for (const point of availableStartPoints) {
-					maze = this.growMaze(point, maze)
-				}
-
-				// carve the maze
-				if (maze.length) {
-					await this.carve(maze, 'corridor')
-				}
-			} else {
-				// If not generating maze corridors, just fill in the points around the rooms
-				await this.carve(availableStartPoints, 'corridor')
-			}
-		}
 	}
 
 	protected growMaze(coordinates: Coordinates, maze: Point[]): Point[] {
@@ -640,6 +400,276 @@ export class Builder {
 		return points
 	}
 
+	protected removeDeadEnds(): void {
+		let done = false
+
+		const cycle = () => {
+			let done = true
+			for (const row of this.tiles) {
+				for (const tile of row) {
+					// If it only has one exit, it's a dead end --> fill it in!
+					if (tile.type === 'wall') {
+						continue
+					}
+					if (
+						tile.find().cardinal().notType('wall').count() <= 1 &&
+						!this.rooms.find(room => room.containsTile(tile.x, tile.y))
+					) {
+						this.resetTile(tile)
+						done = false
+					}
+				}
+			}
+
+			return done
+		}
+
+		while (!done) {
+			done = true
+			done = cycle()
+		}
+	}
+
+	async build(stage?: StageOptions): Promise<this> {
+		// validate the state options
+		this.validate(stage)
+
+		// reset the state
+		this.reset()
+
+		// fill the entire area with solid 'wall' tiles
+		await this.fill('wall')
+
+		// Generate the maze
+		await this.generateMaze(stage)
+
+		// create the rooms
+		await this.addRooms()
+
+		// Normalize region numbers
+		await this.normalizeRegions()
+
+		// create doors between rooms and corridors
+		await this.connectRegions()
+
+		if (this.options.removeDeadEnds) {
+			// remove dead ends
+			await this.removeDeadEnds()
+		}
+
+		return this
+	}
+
+	protected async addRooms(): Promise<void> {
+		const roomRestrictionModifier = 4 * this.options.multiplier
+		let outer_width_limit = this.stage.width - roomRestrictionModifier
+		let outer_height_limit = this.stage.height - roomRestrictionModifier
+
+		if (this.stage.width > 10 && outer_width_limit > this.stage.width * 0.5) {
+			// if the width is greater than 10, it should not be greater than 40% of the stage width
+			outer_width_limit = Math.ceil(this.stage.width * 0.4)
+		}
+
+		if (this.stage.height > 10 && outer_height_limit > this.stage.height * 0.5) {
+			// if the height is greater than 10, it should not be greater than 40% of the stage height
+			outer_height_limit = Math.ceil(this.stage.height * 0.4)
+		}
+
+		const carvePromises: Promise<any>[] = []
+
+		for (let i = 0; i < this.options.roomTries; i++) {
+			// Pick a random room size. The funny math here does two things:
+			// - It makes sure rooms are odd-sized to line up with maze.
+			// - It avoids creating rooms that are too rectangular: too tall and
+			//   narrow or too wide and flat.
+			const size = this.randBetween(1, 3 + this.options.roomExtraSize) * 2 + 1
+			const rectangularity = this.randBetween(0, 1 + Math.floor(size / 2)) * 2
+			let width = size
+			let height = size
+			if (this.oneIn(2)) {
+				width += rectangularity
+			} else {
+				height += rectangularity
+			}
+
+			// Restrict the size of rooms relative to the stage size, but at least 3x3
+			width = Math.max(3, Math.min(width, outer_width_limit) - 1)
+			height = Math.max(3, Math.min(height, outer_height_limit) - 1)
+
+			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
+			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
+
+			// Make sure X dimension doesn't reach the edge of the stage
+			if (x + width >= this.stage.width) {
+				x = Math.max(1, this.stage.width - width - 1)
+			}
+
+			// Make sure Y dimension doesn't reach the edge of the stage
+			if (y + height >= this.stage.height) {
+				y = Math.max(1, this.stage.height - height - 1)
+			}
+
+			const room = new Room(x, y, width, height)
+
+			let overlaps = false
+			for (const other of this.rooms) {
+				// Check to make sure the room is either exactly 1 tile from another room (wall hugging)
+				// or at least 3 tiles from another room (wall, corridor, wall)
+				if (room.touches(other)) {
+					overlaps = true
+					break
+				}
+			}
+
+			if (overlaps) {
+				continue
+			}
+
+			this.rooms.push(room)
+
+			// Create a new region for the room
+			const region = this.startRegion('room')
+
+			// Convert room tiles to floor, but don't wait for the promise to resolve
+			carvePromises.push(this.carveArea({x, y}, width, height, {region: region.id}))
+			carvePromises.push(this.carveHollow({x, y}, width, height, {region: -1, type: 'wall'}))
+		}
+
+		// Wait for all the room carving to finish
+		await Promise.all(carvePromises)
+	}
+
+	protected async fill(type: TileType): Promise<TileMatrix> {
+		let neighbors: Neighbors = {}
+		let x
+		let y
+
+		const region = new Region()
+		this.regions[region.id] = region
+
+		for (x = 0; x < this.stage.width; x++) {
+			this.tiles.push([])
+			for (y = 0; y < this.stage.height; y++) {
+				this.tiles[x].push(new Tile(type, x, y))
+			}
+		}
+
+		for (x = 0; x < this.stage.width; x++) {
+			for (y = 0; y < this.stage.height; y++) {
+				neighbors = {}
+				if (this.tiles[x][y - 1]) {
+					neighbors.n = this.tiles[x][y - 1]
+				}
+				if (this.tiles[x + 1] && this.tiles[x + 1][y - 1]) {
+					neighbors.ne = this.tiles[x + 1][y - 1]
+				}
+				if (this.tiles[x + 1] && this.tiles[x + 1][y]) {
+					neighbors.e = this.tiles[x + 1][y]
+				}
+				if (this.tiles[x + 1] && this.tiles[x + 1][y + 1]) {
+					neighbors.se = this.tiles[x + 1][y + 1]
+				}
+				if (this.tiles[x] && this.tiles[x][y + 1]) {
+					neighbors.s = this.tiles[x][y + 1]
+				}
+				if (this.tiles[x - 1] && this.tiles[x - 1][y + 1]) {
+					neighbors.sw = this.tiles[x - 1][y + 1]
+				}
+				if (this.tiles[x - 1] && this.tiles[x - 1][y]) {
+					neighbors.w = this.tiles[x - 1][y]
+				}
+				if (this.tiles[x - 1] && this.tiles[x - 1][y - 1]) {
+					neighbors.nw = this.tiles[x - 1][y - 1]
+				}
+				this.tiles[x][y].setNeighbors(neighbors)
+			}
+		}
+
+		return this.tiles
+	}
+
+	protected async generateMaze(stage: StageOptions): Promise<void> {
+		const availableStartPoints: Point[] = []
+
+		if (this.options.corridorStrategy.includes('prim')) {
+			const maze: Point[] = this.generateMazePrim()
+			const tiles: Point[] = []
+
+			// remove the tiles that are already rooms, or around the edge, etc.
+			for (const point of maze) {
+				if (this.canCarve(point)) {
+					tiles.push(point)
+				}
+			}
+
+			// carve the maze
+			if (tiles.length) {
+				await this.carve(tiles, 'corridor')
+			}
+		} else if (this.options.corridorStrategy.includes('room')) {
+		// Get all the tiles bordering rooms, and prioritize them as maze starting points
+			for (const room of this.rooms) {
+				const roomAvailableStartPoints: Point[] = []
+				// get all available tiles bordering the room
+				const points = room.getBorderPoints(1)
+				for (const point of points) {
+					if (
+						this.canCarve(point) &&
+					!availableStartPoints.includes(point)
+					) {
+						roomAvailableStartPoints.push(point)
+					}
+				}
+
+				// Randomly select some tiles to be the maze starting points
+				const roomStartPoints: Point[] = []
+				if (roomAvailableStartPoints.length > 1) {
+					let startPointCount: number = this.randBetween(1, roomAvailableStartPoints.length)
+					while (startPointCount > 0) {
+						for (let i = 0; i < roomAvailableStartPoints.length; i++) {
+							if (this.oneIn(i + 1)) {
+								availableStartPoints.push(roomAvailableStartPoints.splice(i, 1)[0])
+								startPointCount--
+							}
+						}
+					}
+					availableStartPoints.push(...roomStartPoints)
+				}
+			}
+
+			// If generating maze corridors, add every other empty tile to the available start points
+			if (this.options.corridorStrategy.find(s => s === 'maze' || s === 'prim')) {
+				// Grab the remaining maze generation points to fill in the rest of the map
+				for (let y = 1; y < stage.height; y += 2) {
+					for (let x = 1; x < stage.width; x += 2) {
+						const point = {x, y}
+						if (
+							this.canCarve(point) &&
+							!availableStartPoints.includes(point)
+						) {
+							availableStartPoints.push(point)
+						}
+					}
+				}
+
+				let maze: Point[] = []
+
+				// Now generate the maze corridors
+				for (const point of availableStartPoints) {
+					maze = this.growMaze(point, maze)
+				}
+
+				// carve the maze
+				if (maze.length) {
+					await this.carve(maze, 'corridor')
+				}
+			} else {
+				// If not generating maze corridors, just fill in the points around the rooms
+				await this.carve(availableStartPoints, 'corridor')
+			}
+		}
+	}
+
 	protected async normalizeRegions(): Promise<void> {
 		// Get all floor tiles
 		const floorTiles = this.find().type('floor').get()
@@ -681,7 +711,7 @@ export class Builder {
 								const direction = this.longestCorridorDirection(tile)
 
 								// if it has any cardinal corridor neighbors in the same region, they should also be cleaned
-								for (let neighbor of this.walkToEdge(tile, direction)) {
+								for (const neighbor of this.walkToEdge(tile, direction)) {
 									if (neighbor.cardinal().find(t => t.isRoom())) {
 										this.walkStraight(neighbor, false).map(cleanTile)
 									}
@@ -696,36 +726,6 @@ export class Builder {
 
 				region_id++
 			}
-		}
-	}
-
-	protected removeDeadEnds(): void {
-		let done = false
-
-		const cycle = () => {
-			let done = true
-			for (const row of this.tiles) {
-				for (const tile of row) {
-					// If it only has one exit, it's a dead end --> fill it in!
-					if (tile.type === 'wall') {
-						continue
-					}
-					if (
-						tile.find().cardinal().notType('wall').count() <= 1 &&
-						!this.rooms.find(room => room.containsTile(tile.x, tile.y))
-					) {
-						this.resetTile(tile)
-						done = false
-					}
-				}
-			}
-
-			return done
-		}
-
-		while (!done) {
-			done = true
-			done = cycle()
 		}
 	}
 }

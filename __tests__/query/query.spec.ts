@@ -3,7 +3,7 @@ import {Neighbors, Tile, TileMatrix, TileState} from '../../src/structures/Tile'
 import {Query} from '../../src/query/Query'
 
 export function setupQueryVars(start_x = 2, start_y = 10, start_region = -1, start_type = 'floor') {
-	let tiles: TileMatrix = []
+	const tiles: TileMatrix = []
 	const $tile = {
 		x: start_x,
 		y: start_y,

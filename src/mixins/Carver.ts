@@ -25,6 +25,51 @@ export class Carver {
 		return {x, y, region, type}
 	}
 
+	protected canCarve(cell: Point, offset?: Coordinates): boolean {
+		const checks: Record<string, Point> = {start: cell}
+
+		if (offset) {
+			const parsed = parsePoint(offset)
+			checks.next = {x: cell.x + parsed.x, y: cell.y + parsed.y}
+			checks.dest = {x: cell.x + parsed.x * 2, y: cell.y + parsed.y * 2}
+			checks.after = {x: cell.x + parsed.x * 3, y: cell.y + parsed.y * 3}
+		}
+
+		for (const [check, def] of Object.entries(checks)) {
+			if (!this.isCarvable(def, check)) {
+				return false
+			}
+		}
+		return true
+	}
+
+	protected isCarvable(cell: Point, check: string): boolean {
+		if (!this.hasTile(cell)) {
+			return false
+		}
+
+		const tile: Tile = this.getTile(cell)
+
+		if (!tile.isWall()) {
+			return false
+		}
+
+		if (check !== 'after' && tile.nearRoom()) {
+			return false
+		}
+
+		if (tile.floors().length > 2) {
+			return false
+		}
+
+		// noinspection RedundantIfStatementJS
+		if (check !== 'after' && this.nearEdge(tile)) {
+			return false
+		}
+
+		return true
+	}
+
 	async carve(points: Coordinates | Coordinates[], optionalTypeOrRegion?: RegionType | TileType, optionalRegion?: RegionType | number): Promise<Tile[]> {
 		const carvePromises = []
 		const tiles: Tile[] = []
@@ -93,50 +138,5 @@ export class Carver {
 	async carveTile(location: Coordinates, type?: TileType, region?: number): Promise<Tile>
 	async carveTile(optionalX: any, optionalY?: any, optionalType?: any, optionalRegion?: number): Promise<Tile> {
 		return this.setTile(optionalX, optionalY, optionalType, optionalRegion)
-	}
-
-	protected canCarve(cell: Point, offset?: Coordinates): boolean {
-		const checks: Record<string, Point> = {start: cell}
-
-		if (offset) {
-			const parsed = parsePoint(offset)
-			checks.next = {x: cell.x + parsed.x, y: cell.y + parsed.y}
-			checks.dest = {x: cell.x + parsed.x * 2, y: cell.y + parsed.y * 2}
-			checks.after = {x: cell.x + parsed.x * 3, y: cell.y + parsed.y * 3}
-		}
-
-		for (const [check, def] of Object.entries(checks)) {
-			if (!this.isCarvable(def, check)) {
-				return false
-			}
-		}
-		return true
-	}
-
-	protected isCarvable(cell: Point, check: string): boolean {
-		if (!this.hasTile(cell)) {
-			return false
-		}
-
-		const tile: Tile = this.getTile(cell)
-
-		if (!tile.isWall()) {
-			return false
-		}
-
-		if (check !== 'after' && tile.nearRoom()) {
-			return false
-		}
-
-		if (tile.floors().length > 2) {
-			return false
-		}
-
-		// noinspection RedundantIfStatementJS
-		if (check !== 'after' && this.nearEdge(tile)) {
-			return false
-		}
-
-		return true
 	}
 }

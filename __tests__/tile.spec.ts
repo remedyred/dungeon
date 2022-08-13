@@ -7,6 +7,7 @@ describe('Tile', () => {
 	const TILE_X = 2
 	const TILE_Y = 10
 	const TILE_REGION = -1
+	// eslint-disable-next-line prefer-const
 	let {tile, neighbors, $neighbors, $tile} = setupQueryVars(TILE_X, TILE_Y, TILE_REGION, TILE_TYPE)
 
 	it('should be a function', () => {

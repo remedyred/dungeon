@@ -291,7 +291,7 @@ export class Query {
 		}
 
 		let results: Tile[] = []
-		let tiles: Tile[] = this.tiles.slice()
+		const tiles: Tile[] = this.tiles.slice()
 		let hasNorth = false
 		let hasEast = false
 		let hasSouth = false
@@ -328,8 +328,8 @@ export class Query {
 				continue
 			}
 
-			let regionMessage = tile.region + (tile.regionType ? ` [${tile.regionType}]` : '')
-			let message = `${tile.x}x${tile.y} [${tile.type}] (${regionMessage}}). `
+			const regionMessage = tile.region + (tile.regionType ? ` [${tile.regionType}]` : '')
+			const message = `${tile.x}x${tile.y} [${tile.type}] (${regionMessage}}). `
 
 			// Skip tiles that don't match the type
 			if (!isEmpty(options.type) && !options.type.includes(tile.type)) {

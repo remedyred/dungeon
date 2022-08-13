@@ -32,7 +32,7 @@ export class RegionManager {
 	getRegions(): Record<number, Tile[]> {
 		const regions: Record<number, Tile[]> = {}
 
-		for (let tile of this.tiles.flat()) {
+		for (const tile of this.tiles.flat()) {
 			if (!regions[tile.region]) {
 				regions[tile.region] = []
 			}

@@ -85,7 +85,7 @@ describe('dungeon.build()', () => {
 			[101, 101]
 		]
 
-		let seed = $chance.generateSlug()
+		const seed = $chance.generateSlug()
 
 		describe.each(RELIABILITY_COUNTER)(`Should reliably generate random dungeons (seed: ${seed}-%i)`, (i: number) => {
 			describe.each(sizes)('Should reliably create %i x %i dungeons', (width: number, height: number) => {

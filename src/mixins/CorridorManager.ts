@@ -14,7 +14,7 @@ export class CorridorManager {
 		const corridorTiles = this.find().regionType('corridor').get()
 		const corridors: Record<number, Corridor> = {}
 
-		for (let tile of corridorTiles) {
+		for (const tile of corridorTiles) {
 			if (!corridors[tile.region]) {
 				corridors[tile.region] = new Corridor(tile.region, [])
 			}
