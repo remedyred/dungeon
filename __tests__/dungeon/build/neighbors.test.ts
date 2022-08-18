@@ -13,7 +13,10 @@ describe('neighbors', () => {
 
 		expect(() => {
 			for (let x = 0; x < width; x++) {
+				expect($builder.tiles[x]).toBeTruthy()
 				for (let y = 0; y < height; y++) {
+					expect($builder.tiles[x][y]).toBeTruthy()
+
 					const neighbors = $builder.tiles[x][y].neighbors
 
 					if (neighbors.n) {

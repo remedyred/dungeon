@@ -431,11 +431,11 @@ export class Builder {
 	}
 
 	async build(stage?: StageOptions): Promise<this> {
-		// validate the state options
-		this.validate(stage)
-
 		// reset the state
 		this.reset()
+
+		// validate the state options
+		this.validate(stage)
 
 		// fill the entire area with solid 'wall' tiles
 		await this.fill('wall')
