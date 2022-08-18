@@ -32,7 +32,7 @@
 		"watch:bundle": "pnpm run bundle --watch"
 	},
 	"lint-staged": {
-		"**/*.{ts,json}": "pnpm run fix"
+		"*.{ts,json}": "eslint --fix --cache"
 	},
 	"jest": {
 		"bail": false,
