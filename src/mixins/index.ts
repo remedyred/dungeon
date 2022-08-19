@@ -3,6 +3,7 @@
 export * from './Builder'
 export * from './Carver'
 export * from './CorridorManager'
+export * from './Maze'
 export * from './Random'
 export * from './RegionManager'
 export * from './RoomManager'

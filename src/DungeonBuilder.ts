@@ -1,6 +1,6 @@
 import {isBrowser} from 'browser-or-node'
 import {DungeonOptions} from './common'
-import {Builder, Carver, CorridorManager, Random, RegionManager, RoomManager, State, TileManager, Walker} from './mixins'
+import {Builder, Carver, CorridorManager, Maze, Random, RegionManager, RoomManager, State, TileManager, Walker} from './mixins'
 import {Mixin, settings} from 'ts-mixer'
 
 settings.initFunction = 'init'
@@ -17,7 +17,8 @@ export class DungeonBuilder extends Mixin(
 	RoomManager,
 	State,
 	TileManager,
-	Walker
+	Walker,
+	Maze
 ) {
 	constructor(options?: DungeonOptions) {
 		super(options)
