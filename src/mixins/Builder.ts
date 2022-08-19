@@ -369,10 +369,10 @@ export class Builder {
 		while (walls.length !== 0) {
 			const {x, y} = walls.splice(this.randBetween(1, walls.length) - 1, 1)[0]
 
-			const left = lookup(maze, x - 1, y)
-			const right = lookup(maze, x + 1, y)
-			const top = lookup(maze, x, y - 1)
-			const bottom = lookup(maze, x, y + 1)
+			const left = lookup(maze, x - 1, y, 'wall')
+			const right = lookup(maze, x + 1, y, 'wall')
+			const top = lookup(maze, x, y - 1, 'wall')
+			const bottom = lookup(maze, x, y + 1, 'wall')
 
 			if (left === 'floor' && right === 'wall') {
 				maze[y][x] = 'floor'
