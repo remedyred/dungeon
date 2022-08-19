@@ -1,5 +1,5 @@
 import {DungeonState, safeMerge, State} from './State'
-import {Coordinates, parsePoint} from '../coordinates/Coordinates'
+import {Coordinates, parsePoint, Point} from '../coordinates/Coordinates'
 import {isNumber} from '@snickbit/utilities'
 import {Query, QueryOptions} from '../query/Query'
 import Tile, {TileMatrix, TileType} from '../structures/Tile'
@@ -85,5 +85,20 @@ export class TileManager {
 	nearEdge(optionalX: Coordinates | number, optionalY?: number): boolean {
 		const {x, y} = parsePoint(optionalX, optionalY)
 		return x === 0 || y === 0 || x === this.stage.width - 1 || y === this.stage.height - 1
+	}
+
+	protected getGridPoints(): Point[] {
+		const availableStartPoints: Point[] = []
+		// Grab the remaining maze generation points to fill in the rest of the map
+		for (let y = 1; y < this.stage.height; y += 2) {
+			for (let x = 1; x < this.stage.width; x += 2) {
+				const point = {x, y}
+				if (!availableStartPoints.includes(point)) {
+					availableStartPoints.push(point)
+				}
+			}
+		}
+
+		return availableStartPoints
 	}
 }

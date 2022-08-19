@@ -304,6 +304,8 @@ export class Builder {
 		const carvePromises: Promise<any>[] = []
 
 		for (let i = 0; i < this.options.roomTries; i++) {
+			const carvableGridPoints = this.getCarvableGridPoints()
+
 			// Pick a random room size. The funny math here does two things:
 			// - It makes sure rooms are odd-sized to line up with maze.
 			// - It avoids creating rooms that are too rectangular: too tall and
@@ -322,17 +324,11 @@ export class Builder {
 			width = Math.max(3, Math.min(width, outer_width_limit) - 1)
 			height = Math.max(3, Math.min(height, outer_height_limit) - 1)
 
-			let x = this.randBetween(0, Math.floor((this.stage.width - width) / 2)) * 2 + 1
-			let y = this.randBetween(0, Math.floor((this.stage.height - height) / 2)) * 2 + 1
+			const {x, y} = this.rng.pickone(carvableGridPoints)
 
-			// Make sure X dimension doesn't reach the edge of the stage
-			if (x + width >= this.stage.width) {
-				x = Math.max(1, this.stage.width - width - 1)
-			}
-
-			// Make sure Y dimension doesn't reach the edge of the stage
-			if (y + height >= this.stage.height) {
-				y = Math.max(1, this.stage.height - height - 1)
+			if (!this.hasTile(x + width, y + height)) {
+				// Room is too big to fit on the map
+				continue
 			}
 
 			const room = new Room(x, y, width, height)

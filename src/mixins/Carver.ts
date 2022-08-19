@@ -70,6 +70,18 @@ export class Carver {
 		return true
 	}
 
+	protected getCarvableGridPoints(): Point[] {
+		const availableStartPoints: Point[] = this.getGridPoints()
+
+		for (const point of availableStartPoints) {
+			if (!this.canCarve(point)) {
+				availableStartPoints.splice(availableStartPoints.indexOf(point), 1)
+			}
+		}
+
+		return availableStartPoints
+	}
+
 	async carve(points: Coordinates | Coordinates[], optionalTypeOrRegion?: RegionType | TileType, optionalRegion?: RegionType | number): Promise<Tile[]> {
 		const carvePromises = []
 		const tiles: Tile[] = []

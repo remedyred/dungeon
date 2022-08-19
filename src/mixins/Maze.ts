@@ -125,24 +125,6 @@ export class Maze {
 		return availableStartPoints
 	}
 
-	protected generateMazeGrid(): Point[] {
-		const availableStartPoints: Point[] = []
-		// Grab the remaining maze generation points to fill in the rest of the map
-		for (let y = 1; y < this.stage.height; y += 2) {
-			for (let x = 1; x < this.stage.width; x += 2) {
-				const point = {x, y}
-				if (
-					this.canCarve(point) &&
-					!availableStartPoints.includes(point)
-				) {
-					availableStartPoints.push(point)
-				}
-			}
-		}
-
-		return availableStartPoints
-	}
-
 	protected growMaze(coordinates: Coordinates, maze: Point[]): Point[] {
 		const start = parsePoint(coordinates)
 
@@ -261,7 +243,7 @@ export class Maze {
 
 		// If generating maze corridors, add every other empty tile to the available start points
 		if (this.options.corridorStrategy.find(s => s === 'maze' || s === 'prim')) {
-			availableStartPoints.push(...this.generateMazeGrid())
+			availableStartPoints.push(...this.getCarvableGridPoints())
 
 			let maze: Point[] = []
 
