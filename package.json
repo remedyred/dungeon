@@ -47,7 +47,7 @@
 		"victor": "^1.1.0"
 	},
 	"devDependencies": {
-		"@types/jest": "28.1.7",
+		"@types/jest": "28.1.8",
 		"@types/node": "18.0.6",
 		"@typescript-eslint/eslint-plugin": "^5.30.6",
 		"@typescript-eslint/parser": "^5.30.6",
