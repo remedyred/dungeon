@@ -21,8 +21,8 @@ specifiers:
   victor: ^1.1.0
 
 dependencies:
-  '@snickbit/indexer': 2.5.12
-  '@snickbit/utilities': 3.4.3
+  '@snickbit/indexer': 2.5.14
+  '@snickbit/utilities': 3.4.4
   chance: 1.1.8
   victor: 1.1.0
 
@@ -725,26 +725,26 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@snickbit/ansi/0.0.12:
-    resolution: {integrity: sha512-EVnUGT1CyHU0OOHfn13hLO9+m0Ou2aTYZ2wCLLb0zgzxV/F7zgavAledWxVptcIwIlk0AxqWfrgieBlmsAfr9Q==}
+  /@snickbit/ansi/0.0.13:
+    resolution: {integrity: sha512-6luJMgt9Pz66oEeJeq0op5MrE//n/toS3zpJ1S6kZzxpXfkFjaRnnOBhqisQyvMd3K8vjHzITvHy2D0BRwOzBw==}
     engines: {node: '>= 12'}
     dev: false
 
-  /@snickbit/cycle/0.0.29:
-    resolution: {integrity: sha512-hP/kU0+g9hRuvv1dtPEpq6qdtd0rxdLFLj/GZ6f8PqxqFTdxj4OeWtFn64Xlr1scsAQz9PYFCmf4hZ6tO+fGrw==}
+  /@snickbit/cycle/1.0.3:
+    resolution: {integrity: sha512-WwW2I/odeRLsPhC3NPBx9VsdkJVpoKoip2qaBsXVmCFTg8WP3huDoXLE3RgQTcKaIvvrPWhwmK8uAQLTL+GbUw==}
     engines: {node: '>= 12'}
     dependencies:
-      '@snickbit/utilities': 3.4.3
+      '@snickbit/utilities': 3.4.4
     dev: false
 
-  /@snickbit/indexer/2.5.12:
-    resolution: {integrity: sha512-Sw3VGdpRC3lnFxaJ9gGP49NZMfjKFXSgwjk0FE5gYhtIA8Fe34Z0SO8P2po+N/nyoFc79aqMzEnS8HZRZxu+MQ==}
+  /@snickbit/indexer/2.5.14:
+    resolution: {integrity: sha512-CYQFOCvUkLVLvQmSI9Drq22hDWSOzDbtzmbB4PDXYhjV5KxbmCPNLeL9cDEeUvXaI7Z5cfE4o4PdfMRPRrrsBw==}
     engines: {node: '>= 12'}
     hasBin: true
     dependencies:
       '@snickbit/node-cli': 2.0.2
       '@snickbit/node-utilities': 4.4.9
-      '@snickbit/out': 2.0.37
+      '@snickbit/out': 2.0.39
       '@snickbit/utilities': 3.4.2
       fast-glob: 3.2.11
       lilconfig: 2.0.6
@@ -756,8 +756,8 @@ packages:
     engines: {node: '>= 12'}
     dependencies:
       '@snickbit/node-utilities': 4.4.9
-      '@snickbit/out': 2.0.37
-      '@snickbit/utilities': 3.4.3
+      '@snickbit/out': 2.0.39
+      '@snickbit/utilities': 3.4.4
       lilconfig: 2.0.6
       yargs-parser: 21.1.1
     dev: false
@@ -766,8 +766,8 @@ packages:
     resolution: {integrity: sha512-FZPHi2JhujSIwGi113iHz2+0G9mEBR0m1H8y87kY9Sov3PdzCuBq8zBoy+i2cWjJzPHQj++MhLyCXmu2ArBOlg==}
     engines: {node: '>= 12'}
     dependencies:
-      '@snickbit/out': 2.0.37
-      '@snickbit/utilities': 3.4.3
+      '@snickbit/out': 2.0.39
+      '@snickbit/utilities': 3.4.4
       ansi-styles-template: 1.0.0
       cli-progress: 3.11.2
       is-wsl: 2.2.0
@@ -776,13 +776,13 @@ packages:
       prompts: 2.4.2
     dev: false
 
-  /@snickbit/out/2.0.37:
-    resolution: {integrity: sha512-fTVcE5QKVSNKMddUVqwXGsc5jx87L8sKm6ufA1z/02ygibz/pCGqmDI5lQZsv7qIFwm+9h0r3ydk59RCf7gw8Q==}
+  /@snickbit/out/2.0.39:
+    resolution: {integrity: sha512-iEI2vveTraYiRLyxjRPX5wNJv2AjuFOf+goEA3z7pc/FNSpNz/r+fvggVXp3SOnSzzsfXntz6Wb2/rfuvUwMWQ==}
     engines: {node: '>= 12'}
     dependencies:
-      '@snickbit/ansi': 0.0.12
-      '@snickbit/cycle': 0.0.29
-      '@snickbit/utilities': 3.4.3
+      '@snickbit/ansi': 0.0.13
+      '@snickbit/cycle': 1.0.3
+      '@snickbit/utilities': 3.4.4
       ansi-styles-template: 1.0.0
       browser-or-node: 2.0.0
       node-inspect-extracted: 1.1.0
@@ -794,8 +794,8 @@ packages:
     engines: {node: '>= 12'}
     dev: false
 
-  /@snickbit/plural/1.0.2:
-    resolution: {integrity: sha512-Qy77SU9BE/AcHldppsspEFoLxxa9glB+bd5MNs4rpeBG8YCBbc+jRuZ0fWCn/u44ix5jlqi/rY5hugw7XG1BMQ==}
+  /@snickbit/plural/1.0.3:
+    resolution: {integrity: sha512-lHMDzr6zmAwZ68QnlJ/jyu/m/4pfUHqgehbyMLNW3gFd0IwjmzkNNG49GlgYBgivK1O4tSE2ahvDd4sTt9EY8g==}
     engines: {node: '>= 12'}
     dev: false
 
@@ -808,11 +808,11 @@ packages:
       nanoid: 3.3.4
     dev: false
 
-  /@snickbit/utilities/3.4.3:
-    resolution: {integrity: sha512-G9JGD1RUOkJnDDnmMFAN175BlQ6euKN+AGFnRgvSIsyaWct+Pl2MhG0VrUp5FcYSUJ2VzrJXsYdIpbXiWg1H/g==}
+  /@snickbit/utilities/3.4.4:
+    resolution: {integrity: sha512-sWogjyJBogUQtEe45B6p7koarL1n2PF6Hxf/0Y1VkCXSBGnd2uaQpm7a76GN8wZw8zM5vldMA/sMN03HksINkg==}
     engines: {node: '>= 12'}
     dependencies:
-      '@snickbit/plural': 1.0.2
+      '@snickbit/plural': 1.0.3
       just-camel-case: 6.1.1
       nanoid: 3.3.4
     dev: false
