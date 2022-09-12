@@ -21,7 +21,7 @@ specifiers:
   victor: ^1.1.0
 
 dependencies:
-  '@snickbit/indexer': 2.5.17
+  '@snickbit/indexer': 2.5.18
   '@snickbit/utilities': 3.4.9
   chance: 1.1.8
   victor: 1.1.0
@@ -725,8 +725,8 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@snickbit/ansi/0.0.17:
-    resolution: {integrity: sha512-UbtbjcQmKB31SvpgucV6vnr4Azf2xkeZ9aHn9psgwLauqnFtXdqEkcGWDvLsZoe5mHbAiCuFtob6A1LWqdWbnw==}
+  /@snickbit/ansi/0.0.18:
+    resolution: {integrity: sha512-gCK0azCGO00+R2hgrxcNL+yvHMgEqUnsr1HPBKhfBUukFurjZ58GWNHDkFst5QvKBdJbpUxgudVW0UfJSSISXw==}
     engines: {node: '>= 12'}
     dev: false
 
@@ -737,8 +737,8 @@ packages:
       '@snickbit/utilities': 3.4.9
     dev: false
 
-  /@snickbit/indexer/2.5.17:
-    resolution: {integrity: sha512-lJkcLjNUzfF+gnIsKP2gKIbTFYm+kle24xT4pD7oU5cCkjPJWblB+dSxScnbfQcGVR9SSZZ9GP2o/X2cMiZwCg==}
+  /@snickbit/indexer/2.5.18:
+    resolution: {integrity: sha512-XIpjWNkMtMSfeKz7Eha55Rzmp34n2niW6BNemiJExEWHvq1OY17M2j9UWauS9HCShyjPplV9flNaYfS84MMxGg==}
     engines: {node: '>= 12'}
     hasBin: true
     dependencies:
@@ -780,7 +780,7 @@ packages:
     resolution: {integrity: sha512-syS69rIaTCQUmIFwJVYyGh+ADnyMin1HpB4dgsG7HodX52YYLP+y7RwnbC2cjmqXoyDjYTA4sm0Bss+JuoJJLA==}
     engines: {node: '>= 12'}
     dependencies:
-      '@snickbit/ansi': 0.0.17
+      '@snickbit/ansi': 0.0.18
       '@snickbit/cycle': 1.0.5
       '@snickbit/utilities': 3.4.9
       ansi-styles-template: 1.0.0
