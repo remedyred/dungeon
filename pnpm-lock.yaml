@@ -21,7 +21,7 @@ specifiers:
   victor: ^1.1.0
 
 dependencies:
-  '@snickbit/indexer': 2.5.18
+  '@snickbit/indexer': 2.5.19
   '@snickbit/utilities': 3.4.9
   chance: 1.1.8
   victor: 1.1.0
@@ -737,8 +737,8 @@ packages:
       '@snickbit/utilities': 3.4.9
     dev: false
 
-  /@snickbit/indexer/2.5.18:
-    resolution: {integrity: sha512-XIpjWNkMtMSfeKz7Eha55Rzmp34n2niW6BNemiJExEWHvq1OY17M2j9UWauS9HCShyjPplV9flNaYfS84MMxGg==}
+  /@snickbit/indexer/2.5.19:
+    resolution: {integrity: sha512-UsqHJZRu6HuaJLees8e+HrCngG9CU3i4ZXBtmLw7gc0LtfF5gM6MJ6brs9063YywjXNMmIHy/g5+r4Ap9H11ng==}
     engines: {node: '>= 12'}
     hasBin: true
     dependencies:
