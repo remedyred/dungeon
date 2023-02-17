@@ -16,7 +16,7 @@ specifiers:
   jest: 28.1.3
   shx: 0.3.4
   ts-jest: 28.0.8
-  tsup: 6.6.0
+  tsup: 6.6.3
   typescript: 4.9.5
   victor: ^1.1.0
 
@@ -39,7 +39,7 @@ devDependencies:
   jest: 28.1.3_@types+node@18.13.0
   shx: 0.3.4
   ts-jest: 28.0.8_mgg23zyyvjoe75wbzvxzqqpmne
-  tsup: 6.6.0_typescript@4.9.5
+  tsup: 6.6.3_typescript@4.9.5
   typescript: 4.9.5
 
 packages:
@@ -3535,9 +3535,9 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
 
-  /tsup/6.6.0_typescript@4.9.5:
-    resolution: {integrity: sha512-HxZE7Hj5yNxLFftCXdcJ+Jsax8dI4oKb0bt8fIvd1g/W0FZ46sU1pFBVo15WpOERFcEMH7Hykey/Q+hKO4s9RQ==}
-    engines: {node: '>=14'}
+  /tsup/6.6.3_typescript@4.9.5:
+    resolution: {integrity: sha512-OLx/jFllYlVeZQ7sCHBuRVEQBBa1tFbouoc/gbYakyipjVQdWy/iQOvmExUA/ewap9iQ7tbJf9pW0PgcEFfJcQ==}
+    engines: {node: '>=14.18'}
     hasBin: true
     peerDependencies:
       '@swc/core': ^1
